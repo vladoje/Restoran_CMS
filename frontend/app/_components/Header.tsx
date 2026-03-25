@@ -3,8 +3,46 @@ import { CgProfile } from "react-icons/cg";
 import { IoSunny } from "react-icons/io5";
 import { GiStairsGoal } from "react-icons/gi";
 import Link from "next/link";
-function Header() {
+import { Restoran } from "../[restaurantSlug]/page";
+import { User } from "./RegisterHelpers";
+import { getRestoranWithSlug } from "../_lib/getRestoran";
+import { getUser } from "../_lib/getUser";
+import { getSite } from "../_lib/getSite";
+import { getHeader, getLinkWithHeaderId } from "../_lib/getLinks";
+export interface Sajt {
+  siteId: number;
+  headerId: number;
+  footerId: number;
+  primaryColor: string;
+  secondaryColor: string;
+  surfaceColor: string;
+  backgroundColor: string;
+  logoUrl: string;
+}
+export interface Header {
+  headerId: number;
+  hasLightModeSwitch: boolean;
+  hasLogo: boolean;
+  classname: string;
+  text: string;
+}
+export interface Link {
+  linkId: number;
+  text: string;
+  url: string;
+  icon: string;
+  headerId?: number;
+  footerId?: number;
+}
+async function Header({ slug }: { slug: string }) {
+  const restoran = await getRestoranWithSlug(slug);
+  const site: Sajt = await getSite(restoran.siteId);
+  const [header, links]: [Header, Link[]] = await Promise.all([
+    getHeader(site.headerId),
+    getLinkWithHeaderId(site.headerId),
+  ] as const);
   const isDarkMode = true;
+
   return (
     // "sticky" drži header na vrhu dok skroluješ, "backdrop-blur" pravi onaj Apple-ov efekat stakla
     <header
