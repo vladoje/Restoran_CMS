@@ -2,11 +2,8 @@ import Link from "next/link";
 import { User } from "../_components/RegisterHelpers";
 import { getRestoranWithSlug } from "../_lib/getRestoran";
 import { getUser } from "../_lib/getUser";
-import {
-  getOldUserReservations,
-  getUserReservations,
-} from "../_lib/getRezervacije";
-import { getTable } from "../_lib/getTables";
+import { getUserReservations } from "../_lib/getRezervacije";
+import { getAllTablesFromSala, getSala } from "../_lib/getTables";
 
 export interface Restoran {
   restoranId: number;
@@ -42,24 +39,20 @@ export interface Sto {
   tableNumber: number;
 }
 
-async function Page({ params }: { params: { restoranSlug: string } }) {
-  const slug = params.restoranSlug;
+async function Page({ params }: { params: { restaurantSlug: string } }) {
+  const slug = (await params).restaurantSlug;
 
   const [restoran, user]: [Restoran, User] = await Promise.all([
     getRestoranWithSlug(slug),
     getUser(1),
   ]);
 
-  const [activeReservations, pastReservations]: [Rezervacija[], Rezervacija[]] =
-    await Promise.all([
-      getUserReservations(user.userId),
-      getOldUserReservations(user.userId),
-    ]);
+  const activeReservations: Rezervacija[] = await getUserReservations(
+    user.userId,
+  );
 
-  const [activeTables, pastTables]: [Sto[], Sto[]] = await Promise.all([
-    Promise.all(activeReservations.map((res) => getTable(res.tableId))),
-    Promise.all(pastReservations.map((res) => getTable(res.tableId))),
-  ] as const);
+  const sala = await getSala(restoran.restoranId);
+  const allTables = await getAllTablesFromSala(sala.salaId);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -106,98 +99,61 @@ async function Page({ params }: { params: { restoranSlug: string } }) {
 
         {/* Aktivne */}
         <div className="mb-6">
-          <h3 className="text-lg mb-4 text-gray-700">Predstojeće</h3>
+          <h3 className="text-lg mb-2 text-gray-700">Predstojeće</h3>
           <div className="space-y-3">
-            {activeReservations.map((res: Rezervacija, i) => {
-              const datum = `${res.dateTime.getDate()}.${res.dateTime.getMonth() + 1}.${res.dateTime.getFullYear()}.`;
-              const sati =
-                res.dateTime.getHours() < 10
-                  ? `0${res.dateTime.getHours()}`
-                  : res.dateTime.getHours();
-              const minuta =
-                res.dateTime.getMinutes() < 10
-                  ? `0${res.dateTime.getMinutes()}`
-                  : res.dateTime.getMinutes();
-              const start = `${sati}:${minuta}`;
+            {!activeReservations.length ? (
+              <div className="text-sm text-gray-500">Nema rezervacija</div>
+            ) : (
+              activeReservations.map((res: Rezervacija, i) => {
+                const datum = `${res.dateTime.getDate()}.${res.dateTime.getMonth() + 1}.${res.dateTime.getFullYear()}.`;
+                const sati =
+                  res.dateTime.getHours() < 10
+                    ? `0${res.dateTime.getHours()}`
+                    : res.dateTime.getHours();
+                const minuta =
+                  res.dateTime.getMinutes() < 10
+                    ? `0${res.dateTime.getMinutes()}`
+                    : res.dateTime.getMinutes();
+                const start = `${sati}:${minuta}`;
 
-              return (
-                <div
-                  key={i}
-                  className="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors"
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-gray-900">{datum}</span>
-                        <span className="text-gray-400">•</span>
-                        <span className="text-gray-900">{start}</span>
-                        <span className="text-gray-400">•</span>
-                        <span className="text-gray-600">
-                          {res.numberOfPeople} gostiju
-                        </span>
+                return (
+                  <div
+                    key={i}
+                    className="border mt-2 border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="text-gray-900">{datum}</span>
+                          <span className="text-gray-400">•</span>
+                          <span className="text-gray-900">{start}</span>
+                          <span className="text-gray-400">•</span>
+                          <span className="text-gray-600">
+                            {res.numberOfPeople}{" "}
+                            {res.numberOfPeople > 1 ? "gosta" : "gost"}
+                          </span>
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Sto{" "}
+                          {
+                            allTables.find((t) => t.tableId === res.tableId)
+                              ?.tableNumber
+                          }
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600">
-                        Sto {activeTables.at(i)?.tableNumber}
+                      <div className="flex gap-2">
+                        <button className="text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
+                          Izmeni
+                        </button>
+                        <button className="text-sm px-4 py-2 text-red-600 border border-red-300 rounded hover:bg-red-50">
+                          Otkaži
+                        </button>
                       </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <button className="text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
-                        Izmeni
-                      </button>
-                      <button className="text-sm px-4 py-2 text-red-600 border border-red-300 rounded hover:bg-red-50">
-                        Otkaži
-                      </button>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Prošle */}
-        <div>
-          <h3 className="text-lg mb-4 text-gray-700">Prošle rezervacije</h3>
-          <div className="space-y-3">
-            {pastReservations.map((res: Rezervacija, i) => {
-              const datum = `${res.dateTime.getDate()}.${res.dateTime.getMonth() + 1}.${res.dateTime.getFullYear()}.`;
-              const sati =
-                res.dateTime.getHours() < 10
-                  ? `0${res.dateTime.getHours()}`
-                  : res.dateTime.getHours();
-              const minuta =
-                res.dateTime.getMinutes() < 10
-                  ? `0${res.dateTime.getMinutes()}`
-                  : res.dateTime.getMinutes();
-              const start = `${sati}:${minuta}`;
-
-              return (
-                <div
-                  key={i}
-                  className="border border-gray-200 rounded-lg p-4 bg-gray-50"
-                >
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-gray-600">{datum}</span>
-                        <span className="text-gray-400">•</span>
-                        <span className="text-gray-600">{start}</span>
-                        <span className="text-gray-400">•</span>
-                        <span className="text-gray-500">
-                          {res.numberOfPeople} gostiju
-                        </span>
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        Sto {pastTables.at(i)?.tableNumber}
-                      </div>
-                    </div>
-                    <button className="text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">
-                      Ponovi rezervaciju
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
       </div>

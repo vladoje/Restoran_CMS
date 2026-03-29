@@ -16,7 +16,7 @@ export function CloseButton() {
     </button>
   );
 }
-export function ProfileActions() {
+export function ProfileActions({ slug }: { slug: string }) {
   return (
     <div className="mt-8 flex flex-col items-center gap-4">
       <Modal.Open opens="odjavi">
@@ -30,7 +30,7 @@ export function ProfileActions() {
         </button>
       </Modal.Open>
       <Link
-        href="/privacy-policy"
+        href={`/${slug}/privacy-policy`}
         className="flex items-center gap-2  hover:text-indigo-500 text-[10px] font-bold uppercase tracking-widest transition-colors"
       >
         <FaShieldHalved size={12} /> Politika Privatnosti

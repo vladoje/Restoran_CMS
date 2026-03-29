@@ -1,13 +1,10 @@
-import Header from "@/app/_components/Header";
 import { FaShieldHalved, FaLock, FaEnvelope } from "react-icons/fa6";
 function Page() {
   const isDarkMode = true;
   return (
     <div
-      className={`min-h-screen  ${!isDarkMode ? " bg-background text-text border-border" : "bg-background-dark text-text-dark border-border-dark"} pb-16`}
+      className={`  ${!isDarkMode ? " bg-background text-text border-border" : "bg-background-dark text-text-dark border-border-dark"} pb-16`}
     >
-      <Header />
-
       <main className="max-w-md mx-auto px-6 pt-10">
         {/* HEADER SEKCIJA */}
         <div className="flex flex-col items-center mb-10">

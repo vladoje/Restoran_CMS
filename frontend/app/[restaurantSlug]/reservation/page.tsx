@@ -1,18 +1,12 @@
-//"use client";
-import Footer from "@/app/_components/Footer";
-import Header from "@/app/_components/Header";
-//import { useState } from "react";
 import { DatePickerInput, getTimeRange, TimeGrid } from "@mantine/dates";
-function Page() {
+export default async function Page() {
   //const [value, setValue] = useState<string | null>(null);
   return (
     <div>
-      <Header />
       <div>
         <h1>Rezervisite sto</h1>
         <div>
           <p>Izaberite sto</p>
-          <PlanSale />
         </div>
         <div>
           <p>Datum</p>
@@ -42,7 +36,7 @@ function Page() {
             //      allowDeselect
           />
           <p>Broj gostiju</p>
-          <BrojGostiju />
+
           <input disabled value="Niste izabrali sto" />
           <p>Poruka restoranu</p>
           <input type="text" />
@@ -50,39 +44,39 @@ function Page() {
 
         <button>Potvrdite rezervaciju</button>
       </div>
-
-      <Footer />
     </div>
   );
 }
-function PlanSale() {
-  //TO DO
-  return <div></div>;
-}
-function BrojGostiju() {
-  return (
-    <select>
-      <option>1 Gost</option>
-      <option>2 Gosta</option>
-      <option>3 Gosta</option>
-      <option>4 Gosta</option>
-      <option>5 Gosta</option>
-      <option>6 Gosta</option>
-      <option>7 Gosta</option>
-      <option>8 Gosta</option>
-      <option>9 Gosta</option>
-      <option>10 Gosta</option>
-      <option>11 Gosta</option>
-      <option>12 Gosta</option>
-      <option>13 Gosta</option>
-      <option>14 Gosta</option>
-      <option>15 Gosta</option>
-      <option>16 Gosta</option>
-      <option>17 Gosta</option>
-      <option>18 Gosta</option>
-      <option>19 Gosta</option>
-      <option>20 Gosta</option>
-    </select>
-  );
-}
-export default Page;
+
+// function BrojGostiju() {
+//   return (
+//     <select>
+//       <option>1 Gost</option>
+//       <option>2 Gosta</option>
+//       <option>3 Gosta</option>
+//       <option>4 Gosta</option>
+//       <option>5 Gosta</option>
+//       <option>6 Gosta</option>
+//       <option>7 Gosta</option>
+//       <option>8 Gosta</option>
+//       <option>9 Gosta</option>
+//       <option>10 Gosta</option>
+//       <option>11 Gosta</option>
+//       <option>12 Gosta</option>
+//       <option>13 Gosta</option>
+//       <option>14 Gosta</option>
+//       <option>15 Gosta</option>
+//       <option>16 Gosta</option>
+//       <option>17 Gosta</option>
+//       <option>18 Gosta</option>
+//       <option>19 Gosta</option>
+//       <option>20 Gosta</option>
+//     </select>
+//   );
+// }
+// export default Page;
+// function page() {
+//   return <div></div>;
+// }
+
+// export default page;
