@@ -85,7 +85,7 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
             Rezervišite sto brzo i jednostavno.
           </p>
           <Link
-            href="/reservation"
+            href={`${slug}/reservation`}
             className="inline-block bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
           >
             Rezerviši

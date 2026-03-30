@@ -1,3 +1,5 @@
+"use client";
+import { Dispatch, SetStateAction } from "react";
 import { Sto } from "../[restaurantSlug]/page";
 import { Sala } from "../_lib/getTables";
 
@@ -8,13 +10,19 @@ function PrezentacijaSale({
   y,
   i,
   tId,
+  setTable,
+  setTableId,
+  setCapacity,
 }: {
   stolovi: Sto[];
   x: number;
   y: number;
   sala: Sala;
   i: number;
-  tId: number;
+  tId: number | null;
+  setTable?: Dispatch<SetStateAction<number | null>>;
+  setTableId?: Dispatch<SetStateAction<number | null>>;
+  setCapacity?: Dispatch<SetStateAction<number | null>>;
 }) {
   const scale = x / sala.width;
 
@@ -24,16 +32,32 @@ function PrezentacijaSale({
       style={{
         width: x,
         height: y,
+        maxWidth: "100%", // Dodato da spreči prelivanje
       }}
     >
       {stolovi.map((table: Sto, k) => {
-        const left = table.positionX * scale - scale * 10;
-        const top = table.positionY * scale - scale * 10;
+        const size = scale * 20;
+
+        const left = Math.min(
+          Math.max(0, table.positionX * scale - size / 2),
+          x - size,
+        );
+
+        const top = Math.min(
+          Math.max(0, table.positionY * scale - size / 2),
+          y - size,
+        );
+
         const width = scale * 20;
         const height = scale * 20;
         const isReserved = table.tableId === tId;
         return (
           <div
+            onClick={() => {
+              setTable?.(table.tableNumber);
+              setTableId?.(table.tableId);
+              setCapacity?.(table.capacity);
+            }}
             key={`${table.tableId}-${i}-${k}`}
             className={`absolute rounded-md flex items-center justify-center text-white text-xs
   ${isReserved ? "bg-green-500" : "bg-gray-300"}

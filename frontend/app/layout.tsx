@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
+import { createTheme, MantineProvider } from "@mantine/core";
+import { DatesProvider } from "@mantine/dates";
+import "dayjs/locale/sr";
+import dayjs from "dayjs";
+dayjs.locale("sr");
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -22,12 +26,63 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const theme = createTheme({
+    primaryColor: "indigo",
+
+    colors: {
+      brand: [
+        "#eef2ff",
+        "#e0e7ff",
+        "#c7d2fe",
+        "#a5b4fc",
+        "#818cf8",
+        "#6366f1",
+        "#4f46e5",
+        "#4338ca",
+        "#3730a3",
+        "#312e81",
+      ],
+    },
+
+    primaryShade: 6,
+
+    fontFamily: "var(--font-geist-sans), sans-serif",
+    fontFamilyMonospace: "var(--font-geist-mono), monospace",
+
+    defaultRadius: "md",
+
+    headings: {
+      fontFamily: "var(--font-geist-sans), sans-serif",
+      sizes: {
+        h1: { fontSize: "28px", fontWeight: "700" },
+        h2: { fontSize: "22px", fontWeight: "600" },
+        h3: { fontSize: "18px", fontWeight: "600" },
+      },
+    },
+
+    components: {
+      Button: {
+        defaultProps: {
+          radius: "md",
+        },
+      },
+      Card: {
+        defaultProps: {
+          radius: "lg",
+          shadow: "sm",
+          padding: "lg",
+        },
+      },
+    },
+  });
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <MantineProvider theme={theme}>
+          <DatesProvider settings={{ locale: "sr" }}>{children}</DatesProvider>
+        </MantineProvider>
       </body>
     </html>
   );
