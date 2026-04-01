@@ -1,23 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Linkk, Sajt } from "./Header";
+
 import { getRestoranWithSlug } from "../_lib/getRestoran";
 import { getSite } from "../_lib/getSite";
 import { getFooter, getLinkWithFooterId } from "../_lib/getLinks";
-
-export interface Footer {
-  footerId: number;
-  hasContactInfo: boolean;
-  hasLogo: boolean;
-  classname: string;
-  text: string;
-}
+import { Foooter, Linkk, Sajt } from "../_lib/Interfaces";
 
 async function Footer({ slug }: { slug: string }) {
   const restoran = await getRestoranWithSlug(slug);
   const site: Sajt = await getSite(restoran.siteId);
 
-  const [footer, links]: [Footer, Linkk[]] = await Promise.all([
+  const [footer, links]: [Foooter, Linkk[]] = await Promise.all([
     getFooter(site.footerId),
     getLinkWithFooterId(site.footerId),
   ] as const);

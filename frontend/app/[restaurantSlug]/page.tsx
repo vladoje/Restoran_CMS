@@ -1,43 +1,10 @@
 import Link from "next/link";
-import { User } from "../_components/RegisterHelpers";
+
 import { getRestoranWithSlug } from "../_lib/getRestoran";
 import { getUser } from "../_lib/getUser";
 import { getUserReservations } from "../_lib/getRezervacije";
 import { getAllTablesFromSala, getSala } from "../_lib/getTables";
-
-export interface Restoran {
-  restoranId: number;
-  ownerId: number;
-  siteId: number;
-  name: string;
-  address: string;
-  phone: string;
-  buffer: number;
-  trajanjeRezervacije: string;
-  slug: string;
-}
-
-export interface Rezervacija {
-  reservationId: number;
-  restoranId: number;
-  userId: number;
-  tableId: number;
-  dateTime: Date;
-  durration: string;
-  numberOfPeople: number;
-  note: string;
-  status: string;
-}
-
-export interface Sto {
-  tableId: number;
-  capacity: number;
-  positionX: number;
-  positionY: number;
-  orientation: number;
-  salaId: number;
-  tableNumber: number;
-}
+import { Restoran, Rezervacija, User } from "../_lib/Interfaces";
 
 async function Page({ params }: { params: { restaurantSlug: string } }) {
   const slug = (await params).restaurantSlug;

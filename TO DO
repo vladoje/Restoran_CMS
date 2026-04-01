@@ -1,4 +1,6 @@
 zavrsiti admin dio 
+
+
 napraviti stranicu za rezervaciju stola
 napraviti admin dashboard i pratece default stranice
 testirati to sve 
@@ -8,7 +10,7 @@ pokusati CMS
 
 responzivnost ReserveTable stranice nije nikako dobra, popraviti to
 
-SA RAZUMIJEVANJEM URADITI SERVER AKCIJU DA USER REZERVISE STO, I DA SE TA REZERVACIJA SACUVA U BAZU PODATAKA
+
 
 
 

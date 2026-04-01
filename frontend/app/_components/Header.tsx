@@ -10,36 +10,12 @@ import { getRestoranWithSlug } from "../_lib/getRestoran";
 import { getSite } from "../_lib/getSite";
 import { getHeader, getLinkWithHeaderId } from "../_lib/getLinks";
 import Image from "next/image";
+import { Headerr, Linkk, Sajt } from "../_lib/Interfaces";
 
-export interface Sajt {
-  siteId: number;
-  headerId: number;
-  footerId: number;
-  primaryColor: string;
-  secondaryColor: string;
-  surfaceColor: string;
-  backgroundColor: string;
-  logoUrl: string;
-}
-export interface Header {
-  headerId: number;
-  hasLightModeSwitch: boolean;
-  hasLogo: boolean;
-  classname: string;
-  text: string;
-}
-export interface Linkk {
-  linkId: number;
-  text: string;
-  url: string;
-  icon: string;
-  headerId?: number;
-  footerId?: number;
-}
 async function Header({ slug }: { slug: string }) {
   const restoran = await getRestoranWithSlug(slug);
   const site: Sajt = await getSite(restoran.siteId);
-  const [header, links]: [Header, Linkk[]] = await Promise.all([
+  const [header, links]: [Headerr, Linkk[]] = await Promise.all([
     getHeader(site.headerId),
     getLinkWithHeaderId(site.headerId),
   ] as const);

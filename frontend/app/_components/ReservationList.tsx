@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Rezervacija, Sto } from "../[restaurantSlug]/page";
 import PrezentacijaSale from "./PrezentacijaSale";
-import { Sala } from "../_lib/getTables";
+import { Rezervacija, Sala, Sto } from "../_lib/Interfaces";
 
 function ReservationList({
   activeReservations,

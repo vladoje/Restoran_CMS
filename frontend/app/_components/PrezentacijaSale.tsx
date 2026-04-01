@@ -1,7 +1,6 @@
 "use client";
 import { Dispatch, SetStateAction } from "react";
-import { Sto } from "../[restaurantSlug]/page";
-import { Sala } from "../_lib/getTables";
+import { Sala, Sto } from "../_lib/Interfaces";
 
 function PrezentacijaSale({
   sala,
@@ -13,6 +12,7 @@ function PrezentacijaSale({
   setTable,
   setTableId,
   setCapacity,
+  setTime,
 }: {
   stolovi: Sto[];
   x: number;
@@ -23,6 +23,7 @@ function PrezentacijaSale({
   setTable?: Dispatch<SetStateAction<number | null>>;
   setTableId?: Dispatch<SetStateAction<number | null>>;
   setCapacity?: Dispatch<SetStateAction<number | null>>;
+  setTime?: Dispatch<SetStateAction<string | null>>;
 }) {
   const scale = x / sala.width;
 
@@ -57,6 +58,7 @@ function PrezentacijaSale({
               setTable?.(table.tableNumber);
               setTableId?.(table.tableId);
               setCapacity?.(table.capacity);
+              setTime?.(null);
             }}
             key={`${table.tableId}-${i}-${k}`}
             className={`absolute rounded-md flex items-center justify-center text-white text-xs

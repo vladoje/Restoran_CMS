@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
+import { User } from "../_lib/Interfaces";
 // import toast from "react-hot-toast";
-import { User } from "../_components/RegisterHelpers";
 
 export function useProfile() {
   function handleLogout() {

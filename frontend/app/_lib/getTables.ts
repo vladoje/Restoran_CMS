@@ -1,13 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { Sto } from "../[restaurantSlug]/page";
-export interface Sala {
-  salaId: number;
-  restoranId: number;
-  width: number;
-  height: number;
-}
+
+import { Sala, Sto } from "./Interfaces";
+
 export async function getTable(tableId: number) {
   const { data, error } = await createClient(await cookies())
     .from("Stolovi")

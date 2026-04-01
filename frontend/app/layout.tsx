@@ -5,6 +5,7 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import "dayjs/locale/sr";
 import dayjs from "dayjs";
+import { Toaster } from "react-hot-toast";
 dayjs.locale("sr");
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -80,6 +81,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <div>
+          <Toaster />
+        </div>
         <MantineProvider theme={theme}>
           <DatesProvider settings={{ locale: "sr" }}>{children}</DatesProvider>
         </MantineProvider>

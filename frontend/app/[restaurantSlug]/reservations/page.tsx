@@ -1,13 +1,13 @@
 import { getUser } from "@/app/_lib/getUser";
-import { Rezervacija } from "../page";
 
 import {
   getOldUserReservations,
   getUserReservations,
 } from "@/app/_lib/getRezervacije";
 import { getAllTablesFromSala, getSala } from "@/app/_lib/getTables";
-import { User } from "@/app/_components/RegisterHelpers";
+
 import ReservationList from "@/app/_components/ReservationList";
+import { Rezervacija, User } from "@/app/_lib/Interfaces";
 
 async function Page() {
   const user: User = await getUser(1);

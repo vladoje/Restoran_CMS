@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { Rezervacija } from "../[restaurantSlug]/page";
+import { Rezervacija } from "./Interfaces";
+
 export interface DBRezervacija {
   reservationId: number;
   restoranId: number;
@@ -56,6 +57,28 @@ export async function getOldUserReservations(userId: number) {
     .select("*")
     .eq("userId", userId)
     .lt("dateTime", now);
+
+  if (error) {
+    console.error(error);
+    notFound();
+  }
+
+  return data?.map(mapRezervacija) ?? [];
+}
+
+export async function get30dayReservationsForTables(tableIds: number[]) {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(start);
+  end.setDate(end.getDate() + 30);
+
+  const { data, error } = await createClient(await cookies())
+    .from("Rezervacije")
+    .select("*")
+    .in("tableId", tableIds) // ✅ KLJUČ
+    .gte("dateTime", start.toISOString())
+    .lt("dateTime", end.toISOString());
 
   if (error) {
     console.error(error);
