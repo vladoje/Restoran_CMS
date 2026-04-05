@@ -1,5 +1,5 @@
 function page() {
-  return <div></div>;
+  return <div>ga</div>;
 }
 
 export default page;

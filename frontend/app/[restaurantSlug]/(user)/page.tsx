@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-import { getRestoranWithSlug } from "../_lib/getRestoran";
-import { getUser } from "../_lib/getUser";
-import { getUserReservations } from "../_lib/getRezervacije";
-import { getAllTablesFromSala, getSala } from "../_lib/getTables";
-import { Restoran, Rezervacija, User } from "../_lib/Interfaces";
+import { getRestoranWithSlug } from "../../_lib/getRestoran";
+import { getUser } from "../../_lib/getUser";
+import { getUserReservations } from "../../_lib/getRezervacije";
+import { getAllTablesFromSala, getSala } from "../../_lib/getTables";
+import { Restoran, Rezervacija, User } from "../../_lib/Interfaces";
 
 async function Page({ params }: { params: { restaurantSlug: string } }) {
   const slug = (await params).restaurantSlug;

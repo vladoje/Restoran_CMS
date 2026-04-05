@@ -55,6 +55,8 @@ export interface Sajt {
   siteId: number;
   headerId: number;
   footerId: number;
+  adminHeaderId: number;
+  adminFooterId: number;
   primaryColor: string;
   secondaryColor: string;
   surfaceColor: string;
@@ -86,4 +88,21 @@ export interface DBRezervacija {
   numberOfPeople: number;
   note: string;
   status: string;
+}
+export interface OpeningHour {
+  id: number;
+  restoranId: number;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  isOpen: boolean;
+}
+export interface SlobodanDan {
+  slobodanDanId: number;
+  restoranId: number;
+  date: string;
+  isOpen: boolean;
+  start: string;
+  end: string;
+  note: string;
 }

@@ -1,5 +1,5 @@
-import Footer from "../_components/Footer";
-import Header from "../_components/Header";
+import AdminFooter from "../../_components/AdminFooter";
+import AdminHeader from "../../_components/AdminHeader";
 
 export default async function Layout({
   children,
@@ -15,11 +15,11 @@ export default async function Layout({
 
   return (
     <div className="min-h-screen text-gray-800 flex flex-col bg-gray-50">
-      <Header slug={restaurantSlug} />
+      <AdminHeader slug={restaurantSlug} />
 
       <main className="flex-1">{children}</main>
 
-      <Footer slug={restaurantSlug} />
+      <AdminFooter slug={restaurantSlug} />
     </div>
   );
 }

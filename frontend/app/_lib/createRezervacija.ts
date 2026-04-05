@@ -9,14 +9,15 @@ export async function createRezervacija(formData: FormData) {
   const date = formData.get("date");
   const time = formData.get("time");
   const buffer = Number(formData.get("buffer"));
-
   const durration = Number(formData.get("durration"));
   const numberOfPeople = Number(formData.get("numberOfPeople"));
   const note = formData.get("note");
+
   const dt = new Date(`${date}T${time}`);
   if (isNaN(dt.getTime())) throw new Error("Datum i vrijeme nisu validni");
   const dateTime = dt.toISOString();
   const minuta = dt.getHours() * 60 + dt.getMinutes();
+
   const status = "Pending";
 
   const now = new Date();
