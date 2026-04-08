@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import { CloseButton } from "./DateTable";
 import Input from "./Input";
@@ -7,34 +7,85 @@ import { H1Datum } from "./SelectedDate";
 import SelectWorkingHours from "./SelectWorkingHours";
 import { Toggle } from "./Toggle";
 import { useCalendar } from "../_hooks/useCalendar";
+import { createSpecialDate } from "../_context/specialDatesStore";
+import { useActiveDays } from "../_context/store";
+import { updateSpecialDates } from "../_lib/updateSlobodniDani";
+import toast from "react-hot-toast";
+import { SlobodanDan } from "../_lib/Interfaces";
 
-function getData(/*employeeId izabraniDatum*/) {
-  return {
-    isOpen: true,
-    start: "07:00",
-    end: "15:00",
-    reason: "",
-  };
-}
+const formatToLocalTime = (timetz: string) => {
+  if (!timetz) return "";
 
+  // timetz je npr. "10:00:00+02"
+  // Uzimamo samo dio prije prvog i drugog ":"
+  const parts = timetz.split(":");
+  const hours = parts[0]; // "10"
+  const minutes = parts[1]; // "00"
+
+  return `${hours}:${minutes}`;
+};
 export function WorkingHoursForm({
   isSelectDate,
+  restoranId,
+  specialDates,
 }: {
   isSelectDate: boolean | string;
+  restoranId: number;
+  specialDates: SlobodanDan[];
 }) {
   const { day, month, year } = useCalendar();
   const izabraniDatum = `${day! < 10 ? `0${day}` : day}-${month! + 1 < 10 ? `0${month! + 1}` : month! + 1}-${year}`;
+  const izabraniDatum2 = `${year}-${month! + 1 < 10 ? `0${month! + 1}` : month! + 1}-${day! < 10 ? `0${day}` : day}`;
 
-  const { isOpen, start, end, reason } = getData(); //employeeId, izabraniDatum
-  const [isOpen2, setIsOpen2] = useState(isOpen);
+  let specialDate = specialDates.find((d) => d.date === izabraniDatum2);
+  const activeDays = useActiveDays((state) => state.activeDays);
+  if (!specialDate) {
+    specialDate = createSpecialDate(izabraniDatum2, activeDays);
+  }
 
-  const [otvaranje, setOtvaranje] = useState("07:00");
-  const [zatvaranje, setZatvaranje] = useState("22:00");
-  const [note, setNote] = useState("");
+  const isOpen2 = specialDate?.isOpen;
+  const start = formatToLocalTime(specialDate?.start || "");
+  const end = formatToLocalTime(specialDate?.end || "");
+  const notee = specialDate?.note;
+
+  const [isOpen, setIsOpen] = useState(!!isOpen2);
+  const [otvaranje, setOtvaranje] = useState(start);
+  const [zatvaranje, setZatvaranje] = useState(end);
+  const [note, setNote] = useState(notee);
+
+  const [state, formAction] = useActionState(
+    async () =>
+      updateSpecialDates(
+        [
+          {
+            ...specialDate,
+            start: otvaranje,
+            end: zatvaranje,
+            note,
+            isOpen,
+          },
+        ],
+        restoranId,
+      ),
+    null,
+  );
+  useEffect(() => {
+    if (state?.success) {
+      toast.success("Uspješno sačuvano");
+    } else if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
+
+  const hasChanges =
+    otvaranje !== start ||
+    zatvaranje !== end ||
+    note !== notee ||
+    isOpen !== isOpen2;
 
   if (day === 99) return null; //dan nikad nece manuelno od strane korisnika biti 99, u 1 slucaju kada ne treba renderovati formu sam ja rucno stavio da dan bude 99
   return (
-    <form action={() => {}}>
+    <form action={formAction}>
       <div className="flex flex-col gap-6 text-gray-700 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
         <div className="border-b border-gray-200 pb-4">
           <H1Datum />
@@ -45,11 +96,11 @@ export function WorkingHoursForm({
 
         {isSelectDate === "admin" && <SelectWorkingHours />}
         {/* Toggle */}
-        <Toggle state={isOpen2} setState={setIsOpen2} />
+        <Toggle state={isOpen} setState={setIsOpen} />
         {/* Dijelovi koji posive kada je salon zatvoren za taj dan */}
         <div
           className={`space-y-5 transition-all duration-300 ${
-            isOpen2 ? "opacity-100" : "opacity-50 pointer-events-none grayscale"
+            isOpen ? "opacity-100" : "opacity-50 pointer-events-none grayscale"
           }`}
         >
           <div className="grid grid-cols-2 gap-4" key={`${izabraniDatum}`}>
@@ -89,7 +140,7 @@ export function WorkingHoursForm({
               setState={setNote}
               type="text"
               placeholder="npr. Nova Godina, Slava, Privatne obaveze..."
-              defaultValue={isOpen ? reason : ""}
+              defaultValue={isOpen ? note : ""}
             />
           </div>
         </div>
@@ -97,99 +148,15 @@ export function WorkingHoursForm({
         <div className="flex gap-3 mt-4">
           <CloseButton />
           <button
-            onClick={() => {}}
-            className="flex-1 px-4 py-3 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 shadow-md transition-all active:scale-95"
+            type="submit"
+            disabled={!hasChanges}
+            className="flex-1 px-4 py-3 text-sm font-semibold text-white bg-indigo-600 rounded-xl shadow-md transition-all active:scale-95
+             hover:bg-indigo-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
           >
             Sačuvaj izmjene
           </button>
         </div>
-        <input type="hidden" name="otvaranje" value={otvaranje} />
-        <input type="hidden" name="zatvaranje" value={zatvaranje} />
-        <input type="hidden" name="note" value={note} />
       </div>
     </form>
   );
 }
-
-/**
-  const [employeeId, setEmployeeId] = useState("all");
-  const activeDays = useActiveDays((state) => state.activeDays);
-
-  //mock data
-  const employees = [
-    {
-      id: 100,
-      name: "Marko Marković",
-      title: "Glavni berber",
-      email: "marko@salon.com",
-      phone: "065 123 456",
-      services: [1],
-    },
-  ];
-  let specificDates = [];
-  if (isSelectDate === "admin") {
-    specificDates = [
-      {
-        date: "07-01-2026",
-        start: "",
-        end: "",
-        isOpen: false,
-        reason: "Bozic",
-        employees: [100],
-      },
-      {
-        date: "27-01-2026",
-        start: "10:00",
-        end: "14:00",
-        isOpen: true,
-        reason: "Sveti Sava",
-        employees: [100],
-      },
-    ];
-  } else if (isSelectDate === "employee") {
-    specificDates = [
-      {
-        date: "07-01-2026",
-        start: "",
-        end: "",
-        isOpen: false,
-        reason: "Bozic",
-      },
-      {
-        date: "27-01-2026",
-        start: "10:00",
-        end: "14:00",
-        isOpen: true,
-        reason: "Sveti Sava",
-      },
-    ];
-  }
-
-  const izabraniDatum = `${day < 10 ? `0${day}` : day}-${month + 1 < 10 ? `0${month + 1}` : month + 1}-${year}`;
-
-  let isSpecial = specificDates.find((date) => date.date === izabraniDatum);
-  let isOpen = activeDays[dayOfWeek - 1 === -1 ? 6 : dayOfWeek - 1];
-  if (isSpecial) {
-    isOpen =
-      isOpen &&
-      specificDates.find((date) =>
-        date.date === izabraniDatum && date.isOpen ? isSpecial?.isOpen : true
-      );
-  }
-  console.log(isSpecial);
-  if (onSelectDate === "admin" && employeeId !== "all" && isSpecial) {
-    if (!isSpecial.employees?.includes(employeeId)) {
-      isSpecial = { isOpen: true, start: "08:00", end: "20:00", reason: "" };
-      isOpen = true;
-    } else {
-      isOpen = isSpecial.isOpen;
-    }
-  }
-  if (onSelectDate === "admin" && employeeId === "all" && isSpecial) {
-    if (isSpecial.employees.length === employees.length) {
-      isOpen = isSpecial.isOpen;
-    } else {
-      isSpecial = { isOpen: true, start: "08:00", end: "20:00", reason: "" };
-      isOpen = true;
-    }
-  } */

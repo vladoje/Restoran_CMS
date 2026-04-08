@@ -17,6 +17,7 @@ import {
   getOpeningHours,
 } from "@/app/_lib/getWorkingHours";
 import { Restoran, User } from "@/app/_lib/Interfaces";
+import SpecialDatesList from "../../../_components/AllSpecialDates";
 
 async function Page({
   params,
@@ -28,12 +29,15 @@ async function Page({
     getRestoranWithSlug(restaurantSlug),
     getUser(1),
   ]);
-  const specialDate = await getAllSpecialDates(restoran.restoranId);
+  const specialDates = await getAllSpecialDates(restoran.restoranId);
+
   const openingHours = await getOpeningHours(restoran.restoranId);
   return (
     <main className="flex-1 p-5 max-w-xl mx-auto w-full pb-24 text-gray-800">
       {/* Sekcija za specifične datume */}
-      <DateTable />
+      <SpecialDatesList specialDates={specialDates} />
+
+      <DateTable specialDates={specialDates} restoranId={restoran.restoranId} />
 
       {/* Standardno radno vrijeme */}
       <StandardWorkTime openingHours={openingHours} />

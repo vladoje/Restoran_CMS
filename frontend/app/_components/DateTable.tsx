@@ -10,8 +10,17 @@ import OtherRows from "./OtherRows";
 import { CalendarProvider, daysOfWeek2 } from "../_context/CalendarContext";
 import { useModal } from "../_hooks/useModal";
 import Td from "./Td";
+// import { useSpecialDates } from "../_context/specialDatesStore";
+// import { useEffect } from "react";
+import { SlobodanDan } from "../_lib/Interfaces";
 
-function DateTable() {
+function DateTable({
+  specialDates,
+  restoranId,
+}: {
+  specialDates: SlobodanDan[];
+  restoranId: number;
+}) {
   const isSelectDate = "admin";
   return (
     <div className="mb-6">
@@ -46,7 +55,11 @@ function DateTable() {
             </div>
 
             <Modal.Window name="working-hours-form">
-              <WorkingHoursForm isSelectDate={isSelectDate} />
+              <WorkingHoursForm
+                restoranId={restoranId}
+                isSelectDate={isSelectDate}
+                specialDates={specialDates}
+              />
             </Modal.Window>
           </Modal>
         </div>{" "}

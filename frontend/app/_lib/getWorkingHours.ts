@@ -3,10 +3,13 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 export async function getAllSpecialDates(restoranId: number) {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
   const { data, error } = await createClient(await cookies())
     .from("SlobodniDani")
     .select("*")
-    .eq("restoranId", restoranId);
+    .eq("restoranId", restoranId)
+    .gte("date", start.toISOString());
 
   if (error) {
     console.error(error);
