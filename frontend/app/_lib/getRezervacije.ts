@@ -87,3 +87,24 @@ export async function get30dayReservationsForTables(tableIds: number[]) {
 
   return data?.map(mapRezervacija) ?? [];
 }
+export async function get30dayReservationsForRestoran(restoranId: number) {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(start);
+  end.setDate(end.getDate() + 30);
+
+  const { data, error } = await createClient(await cookies())
+    .from("Rezervacije")
+    .select("*")
+    .eq("restoranId", restoranId)
+    .gte("dateTime", start.toISOString())
+    .lt("dateTime", end.toISOString());
+
+  if (error) {
+    console.error(error);
+    notFound();
+  }
+
+  return data?.map(mapRezervacija) ?? [];
+}

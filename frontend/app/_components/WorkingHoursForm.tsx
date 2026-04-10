@@ -13,11 +13,9 @@ import { updateSpecialDates } from "../_lib/updateSlobodniDani";
 import toast from "react-hot-toast";
 import { SlobodanDan } from "../_lib/Interfaces";
 
-const formatToLocalTime = (timetz: string) => {
+export const formatToLocalTime = (timetz: string) => {
   if (!timetz) return "";
 
-  // timetz je npr. "10:00:00+02"
-  // Uzimamo samo dio prije prvog i drugog ":"
   const parts = timetz.split(":");
   const hours = parts[0]; // "10"
   const minutes = parts[1]; // "00"

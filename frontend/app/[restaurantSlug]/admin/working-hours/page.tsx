@@ -11,13 +11,14 @@ export const daysOfWeek2 = {
 import DateTable from "@/app/_components/DateTable";
 import StandardWorkTime from "@/app/_components/StandardWorkTime";
 import { getRestoranWithSlug } from "@/app/_lib/getRestoran";
-import { getUser } from "@/app/_lib/getUser";
+// import { getUser } from "@/app/_lib/getUser";
 import {
   getAllSpecialDates,
   getOpeningHours,
 } from "@/app/_lib/getWorkingHours";
-import { Restoran, User } from "@/app/_lib/Interfaces";
+// import { Restoran, User } from "@/app/_lib/Interfaces";
 import SpecialDatesList from "../../../_components/AllSpecialDates";
+import { Restoran } from "@/app/_lib/Interfaces";
 
 async function Page({
   params,
@@ -25,10 +26,11 @@ async function Page({
   params: Promise<{ restaurantSlug: string }>;
 }) {
   const { restaurantSlug } = await params;
-  const [restoran, user]: [Restoran, User] = await Promise.all([
-    getRestoranWithSlug(restaurantSlug),
-    getUser(1),
-  ]);
+  // const [restoran, user]: [Restoran, User] = await Promise.all([
+  //   getRestoranWithSlug(restaurantSlug),
+  //   getUser(1),
+  // ]);
+  const restoran: Restoran = await getRestoranWithSlug(restaurantSlug);
   const specialDates = await getAllSpecialDates(restoran.restoranId);
 
   const openingHours = await getOpeningHours(restoran.restoranId);
