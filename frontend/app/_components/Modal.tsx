@@ -77,11 +77,11 @@ function Window({ name, children }: WindowProps) {
     >
       <div
         ref={ref}
-        className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${!isDarkMode ? "bg-background" : "bg-background-dark"} rounded-2xl shadow-xl p-8 transition-all duration-500 w-[95%] max-w-lg`}
+        className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl p-8 transition-all duration-500 w-[95%] max-w-lg`}
       >
         <button
           onClick={close}
-          className={`absolute top-4 right-4 p-1 rounded-md  hover:bg-gray-100 hover:text-gray-600 transition-all `}
+          className={`absolute top-4 right-4 p-1 rounded-md bg-gray-600  hover:bg-gray-100 hover:text-gray-600 transition-all `}
         >
           <HiXMark className="w-6 h-6" />
         </button>

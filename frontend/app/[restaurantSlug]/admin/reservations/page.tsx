@@ -1,7 +1,12 @@
 import AdminSveRezervacije from "@/app/_components/AdminSveRezervacije";
 import { getRestoranWithSlug } from "@/app/_lib/getRestoran";
-import { get30dayReservationsForRestoran } from "@/app/_lib/getRezervacije";
-import { Restoran } from "@/app/_lib/Interfaces";
+import {
+  get30dayReservationsForRestoran,
+  getOldReservationsForRestoran,
+} from "@/app/_lib/getRezervacije";
+import { getAllTablesFromSala, getSala } from "@/app/_lib/getTables";
+import { getOpeningHours } from "@/app/_lib/getWorkingHours";
+import { OpeningHour, Restoran } from "@/app/_lib/Interfaces";
 
 async function Page({
   params,
@@ -13,13 +18,31 @@ async function Page({
   const rezervacije = await get30dayReservationsForRestoran(
     restoran.restoranId,
   );
-  // [...rezervacije] da ne bi mjenjali rezervacije niz
-  const sortedRezervacija = [...rezervacije].sort((a, b) => {
-    return new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime();
-  });
+  const stareRezervacije = await getOldReservationsForRestoran(
+    restoran.restoranId,
+  );
+  const sala = await getSala(restoran.restoranId);
+  const stolovi = await getAllTablesFromSala(sala.salaId);
+  const radnoVrijemee: OpeningHour[] = await getOpeningHours(
+    restoran.restoranId,
+  );
+  const radnoVrijeme = [...radnoVrijemee].sort(
+    (a, b) => a.dayOfWeek - b.dayOfWeek,
+  );
+
   return (
     <div>
-      <AdminSveRezervacije sortedRezervacija={sortedRezervacija} />
+      <AdminSveRezervacije
+        stolovi={stolovi}
+        radnoVrijeme={radnoVrijeme}
+        sortedRezervacija={rezervacije}
+      />
+      <AdminSveRezervacije
+        stolovi={stolovi}
+        radnoVrijeme={radnoVrijeme}
+        label="Stare rezervacije"
+        sortedRezervacija={stareRezervacije}
+      />
     </div>
   );
 }

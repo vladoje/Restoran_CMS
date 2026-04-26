@@ -12,6 +12,7 @@ import { useActiveDays } from "../_context/store";
 import { updateSpecialDates } from "../_lib/updateSlobodniDani";
 import toast from "react-hot-toast";
 import { SlobodanDan } from "../_lib/Interfaces";
+import { useRouter } from "next/navigation";
 
 export const formatToLocalTime = (timetz: string) => {
   if (!timetz) return "";
@@ -32,6 +33,7 @@ export function WorkingHoursForm({
   specialDates: SlobodanDan[];
 }) {
   const { day, month, year } = useCalendar();
+  const router = useRouter();
   const izabraniDatum = `${day! < 10 ? `0${day}` : day}-${month! + 1 < 10 ? `0${month! + 1}` : month! + 1}-${year}`;
   const izabraniDatum2 = `${year}-${month! + 1 < 10 ? `0${month! + 1}` : month! + 1}-${day! < 10 ? `0${day}` : day}`;
 
@@ -70,10 +72,11 @@ export function WorkingHoursForm({
   useEffect(() => {
     if (state?.success) {
       toast.success("Uspješno sačuvano");
+      router.refresh();
     } else if (state?.error) {
       toast.error(state.error);
     }
-  }, [state]);
+  }, [state, router]);
 
   const hasChanges =
     otvaranje !== start ||
@@ -96,35 +99,39 @@ export function WorkingHoursForm({
         {/* Toggle */}
         <Toggle state={isOpen} setState={setIsOpen} />
         {/* Dijelovi koji posive kada je salon zatvoren za taj dan */}
-        <div
-          className={`space-y-5 transition-all duration-300 ${
-            isOpen ? "opacity-100" : "opacity-50 pointer-events-none grayscale"
-          }`}
-        >
-          <div className="grid grid-cols-2 gap-4" key={`${izabraniDatum}`}>
-            {/* Input za vrijeme otvaranja */}
-            <div className="relative bg-gray-50 border border-gray-200 rounded-xl p-3">
-              <span className="absolute -top-2 left-3 px-2 bg-white text-[10px] font-bold text-gray-400 uppercase tracking-tight">
-                Otvaranje
-              </span>
-              <Input
-                state={otvaranje}
-                setState={setOtvaranje}
-                defaultValue={isOpen ? start : "07:00"}
-                type="time"
-              />
-            </div>
-            {/* Input za vrijeme zatvaranja */}
-            <div className="relative bg-gray-50 border border-gray-200 rounded-xl p-3">
-              <span className="absolute -top-2 left-3 px-2 bg-white text-[10px] font-bold text-gray-400 uppercase tracking-tight">
-                Zatvaranje
-              </span>
-              <Input
-                state={zatvaranje}
-                setState={setZatvaranje}
-                defaultValue={isOpen ? end : "15:00"}
-                type="time"
-              />
+        <div className="space-y-5 transition-all duration-300">
+          <div
+            className={` ${
+              isOpen
+                ? "opacity-100"
+                : "opacity-50 pointer-events-none grayscale"
+            }`}
+          >
+            <div className="grid grid-cols-2 gap-4" key={`${izabraniDatum}`}>
+              {/* Input za vrijeme otvaranja */}
+              <div className="relative bg-gray-50 border border-gray-200 rounded-xl p-3">
+                <span className="absolute -top-2 left-3 px-2 bg-white text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                  Otvaranje
+                </span>
+                <Input
+                  state={otvaranje}
+                  setState={setOtvaranje}
+                  defaultValue={isOpen ? start : "07:00"}
+                  type="time"
+                />
+              </div>
+              {/* Input za vrijeme zatvaranja */}
+              <div className="relative bg-gray-50 border border-gray-200 rounded-xl p-3">
+                <span className="absolute -top-2 left-3 px-2 bg-white text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                  Zatvaranje
+                </span>
+                <Input
+                  state={zatvaranje}
+                  setState={setZatvaranje}
+                  defaultValue={isOpen ? end : "15:00"}
+                  type="time"
+                />
+              </div>
             </div>
           </div>
 

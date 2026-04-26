@@ -9,7 +9,7 @@ export async function updateSpecialDates(
 ) {
   try {
     const supabase = await createClient(await cookies());
-
+    console.log(slobodniDani);
     const postojeci = slobodniDani.filter((dan) => dan.slobodanDanId !== -1);
     const novi = slobodniDani.filter((dan) => dan.slobodanDanId === -1);
     if (!Number.isInteger(restoranId)) {
@@ -39,20 +39,26 @@ export async function updateSpecialDates(
     });
 
     // 4. Provjera u bazi da li ID-ovi zaista pripadaju tom restoranu (Sigurnost)
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
     const { data: existing, error: fetchError } = await supabase
       .from("SlobodniDani")
       .select("*")
+      .gte("date", start.toISOString())
       .eq("restoranId", restoranId);
-
-    if (fetchError || existing.length !== postojeci.length) {
+    // console.log(existing?.length, postojeci.length);
+    if (fetchError) {
       throw new Error("Restoran nije pronađen ili su podaci neispravni.");
     }
 
-    const existingIds = existing.map((row) => row.slobodanDanId).sort();
-    const incomingIds = postojeci.map((row) => row.slobodanDanId).sort();
+    const existingIdsSet = new Set(existing.map((r) => r.slobodanDanId));
 
-    if (!existingIds.every((id, i) => id === incomingIds[i])) {
-      throw new Error("Neovlaštena izmjena ID-ova specijalnog radnog vremena.");
+    const allValid = postojeci.every((row) =>
+      existingIdsSet.has(row.slobodanDanId),
+    );
+
+    if (!allValid) {
+      throw new Error("Neovlaštena izmjena ID-ova.");
     }
     const zaUpdate = postojeci.filter((dan) => {
       const dbDan: SlobodanDan = existing.find(

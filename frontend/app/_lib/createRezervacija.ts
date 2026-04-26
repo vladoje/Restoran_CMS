@@ -105,3 +105,30 @@ export async function createRezervacija(formData: FormData) {
 
   return data;
 }
+export async function changeReservationStatus(
+  reservationId: number,
+  status: string,
+) {
+  if (status !== "Cancelled" && status !== "Confirmed") {
+    throw new Error("Pogrešan status");
+  }
+
+  const supabase = createClient(await cookies());
+
+  const { data, error } = await supabase
+    .from("Rezervacije")
+    .update({ status })
+    .eq("reservationId", reservationId)
+    .select("*");
+
+  if (error) {
+    throw new Error("Greška pri update-u statusa");
+  }
+
+  if (!data || data.length === 0) {
+    throw new Error("Rezervacija ne postoji");
+  }
+  return data;
+}
+
+// await new Promise((resolve) => setTimeout(resolve, 1000));
