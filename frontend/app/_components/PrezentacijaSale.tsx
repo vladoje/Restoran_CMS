@@ -29,11 +29,11 @@ function PrezentacijaSale({
 
   return (
     <div
-      className="relative border rounded-xl bg-gray-100"
+      className="mx-auto relative border border-gray-200 rounded-xl bg-gray-100"
       style={{
-        width: x,
-        height: y,
-        maxWidth: "100%", // Dodato da spreči prelivanje
+        width: x + 4,
+        height: y + 4,
+        maxWidth: "100%",
       }}
     >
       {stolovi.map((table: Sto, k) => {
@@ -61,9 +61,15 @@ function PrezentacijaSale({
               setTime?.(null);
             }}
             key={`${table.tableId}-${i}-${k}`}
-            className={`absolute rounded-md flex items-center justify-center text-white text-xs
-  ${isReserved ? "bg-green-500" : "bg-gray-300"}
-`}
+            title={`Sto ${table.tableNumber} (${table.capacity} mjesta)`}
+            className={`absolute rounded-lg flex items-center justify-center 
+  text-xs font-medium cursor-pointer transition-all 
+  ${
+    isReserved
+      ? "bg-green-500 text-white shadow-md scale-105"
+      : "bg-white text-gray-700 border hover:bg-gray-100 hover:scale-105"
+  }
+  `}
             style={{
               left,
               top,

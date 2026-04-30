@@ -149,3 +149,98 @@ export async function getOldReservationsForRestoran(restoranId: number) {
 
   return data?.map(mapRezervacija) ?? [];
 }
+export async function get7dayReservationsForRestoran(restoranId: number) {
+  const now = new Date();
+  // const danas = now.toISOString().slice(0, 10);
+
+  let day = now.getDay();
+  if (day === 0) day = 7;
+
+  const diff = day - 1;
+
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - diff);
+  monday.setHours(0, 0, 0, 0);
+
+  // const defaultDate = monday.toISOString().slice(0, 10);
+  // const start = new Date();
+
+  const end = new Date(monday);
+  end.setDate(end.getDate() + 7);
+  end.setHours(0, 0, 0, 0);
+  // console.log(monday, end);
+
+  const { data, error } = await createClient(await cookies())
+    .from("Rezervacije")
+    .select(
+      `    *,
+    user:Users(*),
+    table:Stolovi(*)`,
+    )
+    .eq("restoranId", restoranId)
+    .gte("dateTime", monday.toISOString())
+    .lt("dateTime", end.toISOString());
+
+  if (error) {
+    console.error(error);
+    notFound();
+  }
+
+  return data?.map(mapRezervacija) ?? [];
+}
+export async function getTodayReservationsForRestoran(restoranId: number) {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(start);
+  end.setHours(23, 59, 59, 999);
+
+  const { data, error } = await createClient(await cookies())
+    .from("Rezervacije")
+    .select(
+      `    *,
+    user:Users(*),
+    table:Stolovi(*)`,
+    )
+    .eq("restoranId", restoranId)
+    .gte("dateTime", start.toISOString())
+    .lt("dateTime", end.toISOString());
+
+  if (error) {
+    console.error(error);
+    notFound();
+  }
+
+  return data?.map(mapRezervacija) ?? [];
+}
+export async function getReservationsInProgressForRestoran(
+  restoranId: number,
+  trajanjeRezervacije: number,
+) {
+  const start = new Date();
+  start.setMinutes(start.getMinutes() - trajanjeRezervacije);
+
+  const end = new Date();
+  end.setMinutes(end.getMinutes() + trajanjeRezervacije); //nisam siguran za dodavanje minuta na kraj, definitivno treba dodati
+  //ako je neko dosao prije rezervacije ali da li to treba biti cijela rezervacija poslije,
+  //ne moze niko biti potvrdjen da je dosao ako mu rezervacija krece tek za 2h npr
+
+  const { data, error } = await createClient(await cookies())
+    .from("Rezervacije")
+    .select(
+      `    *,
+    user:Users(*),
+    table:Stolovi(*)`,
+    )
+    .eq("restoranId", restoranId)
+    .eq("status", "Confirmed")
+    .gte("dateTime", start.toISOString())
+    .lt("dateTime", end.toISOString());
+
+  if (error) {
+    console.error(error);
+    notFound();
+  }
+
+  return data?.map(mapRezervacija) ?? [];
+}

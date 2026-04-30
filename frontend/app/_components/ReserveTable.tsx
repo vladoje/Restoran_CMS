@@ -262,7 +262,7 @@ function ReserveTable({
   );
 }
 
-function SelectBrojGostiju({
+export function SelectBrojGostiju({
   tableCapacity,
   state,
   setState,
@@ -277,7 +277,8 @@ function SelectBrojGostiju({
     <select
       value={state}
       onChange={(e) => setState?.(Number(e.target.value))}
-      className="w-full border rounded-lg p-2"
+      className="w-full border rounded-xl p-3 bg-white 
+focus:ring-2 focus:ring-black/20 focus:outline-none"
     >
       {lista.map((l) => (
         <option key={l} value={l}>
