@@ -37,9 +37,9 @@ function Page({ slug }: { slug: string }) {
                     <span>Korisničko ime</span>
                   </p>
                 }
-                state={username}
+                value={username}
                 defaultValue={user.name}
-                setState={setUsername}
+                setValue={setUsername}
               />
             </div>
 

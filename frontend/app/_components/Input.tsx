@@ -1,78 +1,89 @@
-import { type ReactNode } from "react";
+import { Dispatch, SetStateAction, ReactNode } from "react";
 
 function Input({
   type = "text",
   label,
+  value,
   defaultValue,
   placeholder,
-  state,
-  setState,
+  setValue,
 }: {
   type?: string;
   label?: ReactNode;
-  defaultValue?: string;
+  value?: string | number;
+  defaultValue?: string | number;
   placeholder?: string;
-  state?: string;
-  setState?: (state: string) => void;
+  setValue?: Dispatch<SetStateAction<string>>;
 }) {
   const isDarkMode = true;
-  const stil = `w-full text-base font-medium  border-2 ${isDarkMode ? "text-text bg-surface" : "text-text-dark bg-surface-dark"}  rounded-2xl py-3.5 px-5  outline-none transition-all placeholder:text-gray-300`;
-  if (state !== undefined && setState) {
-    return (
-      <div>
-        <label className="block text-xs font-semibold  uppercase tracking-wide ml-1 mb-2">
-          {label}
-        </label>
-        <input
-          type={type}
-          className={stil}
-          value={state || defaultValue || ""}
-          onChange={(e) => {
-            setState?.(e.target.value);
-          }}
-        />
-      </div>
-    );
-  }
-  return (
-    <input
-      type={type}
-      defaultValue={defaultValue}
-      placeholder={placeholder}
-      className={stil}
-    />
-  );
-}
 
-export default Input;
-function InputDark({
-  type = "text",
-  label,
-  state,
-  setState,
-}: {
-  type?: string;
-  label?: ReactNode;
-  state: string;
-  setState: (state: string) => void;
-}) {
-  const isDarkMode = true;
-  const stil = `w-full text-base font-medium  border-2 ${!isDarkMode ? "border-border text-text bg-surface" : " border-border-dark text-text-dark bg-surface-dark"}  rounded-2xl py-3.5 px-5  outline-none transition-all placeholder:text-gray-300`;
+  const style = `w-full text-base font-medium border-2 ${
+    isDarkMode ? "text-text bg-surface" : "text-text-dark bg-surface-dark"
+  } rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300`;
+
   return (
     <div>
-      <label className="block text-xs font-semibold  uppercase tracking-wide ml-1 mb-2">
-        {label}
-      </label>
+      {label && (
+        <label className="block text-xs font-semibold uppercase tracking-wide ml-1 mb-2">
+          {label}
+        </label>
+      )}
+
       <input
         type={type}
-        className={stil}
-        value={state || ""}
-        onChange={(e) => {
-          setState?.(e.target.value);
-        }}
+        className={style}
+        value={value ?? ""}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        onChange={(e) => setValue?.(e.target.value)}
       />
     </div>
   );
 }
 
-export { InputDark };
+export default Input;
+export function InputNumber({
+  label,
+  value,
+  defaultValue,
+  setValue,
+}: {
+  label?: ReactNode;
+  value?: number;
+  defaultValue?: number;
+  setValue?: Dispatch<SetStateAction<number>>;
+}) {
+  const isDarkMode = true;
+
+  const style = `w-full text-base font-medium border-2 ${
+    isDarkMode ? "text-text bg-surface" : "text-text-dark bg-surface-dark"
+  } rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300`;
+
+  return (
+    <div>
+      {label && (
+        <label className="block text-xs font-semibold uppercase tracking-wide ml-1 mb-2">
+          {label}
+        </label>
+      )}
+
+      <input
+        type="number"
+        className={style}
+        value={value ?? ""}
+        defaultValue={defaultValue}
+        onChange={(e) => {
+          const val = e.target.value;
+
+          if (val === "") {
+            setValue?.(0); // ili undefined ako želiš
+            return;
+          }
+
+          const num = Number(val);
+          if (!isNaN(num)) setValue?.(num);
+        }}
+      />
+    </div>
+  );
+}
