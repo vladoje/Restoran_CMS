@@ -114,8 +114,8 @@ export function WorkingHoursForm({
                   Otvaranje
                 </span>
                 <Input
-                  state={otvaranje}
-                  setState={setOtvaranje}
+                  value={otvaranje}
+                  setValue={setOtvaranje}
                   defaultValue={isOpen ? start : "07:00"}
                   type="time"
                 />
@@ -126,8 +126,8 @@ export function WorkingHoursForm({
                   Zatvaranje
                 </span>
                 <Input
-                  state={zatvaranje}
-                  setState={setZatvaranje}
+                  value={zatvaranje}
+                  setValue={setZatvaranje}
                   defaultValue={isOpen ? end : "15:00"}
                   type="time"
                 />
@@ -141,8 +141,8 @@ export function WorkingHoursForm({
               Povod / Bilješka
             </span>
             <Input
-              state={note}
-              setState={setNote}
+              value={note}
+              setValue={setNote}
               type="text"
               placeholder="npr. Nova Godina, Slava, Privatne obaveze..."
               defaultValue={isOpen ? note : ""}

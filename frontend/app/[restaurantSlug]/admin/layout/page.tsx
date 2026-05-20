@@ -24,6 +24,7 @@ async function Page({
         Korisnicima vidljiv izgled vase sale
       </h1>
       <ClientLayout restoran={restoran} sala={sala} stolovi={allTables} />
+      {/* <ClientLayout restoran={restoran} sala={sala} stolovi={allTables} /> */}
     </div>
   );
 }
