@@ -113,12 +113,7 @@ export function WorkingHoursForm({
                 <span className="absolute -top-2 left-3 px-2 bg-white text-[10px] font-bold text-gray-400 uppercase tracking-tight">
                   Otvaranje
                 </span>
-                <Input
-                  value={otvaranje}
-                  setValue={setOtvaranje}
-                  defaultValue={isOpen ? start : "07:00"}
-                  type="time"
-                />
+                <Input value={otvaranje} setValue={setOtvaranje} type="time" />
               </div>
               {/* Input za vrijeme zatvaranja */}
               <div className="relative bg-gray-50 border border-gray-200 rounded-xl p-3">
@@ -128,7 +123,6 @@ export function WorkingHoursForm({
                 <Input
                   value={zatvaranje}
                   setValue={setZatvaranje}
-                  defaultValue={isOpen ? end : "15:00"}
                   type="time"
                 />
               </div>

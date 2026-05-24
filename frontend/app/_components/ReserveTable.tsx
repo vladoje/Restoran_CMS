@@ -11,22 +11,40 @@ import PrezentacijaSale from "./PrezentacijaSale";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 
 import { createRezervacija } from "../_lib/createRezervacija";
-import { Restoran, Rezervacija, Sala, Sto, User } from "../_lib/Interfaces";
+import {
+  OpeningHour,
+  Restoran,
+  Rezervacija,
+  Sala,
+  SlobodanDan,
+  Sto,
+  User,
+} from "../_lib/Interfaces";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
+// const specialDates: SlobodanDan[] = await getAllSpecialDates(restoranId);
+//   const openingHour: OpeningHour[] = (await getOpeningHours(restoranId))
+// .find(
+//   (dan) => dan.dayOfWeek === danasnjiDan,
+// );
 function ReserveTable({
   sala,
   allTables,
   user,
   restoran,
   rezervacije,
+  isAdmin = false,
+  specialDates,
+  openingHours,
 }: {
   sala: Sala;
   allTables: Sto[];
   user: User;
   rezervacije: Rezervacija[];
   restoran: Restoran;
+  isAdmin?: boolean;
+  specialDates: SlobodanDan[];
+  openingHours: OpeningHour[];
 }) {
   const router = useRouter();
   const [date, setDate] = useState<string | null>(null);
@@ -116,6 +134,14 @@ function ReserveTable({
     restoran.trajanjeRezervacije,
   ]);
 
+  const specijalniDan = specialDates.find((datum) => datum.date === date);
+  let danasnjiDan = new Date(date || "").getDay() - 1;
+
+  if (danasnjiDan === -1) danasnjiDan = 6;
+  if (danasnjiDan === 0) danasnjiDan = 0;
+  const openingHour: OpeningHour | undefined = openingHours.find(
+    (dan) => dan.dayOfWeek === danasnjiDan,
+  );
   return (
     <form
       onSubmit={async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -124,7 +150,17 @@ function ReserveTable({
         try {
           await createRezervacija(formData);
           toast.success("Uspjesno rezervisan termin");
-          router.push(`/${restoran.slug}`);
+          if (!isAdmin) {
+            router.push(`/${restoran.slug}`);
+          } else {
+            router.refresh();
+            setDate(null);
+            setTime(null);
+            setTable(null);
+            setTableId(null);
+            setCapacity(null);
+            setNote("");
+          }
         } catch (e) {
           if (e instanceof Error) {
             toast.error(e.message);
@@ -196,17 +232,29 @@ function ReserveTable({
                 <div className="w-full max-w-[calc(100vw-48px)] overflow-x-auto">
                   {" "}
                   {/* Dodato ograničenje širine */}
-                  <TimeGrid
-                    data={getTimeRange({
-                      startTime: "10:00",
-                      endTime: "21:00",
-                      interval: "00:30",
-                    })}
-                    value={time}
-                    onChange={setTime}
-                    disableTime={disableTime}
-                    allowDeselect
-                  />
+                  {openingHour?.isOpen === false ||
+                  specijalniDan?.isOpen === false ? (
+                    <div className="flex flex-col items-center justify-center rounded-xl border border-gray-200 bg-gray-50 py-10 text-center">
+                      <span className="text-sm font-medium text-gray-600">
+                        Nije dostupno za rezervacije
+                      </span>
+                      <span className="mt-1 text-xs text-gray-400">
+                        Restoran je zatvoren ovaj dan
+                      </span>
+                    </div>
+                  ) : (
+                    <TimeGrid
+                      data={getTimeRange({
+                        startTime: `${specijalniDan ? specijalniDan.start.slice(0, 4) : openingHour?.startTime}`,
+                        endTime: `${specijalniDan ? specijalniDan.end.slice(0, 4) : openingHour?.endTime}`,
+                        interval: "00:30",
+                      })}
+                      value={time}
+                      onChange={setTime}
+                      disableTime={[...disableTime]}
+                      allowDeselect
+                    />
+                  )}
                 </div>
               </div>
 

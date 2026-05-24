@@ -1,6 +1,8 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
+import { getAllSpecialDates, getOpeningHours } from "./getWorkingHours";
+import { OpeningHour, SlobodanDan } from "./Interfaces";
 
 export async function createRezervacija(formData: FormData) {
   const restoranId = Number(formData.get("restoranId"));
@@ -14,6 +16,7 @@ export async function createRezervacija(formData: FormData) {
   const note = formData.get("note");
 
   const dt = new Date(`${date}T${time}`);
+  console.log(`${date}T${time}`);
   if (isNaN(dt.getTime())) throw new Error("Datum i vrijeme nisu validni");
   const dateTime = dt.toISOString();
   const minuta = dt.getHours() * 60 + dt.getMinutes();
@@ -48,6 +51,49 @@ export async function createRezervacija(formData: FormData) {
   if (!dateTime) {
     throw new Error("Datum je obavezan");
   }
+  let danasnjiDan = dt.getDay() - 1;
+
+  if (danasnjiDan === -1) danasnjiDan = 6;
+  if (danasnjiDan === 0) danasnjiDan = 0;
+  const specialDates: SlobodanDan[] = await getAllSpecialDates(restoranId);
+  const openingHour: OpeningHour = (await getOpeningHours(restoranId)).find(
+    (dan) => dan.dayOfWeek === danasnjiDan,
+  );
+
+  if (openingHour.isOpen === false) {
+    throw new Error("Za izabrani datum restoran ne radi");
+  }
+  const specijalniDan = specialDates.find((datum) => datum.date === date);
+
+  const hours = Number(time.split(":").at(0)) || 0;
+  const minutes = hours * 60 + (Number(time.split(":").at(1)) || 0);
+
+  let Shours: number, Sminutes: number, Ehours: number, Eminutes: number;
+
+  if (specijalniDan) {
+    if (specijalniDan.isOpen === false) {
+      throw new Error("Za izabrani datum restoran ne radi");
+    }
+    Shours = Number(specijalniDan.start.split(":").at(0)) || 0;
+    Sminutes =
+      Shours * 60 + (Number(specijalniDan.start.split(":").at(1)) || 0);
+
+    Ehours = Number(specijalniDan.end.split(":").at(0)) || 0;
+    Eminutes = Ehours * 60 + (Number(specijalniDan.end.split(":").at(1)) || 0);
+  } else {
+    Shours = Number(openingHour.startTime.split(":").at(0)) || 0;
+    Sminutes =
+      Shours * 60 + (Number(openingHour.startTime.split(":").at(1)) || 0);
+
+    Ehours = Number(openingHour.endTime.split(":").at(0)) || 0;
+    Eminutes =
+      Ehours * 60 + (Number(openingHour.endTime.split(":").at(1)) || 0);
+  }
+
+  if (minutes > Eminutes || minutes < Sminutes) {
+    throw new Error("Rezervacija mora biti u toku radnog vremena");
+  }
+  console.log(specijalniDan, openingHour, minutes, Eminutes, Sminutes);
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
 

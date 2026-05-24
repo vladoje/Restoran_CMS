@@ -2,8 +2,17 @@ import { getRestoranWithSlug } from "@/app/_lib/getRestoran";
 import { getUser } from "@/app/_lib/getUser";
 import { getAllTablesFromSala, getSala } from "@/app/_lib/getTables";
 import ReserveTable from "@/app/_components/ReserveTable";
-import { Restoran, User } from "@/app/_lib/Interfaces";
+import {
+  OpeningHour,
+  Restoran,
+  SlobodanDan,
+  User,
+} from "@/app/_lib/Interfaces";
 import { get30dayReservationsForTables } from "@/app/_lib/getRezervacije";
+import {
+  getAllSpecialDates,
+  getOpeningHours,
+} from "@/app/_lib/getWorkingHours";
 
 export default async function Page({
   params,
@@ -22,8 +31,17 @@ export default async function Page({
   const tableIds = allTables.map((t) => t.tableId);
 
   const rezervacije = await get30dayReservationsForTables(tableIds);
+  const specialDates: SlobodanDan[] = await getAllSpecialDates(
+    restoran.restoranId,
+  );
+  const openingHours: OpeningHour[] = await getOpeningHours(
+    restoran.restoranId,
+  );
+
   return (
     <ReserveTable
+      specialDates={specialDates}
+      openingHours={openingHours}
       user={user}
       restoran={restoran}
       sala={sala}

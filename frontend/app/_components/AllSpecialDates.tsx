@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { SlobodanDan } from "../_lib/Interfaces";
-import { daysOfWeek2 } from "../_context/CalendarContext";
+import { daysOfWeek } from "../_context/CalendarContext";
 import { formatToLocalTime } from "./WorkingHoursForm";
 
 interface SpecialDatesListProps {
@@ -34,7 +34,8 @@ export default function SpecialDatesList({
       <ul className="divide-y divide-gray-100">
         {visibleDates.map((d) => {
           const dayOfWeek = new Date(d.date).getDay();
-
+          // if (dayOfWeek === 0) dayOfWeek = 6;
+          // if (dayOfWeek === 1) dayOfWeek = 0;
           return (
             <li
               key={d.slobodanDanId}
@@ -43,8 +44,7 @@ export default function SpecialDatesList({
               {/* LEFT */}
               <div>
                 <p className="font-medium text-gray-800">
-                  {d.date} ({daysOfWeek2[dayOfWeek as keyof typeof daysOfWeek2]}
-                  )
+                  {d.date} ({daysOfWeek[dayOfWeek as keyof typeof daysOfWeek]})
                 </p>
 
                 <p className="text-sm text-gray-500 mt-1">
