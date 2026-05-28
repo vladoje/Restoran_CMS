@@ -43,6 +43,13 @@ export interface User {
   name: string;
   userId: number;
   passwordHash: string;
+  provider?: string | null;
+}
+export interface UserRestoran {
+  role: string;
+  userId: number;
+  id: number;
+  restoranId: number;
 }
 export interface Foooter {
   footerId: number;

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default async function Page() {
   return (
     <main className="flex-1">
@@ -11,9 +13,12 @@ export default async function Page() {
             Kreiraj stranicu svog restorana, upravljaj rezervacijama i pruži
             gostima jednostavno i brzo iskustvo rezervisanja.
           </p>
-          <button className="bg-gray-900 text-white px-8 py-4 rounded-lg text-lg hover:bg-gray-800 transition-colors">
+          <Link
+            href={`/create`}
+            className="bg-gray-900 text-white px-8 py-4 rounded-lg text-lg hover:bg-gray-800 transition-colors"
+          >
             Kreiraj stranicu restorana
-          </button>
+          </Link>
         </div>
 
         {/* Features */}

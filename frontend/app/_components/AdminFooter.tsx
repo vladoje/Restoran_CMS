@@ -3,29 +3,34 @@ import Image from "next/image";
 
 import { getRestoranWithSlug } from "../_lib/getRestoran";
 import { getSite } from "../_lib/getSite";
-import { getFooter, getLinkWithFooterId } from "../_lib/getLinks";
-import { Foooter, Linkk, Sajt } from "../_lib/Interfaces";
+
+import { Sajt } from "../_lib/Interfaces";
+import { links } from "./AdminHeader";
 
 async function Footer({ slug }: { slug: string }) {
   const restoran = await getRestoranWithSlug(slug);
   const site: Sajt = await getSite(restoran.siteId);
+  const footer = {
+    text: "TEST-RESTORAN",
 
-  const [footer, links]: [Foooter, Linkk[]] = await Promise.all([
-    getFooter(site.adminFooterId),
-    getLinkWithFooterId(site.adminFooterId),
-  ] as const);
+    classname:
+      "bg-gray-800 text-gray-100 p-6 h-32 flex flex-col justify-between",
+  };
 
   return (
     <footer className="w-full border-t mt-16">
       <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-8 md:flex-row md:justify-between">
         {/* LOGO + TEXT */}
         <div className="flex flex-col gap-3 max-w-sm">
-          {footer.hasLogo && (
-            <div className="flex items-center gap-2">
-              <Image src={site.logoUrl} alt="logo" width={32} height={32} />
-              <span className="font-semibold text-lg">{footer.text}</span>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            <Image
+              src={site?.logoUrl || "https://picsum.photos/200"}
+              alt="logo"
+              width={32}
+              height={32}
+            />
+            <span className="font-semibold text-lg">{footer.text}</span>
+          </div>
 
           <p className="text-sm opacity-70">{footer.text}</p>
         </div>
@@ -34,9 +39,9 @@ async function Footer({ slug }: { slug: string }) {
         <div className="flex flex-col gap-2">
           <span className="font-semibold text-sm mb-2">Navigacija</span>
 
-          {links.map((link) => (
+          {links.map((link, i) => (
             <Link
-              key={link.linkId}
+              key={i}
               href={link.url}
               className="text-sm opacity-80 hover:opacity-100 transition"
             >
@@ -46,14 +51,13 @@ async function Footer({ slug }: { slug: string }) {
         </div>
 
         {/* KONTAKT (placeholder za kasnije CMS) */}
-        {footer.hasContactInfo && (
-          <div className="flex flex-col gap-2">
-            <span className="font-semibold text-sm mb-2">Kontakt</span>
 
-            <p className="text-sm opacity-80">Adresa: Nije postavljena</p>
-            <p className="text-sm opacity-80">Telefon: Nije postavljen</p>
-          </div>
-        )}
+        <div className="flex flex-col gap-2">
+          <span className="font-semibold text-sm mb-2">Kontakt</span>
+
+          <p className="text-sm opacity-80">Adresa: Nije postavljena</p>
+          <p className="text-sm opacity-80">Telefon: Nije postavljen</p>
+        </div>
       </div>
 
       {/* BOTTOM BAR */}
