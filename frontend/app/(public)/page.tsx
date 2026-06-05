@@ -14,7 +14,7 @@ export default async function Page() {
             gostima jednostavno i brzo iskustvo rezervisanja.
           </p>
           <Link
-            href={`/create`}
+            href={`/`} //treba mozda stranica da se posalje mejl meni ili tekvo nesto
             className="bg-gray-900 text-white px-8 py-4 rounded-lg text-lg hover:bg-gray-800 transition-colors"
           >
             Kreiraj stranicu restorana
@@ -63,9 +63,12 @@ export default async function Page() {
             Pridruži se restoranima koji već koriste naš sistem za efikasno
             upravljanje rezervacijama.
           </p>
-          <button className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
-            Registruj se
-          </button>
+          <Link
+            href={`/login`}
+            className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+          >
+            Uloguj se
+          </Link>
         </div>
       </div>
     </main>

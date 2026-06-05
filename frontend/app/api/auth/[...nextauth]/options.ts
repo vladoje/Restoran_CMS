@@ -1,3 +1,8 @@
+//Prvo zavrsiti login za Admin-e pa onda napraviti i login za USER-e pa tek onda napraviti kredencijalni register za user-e
+//napraviti pocetni register i restoran ime slug templejt i redirect na novonapravljeni templejt, popup ili ceklista sta nedostaje
+//podesavanja, dodavanje podataka i
+//site buider i preview
+
 import { User, UserRestoran } from "@/app/_lib/Interfaces";
 import { createClient } from "@/utils/supabase/server";
 import { NextAuthOptions } from "next-auth";
@@ -14,7 +19,6 @@ export const options: NextAuthOptions = {
   providers: [
     Google({
       async profile(profile: GoogleProfile) {
-        console.log(profile);
         const email = profile.email;
         const name = profile.name;
         const provider = "google";
@@ -26,7 +30,8 @@ export const options: NextAuthOptions = {
         const supabase = await createClient(cookieStore); // Proslijedi već dovaćeni cookieStore
 
         const restoranId = cookieStore.get("restoranId")?.value;
-        if (!restoranId || isNaN(Number(restoranId)))
+        const slug = cookieStore.get("slug")?.value;
+        if (!restoranId || isNaN(Number(restoranId)) || !slug)
           throw new Error("Cookie error");
 
         const {
@@ -36,10 +41,10 @@ export const options: NextAuthOptions = {
           await supabase
             .from("Restorani")
             .select("*")
-            .eq("restoranId", restoranId)
+            .eq("restoranId", Number(restoranId))
             .single();
 
-        if (restoranError || !restoran) throw new Error("Database error");
+        if (restoranError || !restoran) throw new Error("Database error1");
 
         const {
           data: dataUser,
@@ -51,7 +56,7 @@ export const options: NextAuthOptions = {
           .single();
 
         if (userError && userError.code !== "PGRST116")
-          throw new Error("Database error");
+          throw new Error("Database error2");
 
         let user = dataUser;
 
@@ -67,7 +72,7 @@ export const options: NextAuthOptions = {
               .select("*")
               .single();
 
-          if (error || !newUser) throw new Error("Database error");
+          if (error || !newUser) throw new Error("Database error3");
 
           const {
             data: newUserRestoran,
@@ -83,7 +88,10 @@ export const options: NextAuthOptions = {
               .select("*")
               .single();
 
-          if (error2 || !newUserRestoran) throw new Error("Database error");
+          if (error2 || !newUserRestoran) {
+            console.log(error2);
+            throw new Error("Database error4");
+          }
           user = newUser;
         } else {
           // ---- POSTOJEĆI KORISNIK ----
@@ -101,7 +109,7 @@ export const options: NextAuthOptions = {
                 .select("*")
                 .single();
 
-            if (error || !updatedUser) throw new Error("Database error");
+            if (error || !updatedUser) throw new Error("Database error5");
             user = updatedUser;
           }
 
@@ -110,7 +118,7 @@ export const options: NextAuthOptions = {
             .from("RestaurantUsers")
             .select("*")
             .eq("userId", user.userId)
-            .eq("restoranId", restoranId)
+            .eq("restoranId", Number(restoranId))
             .maybeSingle();
 
           // Ako postojeći korisnik nije povezan sa ovim restoranom, poveži ga
@@ -132,6 +140,7 @@ export const options: NextAuthOptions = {
 
         // Čistimo kolačić nakon uspješne operacije
         cookieStore.delete("restoranId");
+        cookieStore.delete("slug");
 
         return {
           id: user.userId,
@@ -139,6 +148,8 @@ export const options: NextAuthOptions = {
           role: user.role,
           name,
           provider,
+          restoranId: Number(restoranId),
+          slug,
         };
       },
       clientId: process.env.GOOGLE_ID as string,
@@ -157,17 +168,25 @@ export const options: NextAuthOptions = {
           type: "text",
           placeholder: "••••••••",
         },
+        url: {
+          label: "Lozinka:",
+          type: "text",
+          placeholder: "••••••••",
+        },
       },
       async authorize(credentials) {
         //LOGIN
         const supabase = await createClient(await cookies());
         if (!credentials) {
+          console.log("1");
           return null;
         }
-        const { email, password } = credentials;
+        const { email, password, url } = credentials;
         if (!email || !password) {
+          console.log("2");
           return null;
         }
+
         const {
           data: user,
           error: userError,
@@ -176,15 +195,67 @@ export const options: NextAuthOptions = {
           .select("*")
           .eq("email", email)
           .single();
-        if (userError || !user) return null;
-        if (!user.passwordHash) return null;
+        if (userError || !user) {
+          console.log("3");
+          return null;
+        }
+        if (!user.passwordHash) {
+          console.log("4");
+          return null;
+        }
         const valid = await bcrypt.compare(password, user.passwordHash);
-        if (!valid) return null;
+        if (!valid) {
+          console.log("4");
+          return null;
+        }
+
+        const {
+          data: UserRestoran,
+          error: error2,
+        }: { data: UserRestoran[] | null; error: PostgrestError | null } =
+          await supabase
+            .from("RestaurantUsers")
+            .select("*")
+            .eq("userId", user.userId);
+        ////////// PREPRAVITI KADA BUDE POTREBA ZA 1 ADMIN VISE RESTORANA
+
+        if (error2 || !UserRestoran) throw new Error("Database error7");
+
+        let restoran: Restoran | null = null;
+        if (!url) {
+          const {
+            data: restoran1,
+            error: error3,
+          }: { data: Restoran | null; error: PostgrestError | null } =
+            await supabase
+              .from("Restorani")
+              .select("*")
+              .eq("restoranId", UserRestoran[0].restoranId) //1 admin 1 restoran
+              .single();
+
+          if (error3 || !restoran1) throw new Error("Database error8");
+          restoran = restoran1;
+        } else {
+          const {
+            data: restoran2,
+            error: error4,
+          }: { data: Restoran | null; error: PostgrestError | null } =
+            await supabase
+              .from("Restorani")
+              .select("*")
+              .eq("slug", url)
+              .single();
+
+          if (error4 || !restoran2) throw new Error("Database error9");
+          restoran = restoran2;
+        }
         return {
           id: user.userId,
           email: user.email,
           role: user.role,
           name: user.name,
+          restoranId: restoran.restoranId,
+          slug: restoran.slug,
           provider: user.provider,
         };
       },
@@ -197,6 +268,8 @@ export const options: NextAuthOptions = {
         token.userId = user.id;
         token.email = user.email;
         token.name = user.name;
+        token.restoranId = user.restoranId;
+        token.slug = user.slug;
       }
       return token;
     },
@@ -204,11 +277,19 @@ export const options: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.role = token.role as string;
-        session.user.id = token.id as number;
+        session.user.id = token.userId as number;
         session.user.email = token.email as string;
         session.user.name = token.name as string;
+        session.user.slug = token.slug as string;
+        session.user.restoranId = token.restoranId as number;
       }
       return session;
     },
+  },
+  pages: {
+    signIn: "/login",
+    signOut: "/auth/signout",
+    error: "/auth/error", // Error code passed in query string as ?error=
+    verifyRequest: "/auth/verify-request", // (used for check email message)
   },
 };

@@ -4,15 +4,18 @@ KASNIJE IMPLEMENTIRATI LIGHT I DARK MODE
 
 */
 
-import { FaMoon } from "react-icons/fa6";
+// import { FaMoon } from "react-icons/fa6";
 import Link from "next/link";
 import { getRestoranWithSlug } from "../_lib/getRestoran";
 import { getSite } from "../_lib/getSite";
 import { getHeader, getLinkWithHeaderId } from "../_lib/getLinks";
 import Image from "next/image";
 import { Headerr, Linkk, Sajt } from "../_lib/Interfaces";
+import { getServerSession } from "next-auth";
+import { options } from "../api/auth/[...nextauth]/options";
 
 async function Header({ slug }: { slug: string }) {
+  const session = await getServerSession(options);
   const restoran = await getRestoranWithSlug(slug);
   const site: Sajt = await getSite(restoran.siteId);
   const [header, links]: [Headerr, Linkk[]] = await Promise.all([
@@ -38,19 +41,19 @@ async function Header({ slug }: { slug: string }) {
             <Link
               key={link.linkId}
               href={link.url}
-              className="text-sm font-medium hover:opacity-70 transition"
+              className={`text-sm font-medium hover:opacity-70 transition ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`}
             >
               {link.text}
             </Link>
           ))}
         </nav>
 
-        {/* TOGGLE (kasnije) */}
+        {/* TOGGLE (kasnije)
         {header.hasLightModeSwitch && (
           <button>
             <FaMoon />
           </button>
-        )}
+        )} */}
       </div>
     </header>
   );

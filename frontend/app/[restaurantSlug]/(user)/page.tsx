@@ -5,13 +5,17 @@ import { getUser } from "../../_lib/getUser";
 import { getUserReservations } from "../../_lib/getRezervacije";
 import { getAllTablesFromSala, getSala } from "../../_lib/getTables";
 import { Restoran, Rezervacija, User } from "../../_lib/Interfaces";
+import { getServerSession } from "next-auth";
+import NewUserDashboard from "@/app/_components/NewUserDashboard";
+import { options } from "@/app/api/auth/[...nextauth]/options";
 
 async function Page({ params }: { params: { restaurantSlug: string } }) {
   const slug = (await params).restaurantSlug;
-
+  const session = await getServerSession(options);
+  if (!session?.user) return <NewUserDashboard restaurantSlug={slug} />;
   const [restoran, user]: [Restoran, User] = await Promise.all([
     getRestoranWithSlug(slug),
-    getUser(1),
+    getUser(session.user.id),
   ]);
 
   const activeReservations: Rezervacija[] = await getUserReservations(

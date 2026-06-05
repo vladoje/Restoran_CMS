@@ -5,9 +5,12 @@ import { getRestoranWithSlug } from "../_lib/getRestoran";
 import { getSite } from "../_lib/getSite";
 import { getFooter, getLinkWithFooterId } from "../_lib/getLinks";
 import { Foooter, Linkk, Sajt } from "../_lib/Interfaces";
+import { getServerSession } from "next-auth";
+import { options } from "../api/auth/[...nextauth]/options";
 
 async function Footer({ slug }: { slug: string }) {
   const restoran = await getRestoranWithSlug(slug);
+  const session = await getServerSession(options);
   const site: Sajt = await getSite(restoran.siteId);
 
   const [footer, links]: [Foooter, Linkk[]] = await Promise.all([
@@ -38,7 +41,7 @@ async function Footer({ slug }: { slug: string }) {
             <Link
               key={link.linkId}
               href={link.url}
-              className="text-sm opacity-80 hover:opacity-100 transition"
+              className={`text-sm opacity-80 hover:opacity-100 transition ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`}
             >
               {link.text}
             </Link>

@@ -7,10 +7,14 @@ function Input({
   defaultValue,
   placeholder,
   setValue,
+  name,
+  disabled,
 }: {
   type?: string;
   label?: ReactNode;
   value?: string | number;
+  name?: string;
+  disabled?: boolean;
   defaultValue?: string | number;
   placeholder?: string;
   setValue?: Dispatch<SetStateAction<string>>;
@@ -18,8 +22,11 @@ function Input({
   const isDarkMode = true;
 
   const style = `w-full text-base font-medium border-2 ${
-    isDarkMode ? "text-text bg-surface" : "text-text-dark bg-surface-dark"
-  } rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300`;
+    isDarkMode
+      ? "text-text bg-surface border-slate-200"
+      : "text-text-dark bg-surface-dark border-slate-700"
+  } rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300 
+disabled:opacity-60 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed disabled:border-slate-200`;
 
   return (
     <div>
@@ -30,6 +37,8 @@ function Input({
       )}
 
       <input
+        disabled={disabled}
+        name={name}
         type={type}
         className={style}
         value={value ?? ""}
@@ -56,8 +65,11 @@ export function InputNumber({
   const isDarkMode = true;
 
   const style = `w-full text-base font-medium border-2 ${
-    isDarkMode ? "text-text bg-surface" : "text-text-dark bg-surface-dark"
-  } rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300`;
+    isDarkMode
+      ? "text-text bg-surface border-slate-200"
+      : "text-text-dark bg-surface-dark border-slate-700"
+  } rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300 
+disabled:opacity-60 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed disabled:border-slate-200`;
 
   return (
     <div>
