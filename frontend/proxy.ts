@@ -4,18 +4,26 @@ import withAuth, { NextRequestWithAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export default withAuth(
-  function middleware(req: NextRequestWithAuth) {
+   function proxy(req: NextRequestWithAuth) {
     const destinacija = req.nextUrl.pathname;
+
 
     const token = req.nextauth.token;
     const slug = destinacija.split("/").at(1);
+    if (!slug || slug === "undefined") {
+      // Ako imamo token, spasi situaciju i baci ga na njegov pravi slug
+      if (token?.slug) {
+        return NextResponse.redirect(new URL(`/${token.slug}/admin`, req.url));
+      }
+      return NextResponse.redirect(new URL(`/login`, req.url));
+    }
     if (!slug) {
       return NextResponse.redirect(new URL(`/login`, req.url));
     }
     const isLoginOrRegister = destinacija
       .split("/")
       .find((url) => url === "login" || url === "register");
-    const isAdminRoute = destinacija.split("/").find((url) => url === "admin");
+   const isAdminRoute = destinacija.includes("/admin");
     const isDashboard = destinacija === "/";
     const isUserDashboard = destinacija === `/${slug}`;
 

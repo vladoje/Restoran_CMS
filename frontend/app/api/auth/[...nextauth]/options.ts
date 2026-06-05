@@ -196,7 +196,8 @@ export const options: NextAuthOptions = {
           .eq("email", email)
           .single();
         if (userError || !user) {
-          console.log("3");
+          
+          console.log("Options",userError);
           return null;
         }
         if (!user.passwordHash) {

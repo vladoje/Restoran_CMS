@@ -9,6 +9,7 @@ import isEmail from "validator/lib/isEmail";
 import bcrypt from "bcrypt";
 import { Restoran, Sajt, User } from "./Interfaces";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+import { log } from "console";
 
 interface Ids {
   userId: null | number;
@@ -46,6 +47,11 @@ export async function adminRegisterAPI({
     openingSucces: false,
     linksSuccess: false,
   };
+  console.log("ARAPI", email,
+  name,
+  password,
+  slug,
+  restoranName,)
   const supabase = await createClient(await cookies());
   try {
     if (!slug || !restoranName || !name || !password || !email)
@@ -133,7 +139,6 @@ export async function adminRegisterAPI({
           trajanjeRezervacije: 120,
           ownerId: user.userId,
           siteId: sajt.siteId,
-          role: "admin",
         })
         .select("*")
         .single(),
@@ -143,7 +148,10 @@ export async function adminRegisterAPI({
     ids.linksSuccess = true;
     const restoran = restoranRes.data;
     if (!restoran || restoranRes.error)
+    {
+
       throw new Error("DB didnt create a new restoran");
+    }
     ids.restoranId = restoranRes?.data.restoranId;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -164,7 +172,9 @@ export async function adminRegisterAPI({
       throw new Error("Database error4");
     }
     ids.restoranUserId = restoranUserRes?.data.id;
-  } catch {
+  } catch(e) {
+    console.log("ARAPI Error", e);
+    
     await Promise.all([
       ids.userId
         ? supabase.from("Users").delete().eq("userId", ids.userId)
@@ -217,10 +227,9 @@ async function konfiguracijaSaleIRadnogVremena(
   restoran: Restoran,
   ids: Ids,
 ) {
-  const sedam = new Date();
-  sedam.setHours(7, 0, 0, 0);
-  const deset = new Date();
-  deset.setHours(22, 0, 0, 0);
+  const sedam = "07:00:00"
+  const deset = "22:00:00"
+  
   const [salaRes, openingHoursRes] = await Promise.all([
     supabase
       .from("Sale")
@@ -234,60 +243,64 @@ async function konfiguracijaSaleIRadnogVremena(
     supabase.from("OpeningHours").insert([
       {
         dayOfWeek: 0,
-        startTime: sedam.getTime(),
-        endTime: deset.getTime(),
+        startTime: sedam  ,
+        endTime: deset,
         isOpen: true,
         restoranId: restoran.restoranId,
       },
       {
         dayOfWeek: 1,
-        startTime: sedam.getTime(),
-        endTime: deset.getTime(),
+        startTime: sedam,
+        endTime: deset,
         isOpen: true,
         restoranId: restoran.restoranId,
       },
       {
         dayOfWeek: 2,
-        startTime: sedam.getTime(),
-        endTime: deset.getTime(),
+        startTime: sedam,
+        endTime: deset,
         isOpen: true,
         restoranId: restoran.restoranId,
       },
       {
         dayOfWeek: 3,
-        startTime: sedam.getTime(),
-        endTime: deset.getTime(),
+        startTime: sedam,
+        endTime: deset,
         isOpen: true,
         restoranId: restoran.restoranId,
       },
       {
         dayOfWeek: 4,
-        startTime: sedam.getTime(),
-        endTime: deset.getTime(),
+        startTime: sedam,
+        endTime: deset,
         isOpen: true,
         restoranId: restoran.restoranId,
       },
       {
         dayOfWeek: 5,
-        startTime: sedam.getTime(),
-        endTime: deset.getTime(),
+        startTime: sedam,
+        endTime: deset,
         isOpen: true,
         restoranId: restoran.restoranId,
       },
       {
         dayOfWeek: 6,
-        startTime: sedam.getTime(),
-        endTime: deset.getTime(),
+        startTime: sedam,
+        endTime: deset,
         isOpen: true,
         restoranId: restoran.restoranId,
       },
     ]),
   ]);
-  if (salaRes?.error || !salaRes)
+  if (salaRes?.error || !salaRes){
+console.log("ARAPI Sala error", salaRes.error);
     throw new Error("DB didnt create working hours or sala");
+  }
   ids.salaId = salaRes?.data.salaId;
-  if (openingHoursRes?.error || !openingHoursRes)
+  if (openingHoursRes?.error || !openingHoursRes){
+console.log("ARAPI Opening hours error", openingHoursRes.error);
     throw new Error("DB didnt create working hours or sala");
+  }
   ids.openingSucces = true;
 }
 
@@ -320,7 +333,12 @@ async function konfiguracijaSajta(
   ]);
 
   if (!headerRes || headerRes?.error)
+  {
+    
+    
     throw new Error("DB didnt create a new header");
+  
+  }
   ids.headerId = headerRes?.data?.headerId;
   if (!footerRes || footerRes?.error)
     throw new Error("DB didnt create a new footer");

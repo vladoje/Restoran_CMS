@@ -100,34 +100,34 @@ export default function ClientLayout({
         }),
       );
     } else {
-      setStolovi((prev) => {
-        const rect = floorRef.current!.getBoundingClientRect();
+  // Izračunaj pozicije VAN setStolovi funkcije
+  const rect = floorRef.current!.getBoundingClientRect();
+  const dropX = active.rect.current?.translated?.left ?? 0;
+  const dropY = active.rect.current?.translated?.top ?? 0;
+  const posX = dropX - rect.left;
+  const posY = dropY - rect.top;
+  const size = scale * 20;
 
-        const dropX = active.rect.current?.translated?.left ?? 0;
-        const dropY = active.rect.current?.translated?.top ?? 0;
+  const izracunatX = minAndMax((posX + size / 2) / scale, 20 / 2 + margina, width - 20 / 2 - margina);
+  const izracunatY = minAndMax((posY + size / 2) / scale, 20 / 2 + margina, height - 20 / 2 - margina);
 
-        const posX = dropX - rect.left;
-        const posY = dropY - rect.top;
-        const size = scale * 20;
-
-        nextTable.positionX = minAndMax(
-          (posX + size / 2) / scale,
-          20 / 2 + margina,
-          width - 20 / 2 - margina,
-        ); //20 je zasad magican broj trebam dodati table.sizeX i Y
-        nextTable.positionY = minAndMax(
-          (posY + size / 2) / scale,
-          20 / 2 + margina,
-          height - 20 / 2 - margina,
-        );
-        return [...prev, nextTable];
-      });
-    }
+  setStolovi((prev) => {
+    // Kreiramo POTPUNO NOVI objekat tek ovdje, nema dupliranja
+    const kreiraniSto: Sto = {
+      ...nextTable,
+      positionX: izracunatX,
+      positionY: izracunatY
+    };
+    
+    return [...prev, kreiraniSto];
+  });
+}
   };
 
+  const lastTable = stolovi.sort((a, b) => a.tableNumber - b.tableNumber).at(-1);
   const nextTable: Sto = {
-    ...stolovi.sort((a, b) => a.tableNumber - b.tableNumber).at(-1),
-  } as Sto;
+    ...(lastTable || {tableNumber:0,capacity:2,positionX:0,positionY:0,orientation:0,salaId:-1,tableId:0}),
+  };
   nextTable.tableNumber = nextTable.tableNumber + 1;
   nextTable.tableId = nextTable.tableId + 1;
   nextTable.salaId = -1;

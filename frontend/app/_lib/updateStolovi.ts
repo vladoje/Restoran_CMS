@@ -67,6 +67,20 @@ export async function updateStolovi(
       throw new Error("Neovlaštena izmjena ID-ova.");
     }
 
+ // 1. Izvuci sve tableNumber-e iz niza koji je stigao sa frontenda
+const primljeniBrojevi = stolovi.map((sto) => sto.tableNumber);
+
+// 2. Set automatski briše duplikate. 
+// Ako je dužina Seta manja od dužine niza, znači da klijent šalje duplirane brojeve!
+const imaDuplikataUZahtjevu = new Set(primljeniBrojevi).size !== primljeniBrojevi.length;
+
+if (imaDuplikataUZahtjevu) {
+  throw new Error("Ne možete poslati više stolova sa istim rednim brojem!");
+}
+
+
+
+
     const width = sala.width;
     const height = sala.height;
     let areValid = true;

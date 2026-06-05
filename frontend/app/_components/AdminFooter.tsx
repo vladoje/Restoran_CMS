@@ -39,7 +39,7 @@ async function Footer({ slug }: { slug: string }) {
         <div className="flex flex-col gap-2">
           <span className="font-semibold text-sm mb-2">Navigacija</span>
 
-          {links.map((link, i) => (
+          {links(slug).map((link, i) => (
             <Link
               key={i}
               href={link.url}

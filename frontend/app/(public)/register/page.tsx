@@ -128,17 +128,19 @@ function Page() {
                   });
 
                   if (!res?.ok) {
+                    
+                    
                     console.log("Greška pri prijavi:", res?.error);
                     // Ovdje možeš setovati neki error state da klijent vidi poruku
                   } else {
-                    if (session.data?.user.role === "admin") {
-                      router.push(`${session.data?.user.slug}/admin` || "");
-                    } else {
-                      router.push(`${session.data?.user.slug}` || "");
-                    }
+                    console.log("Uspješno prijavljeni:", session);
+                    router.push(`/${session.data?.user.slug}/admin` );
+                    
+                  }
+                    
                     setError("Uspjesno ste napravili svoj nalog!");
                   }
-                } catch (e: unknown) {
+                 catch (e: unknown) {
                   // Normalize error to a string
                   const errMsg = e instanceof Error ? e.message : String(e);
                   setError(errMsg);
@@ -148,7 +150,7 @@ function Page() {
               }}
               className="w-full py-3.5 px-4 rounded-xl font-bold tracking-wide bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 active:scale-[0.98] transition-all duration-150"
             >
-              Uloguj se
+              Kreirajte restoran
             </button>
           </div>
         </div>

@@ -49,6 +49,7 @@ export function FloorPlan({
   const [height2, setHeight2] = useState<number>(height);
   const [selectedSto, setSelectedSto] = useState<Sto | null>(null);
   const [capacity, setCapacity] = useState<number>(0);
+  const [orderNumber, setOrderNumber] = useState<number>(0);
   // console.log(selectedSto);
   const context = useContext(ModalContext);
   const router = useRouter();
@@ -64,18 +65,19 @@ export function FloorPlan({
           height: height * scale,
         }}
       >
-        {stolovi.map((table) => (
+        {stolovi.length? stolovi.map((table) => (
           <div
             key={table.tableId}
             onDoubleClick={() => {
               setSelectedSto(table);
               setCapacity(table.capacity);
+              setOrderNumber(table.tableNumber)
               open("tableForm");
             }}
           >
             <DraggableTable disab={true} table={table} scale={scale} />
           </div>
-        ))}
+        )):null}
 
         <div
           onClick={() => open("resize")}
@@ -93,6 +95,14 @@ export function FloorPlan({
               value={capacity}
               setValue={setCapacity}
             />
+            <div className="mt-4">
+
+             <InputNumber
+              label="Podesite redni broj stola"
+              value={orderNumber}
+              setValue={setOrderNumber}
+              />
+              </div>
             <button
               onClick={() => {
                 setStolovi((stolovi) => {
@@ -100,17 +110,32 @@ export function FloorPlan({
                     ...stolovi.filter(
                       (sto) => sto.tableId !== selectedSto!.tableId,
                     ),
-                    { ...selectedSto!, capacity },
+                    { ...selectedSto!, capacity,tableNumber:orderNumber },
                   ];
                 });
-                toast.success("Uspjesno promjenjen kapacitet stola");
+                toast.success("Uspješno sačuvano");
                 close();
               }}
-              className="mt-4 w-full rounded-lg bg-gray-900 text-white py-2 text-sm font-medium 
+              className="mt-2 w-full rounded-lg bg-gray-900 text-white py-2 text-sm font-medium 
              hover:bg-gray-800 transition active:scale-[0.98]"
             >
               Sačuvaj promjene
             </button>
+            <button
+            onClick={() => {
+                setStolovi((stolovi) => {
+                  return [
+                    ...stolovi.filter(
+                      (sto) => sto.tableId !== selectedSto!.tableId,
+                    ),
+                  ];
+                });
+                toast.success("Uspjesno obrisan sto");
+                close();
+              }}
+              className="mt-4 w-full rounded-lg bg-red-800 text-white py-2 text-sm font-medium 
+             hover:bg-red-600 transition active:scale-[0.98]"
+            >Obrisi sto</button>
           </div>
         </Modal.Window>
         <Modal.Window name="resize">

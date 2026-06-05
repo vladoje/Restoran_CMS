@@ -15,7 +15,7 @@ async function Page({
     getUser(2),
   ]);
   const sala = await getSala(restoran.restoranId);
-  const allTables = await getAllTablesFromSala(sala.salaId);
+  const allTables = await getAllTablesFromSala(sala.salaId)||[];
 
   // const tableIds = allTables.map((t) => t.tableId);
   return (

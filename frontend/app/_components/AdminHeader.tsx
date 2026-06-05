@@ -4,34 +4,34 @@ KASNIJE IMPLEMENTIRATI LIGHT I DARK MODE
 
 */
 
-export const links = [
+export const links =(slug:string)=> [
   {
     text: "Pocetna",
-    url: "/test/admin",
+    url: `/${slug}/admin`,
   },
   {
     text: "Politika privatnosti",
-    url: "/test/admin/privacy-policy",
+    url: `/${slug}/admin/privacy-policy`,
   },
   {
     text: "Radno vrijeme",
-    url: "/test/admin/working-hours",
+    url: `/${slug}/admin/working-hours`,
   },
   {
     text: "Raspored stolova",
-    url: "/test/admin/layout",
+    url: `/${slug}/admin/layout`,
   },
   {
     text: "Rezervacije",
-    url: "/test/admin/reservations",
+    url: `/${slug}/admin/reservations`,
   },
   {
     text: "Podesavanja",
-    url: "/test/admin/settings",
+    url: `/${slug}/admin/settings`,
   },
   {
     text: "Rezervisi",
-    url: "/test/admin/rezervisi",
+    url: `/${slug}/admin/rezervisi`,
   },
 ];
 
@@ -69,7 +69,7 @@ async function Header({ slug }: { slug: string }) {
 
         {/* NAV */}
         <nav className="flex items-center gap-6">
-          {links.map((link, i) => (
+          {links(slug).map((link, i) => (
             <Link
               key={i}
               href={link.url}
