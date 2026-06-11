@@ -2,6 +2,13 @@
 import { useState } from "react";
 import PrezentacijaSale from "./PrezentacijaSale";
 import { Rezervacija, Sala, Sto } from "../_lib/Interfaces";
+export const globalStyles = {
+  bg: "white",
+  primary: "gray-900",
+  secondary: "gray-200",
+  surface: "gray-50",
+  text: "gray-600",
+};
 
 function ReservationList({
   activeReservations,
@@ -20,12 +27,68 @@ function ReservationList({
   const visibleReservations = activeReservations.slice(0, numShown);
   const isExpanded = numShown >= activeReservations.length;
 
+  const json = {
+    nema: {
+      css: "mt-16 text-sm text-gray-500 border border-dashed rounded-xl p-6 text-center",
+      text: "Nema rezervacija",
+    },
+    "res-card": {
+      css: "border border-gray-200 rounded-xl p-5 bg-white hover:shadow-sm hover:border-gray-300 transition-all",
+    },
+    "res-information-poravnanje": {
+      css: "justify-between items-start gap-4",
+    },
+    "res-datum-start": {
+      css: "flex-wrap items-center gap-2 text-sm",
+    },
+    "res-datum": {
+      css: "font-medium text-gray-900",
+    },
+    "res-tacka": {
+      css: "text-gray-400",
+      text: "•",
+    },
+    "res-start": {
+      css: "text-gray-900",
+    },
+    "res-gost": {
+      css: "",
+    },
+    "res-status-past": {
+      css: "bg-gray-100 text-gray-500 ml-1 px-2 py-0.5 rounded-full text-xs font-medium",
+      text: "Završena",
+    },
+    "res-status-new": {
+      css: "bg-green-100 text-green-700 ml-1 px-2 py-0.5 rounded-full text-xs font-medium",
+      text: "Aktivna",
+    },
+    "res-sto": {
+      css: "text-sm ",
+    },
+    brzeAkcije: {
+      css: "gap-2 opacity-0 group-hover:opacity-100 transition",
+    },
+    "res-izmjeni": {
+      css: "text-sm px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition",
+      text: "Izmeni",
+    },
+    "res-otkazi": {
+      css: "text-sm px-4 py-2 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition",
+      text: "Otkazi",
+    },
+    "showMore-div": {
+      css: "justify-center pt-2",
+    },
+    "showMore-button": {
+      css: "text-sm font-medium text-gray-700 px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition",
+      text: (bool: boolean) => (bool ? "Prikazi manje" : "Prikazi jos"),
+    },
+  };
+
   return (
     <div className="space-y-4">
       {!activeReservations.length ? (
-        <div className="text-sm text-gray-500 border border-dashed rounded-xl p-6 text-center">
-          Nema rezervacija
-        </div>
+        <div className={json.nema.css}>{json.nema.text}</div>
       ) : (
         <>
           <div className="relative space-y-4">
@@ -48,57 +111,57 @@ function ReservationList({
               const table = allTables.find((t) => t.tableId === res.tableId);
 
               return (
-                <div
-                  key={i}
-                  className="group border border-gray-200 rounded-xl p-5 bg-white hover:shadow-sm hover:border-gray-300 transition-all"
-                >
-                  <div className="flex justify-between items-start gap-4">
+                <div key={i} className={json["res-card"].css}>
+                  <div
+                    className={`flex ${json["res-information-poravnanje"].css}`}
+                  >
                     {/* LEFT */}
                     <div className="space-y-2">
-                      <div className="flex flex-wrap items-center gap-2 text-sm">
-                        <span className="font-medium text-gray-900">
-                          {datum}
+                      <div className={`flex ${json["res-datum-start"].css}`}>
+                        <span className={json["res-datum"].css}>{datum}</span>
+
+                        <span className={json["res-tacka"].css}>
+                          {json["res-tacka"].text}
                         </span>
 
-                        <span className="text-gray-300">•</span>
+                        <span className={json["res-start"].css}>{start}</span>
 
-                        <span className="text-gray-800">{start}</span>
+                        <span className={json["res-tacka"].css}>
+                          {json["res-tacka"].text}
+                        </span>
 
-                        <span className="text-gray-300">•</span>
-
-                        <span className="text-gray-600">
+                        <span className={json["res-gost"].css}>
                           {res.numberOfPeople}{" "}
                           {res.numberOfPeople > 1 ? "gosta" : "gost"}
                         </span>
 
                         {/* STATUS */}
                         <span
-                          className={`ml-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                          className={` ${
                             isPast
-                              ? "bg-gray-100 text-gray-500"
-                              : "bg-green-100 text-green-700"
+                              ? json["res-status-past"].css
+                              : json["res-status-new"].css
                           }`}
                         >
-                          {isPast ? "Završena" : "Aktivna"}
+                          {isPast
+                            ? json["res-status-past"].text
+                            : json["res-status-new"].text}
                         </span>
                       </div>
 
-                      <div className="text-sm text-gray-500">
-                        Sto{" "}
-                        <span className="font-medium text-gray-800">
-                          {table?.tableNumber ?? "—"}
-                        </span>
+                      <div className={json["res-sto"].css}>
+                        Sto {table?.tableNumber ?? "—"}
                       </div>
                     </div>
 
                     {/* ACTIONS */}
                     {!isPast && (
                       <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
-                        <button className="text-sm px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                          Izmeni
+                        <button className={json["res-izmjeni"].css}>
+                          {json["res-izmjeni"].text}
                         </button>
-                        <button className="text-sm px-4 py-2 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition">
-                          Otkaži
+                        <button className={json["res-otkazi"].css}>
+                          {json["res-otkazi"].text}
                         </button>
                       </div>
                     )}
@@ -114,25 +177,20 @@ function ReservationList({
                 </div>
               );
             })}
-
-            {/* FADE EFFECT */}
-            {!isExpanded && (
-              <div className="pointer-events-none absolute bottom-0 left-0 w-full h-16 bg-linear-to-t from-white to-transparent rounded-xl" />
-            )}
           </div>
 
           {/* SHOW MORE / LESS */}
           {activeReservations.length > 3 && (
-            <div className="flex justify-center pt-2">
+            <div className={`flex ${json["showMore-div"].css}`}>
               <button
                 onClick={() =>
                   setNumShown((n) =>
                     isExpanded ? 3 : Math.min(activeReservations.length, n + 3),
                   )
                 }
-                className="text-sm font-medium text-gray-700 px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition"
+                className={json["showMore-button"].css}
               >
-                {isExpanded ? "Prikaži manje" : "Prikaži još"}
+                {json["showMore-button"].text(isExpanded)}
               </button>
             </div>
           )}

@@ -18,14 +18,37 @@ async function Page() {
     ]);
   const restoranId =
     activeReservations.at(0)?.restoranId ?? pastReservations.at(0)?.restoranId;
-
+  const json = {
+    nema: {
+      css: "mt-16 text-sm text-gray-500 border border-dashed rounded-xl p-6 text-center",
+      text: "Nema rezervacija",
+    },
+    active: {
+      css: "",
+    },
+    "active-naslov": {
+      css: "",
+      text: "Aktivni termini",
+    },
+    "active-ukupno": {
+      css: "",
+    },
+    inactive: {
+      css: "",
+    },
+    "inactive-naslov": {
+      css: "",
+      text: "Prosli termini",
+    },
+    "inactive-ukupno": {
+      css: "",
+    },
+  };
   if (!restoranId) {
     // nema ništa → render empty state
     return (
-      <div className="space-y-4 mt-16">
-        <div className="text-sm text-gray-500 border border-dashed rounded-xl p-6 text-center">
-          Nema rezervacija
-        </div>
+      <div className="space-y-4 ">
+        <div className={json.nema.css}>{json.nema.text}</div>
       </div>
     );
   }
@@ -35,18 +58,26 @@ async function Page() {
   const allTables = await getAllTablesFromSala(sala.salaId);
   return (
     <div>
-      <div>
-        <h2>Aktivni termini</h2>
-        <p>{activeReservations.length} Ukupno</p>
+      <div className={json.active.css}>
+        <h2 className={json["active-naslov"].css}>
+          {json["active-naslov"].text}
+        </h2>
+        <p className={json["active-ukupno"].css}>
+          {activeReservations.length} Ukupno
+        </p>
         <ReservationList
           sala={sala}
           activeReservations={activeReservations}
           allTables={allTables}
         />
       </div>
-      <div>
-        <h2>Prosli termini</h2>
-        <p>{pastReservations.length} Ukupno</p>
+      <div className={json.inactive.css}>
+        <h2 className={json["inactive-naslov"].css}>
+          {json["inactive-naslov"].text}
+        </h2>
+        <p className={json["inactive-ukupno"].css}>
+          {pastReservations.length} Ukupno
+        </p>
         <ReservationList
           sala={sala}
           activeReservations={pastReservations}

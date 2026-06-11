@@ -1,4 +1,4 @@
-import ReserveTable from "@/app/_components/ReserveTable";
+import ReserveTable from "@/app/_components/ReserveTable/ReserveTable";
 import { getRestoranWithSlug } from "@/app/_lib/getRestoran";
 import { get30dayReservationsForTables } from "@/app/_lib/getRezervacije";
 import { getAllTablesFromSala, getSala } from "@/app/_lib/getTables";

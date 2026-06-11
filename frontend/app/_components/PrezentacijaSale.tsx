@@ -1,7 +1,18 @@
 "use client";
 import { Dispatch, SetStateAction } from "react";
 import { Sala, Sto } from "../_lib/Interfaces";
-
+export function renderTemplate(
+  template: string,
+  data: {
+    tableNumber: number;
+    capacity: number;
+  },
+) {
+  return template.replace(
+    /\{(\w+)\}/g,
+    (_, key: "tableNumber" | "capacity") => `${data[key] ?? ""}`,
+  );
+}
 function PrezentacijaSale({
   sala,
   stolovi,
@@ -26,10 +37,21 @@ function PrezentacijaSale({
   setTime?: Dispatch<SetStateAction<string | null>>;
 }) {
   const scale = x / sala.width;
-
+  const json = {
+    sala: {
+      css: "mx-auto relative border border-gray-200 rounded-xl bg-gray-100",
+    },
+    "sto-reserved": {
+      css: "rounded-lg  items-center justify-center text-xs font-medium cursor-pointer transition-all  bg-green-500 text-white shadow-md scale-105",
+      title: "Sto {tableNumber} ({capacity} mjesta)",
+    },
+    "sto-not-reserved": {
+      css: "rounded-lg  items-center justify-center text-xs font-medium cursor-pointer transition-all  bg-white text-gray-700 border hover:bg-gray-100 hover:scale-105",
+    },
+  };
   return (
     <div
-      className="mx-auto relative border border-gray-200 rounded-xl bg-gray-100"
+      className={json["sala"].css}
       style={{
         width: x + 4,
         height: y + 4,
@@ -61,15 +83,15 @@ function PrezentacijaSale({
               setTime?.(null);
             }}
             key={`${table.tableId}-${i}-${k}`}
-            title={`Sto ${table.tableNumber} (${table.capacity} mjesta)`}
-            className={`absolute rounded-lg flex items-center justify-center 
-  text-xs font-medium cursor-pointer transition-all 
-  ${
-    isReserved
-      ? "bg-green-500 text-white shadow-md scale-105"
-      : "bg-white text-gray-700 border hover:bg-gray-100 hover:scale-105"
-  }
-  `}
+            title={renderTemplate(json["sto-reserved"].title, {
+              tableNumber: table.tableNumber,
+              capacity: table.capacity,
+            })}
+            className={`absolute flex ${
+              isReserved
+                ? json["sto-reserved"].css
+                : json["sto-not-reserved"].css
+            }`}
             style={{
               left,
               top,

@@ -8,7 +8,6 @@ import Input from "./Input";
 import { ProfileActions, Window } from "./ProfileActions";
 
 function Page({ slug }: { slug: string }) {
-  const isDarkMode = true;
   const {
     username,
     setUsername,
@@ -17,44 +16,61 @@ function Page({ slug }: { slug: string }) {
     // handleDelete,
     handleLogout,
   } = useProfile();
+  const json = {
+    profile: {
+      css: "mx-auto px-6 pt-10",
+    },
+    inputs: {
+      css: "space-y-4",
+    },
+    "input-username": {
+      css: "items-center gap-2",
+      text: "Korisničko ime",
+      icon: "FaUser",
+    },
+    "save-button": {
+      css: "mt-4 font-bold py-4 rounded-2xl transition-all active:scale-[0.97]  items-center justify-center gap-3 shadow-lg cursor-pointer",
+      text: "Sacuvaj promjene",
+      icon: "FaSave",
+    },
+  };
   return (
     <Modal>
-      <div
-        className={`${!isDarkMode ? "bg-background text-text border-border" : "bg-background-dark text-text-dark border-border-dark"} pb-10`}
-      >
-        <main className="max-w-md mx-auto px-6 pt-10">
-          {/* AVATAR SEKCIJA */}
-          <UserAvatar username={user.name} />
+      <main className={`max-w-md ${json["profile"].css}`}>
+        {/* AVATAR SEKCIJA */}
+        <UserAvatar username={user.name} />
 
-          {/* FORMA ZA PODATKE */}
-          <div className="space-y-4">
-            {/* KORISNIČKO IME */}
-            <div className={`group `}>
-              <Input
-                label={
-                  <p className={`flex items-center gap-2`}>
+        {/* FORMA ZA PODATKE */}
+        <div className={json["inputs"].css}>
+          {/* KORISNIČKO IME */}
+          <div className={`group `}>
+            <Input
+              label={
+                <p className={`flex ${json["input-username"].css}`}>
+                  {json["input-username"].icon === "FaUser" && (
                     <FaUser size={10} />
-                    <span>Korisničko ime</span>
-                  </p>
-                }
-                value={username}
-                defaultValue={user.name}
-                setValue={setUsername}
-              />
-            </div>
-
-            {/* DUGME ZA SPAŠAVANJE */}
-            <button
-              // onClick={handleClick}
-              className={`w-full mt-4 ${!isDarkMode ? "bg-primary" : "bg-primary-dark"} text-text-dark    font-bold py-4 rounded-2xl transition-all active:scale-[0.97] flex items-center justify-center gap-3 shadow-lg cursor-pointer`}
-            >
-              <FaSave /> Sačuvaj izmjene
-            </button>
+                  )}
+                  <span>{json["input-username"].text}</span>
+                </p>
+              }
+              value={username}
+              setValue={setUsername}
+            />
           </div>
 
-          <ProfileActions slug={slug} />
-        </main>
-      </div>
+          {/* DUGME ZA SPAŠAVANJE */}
+          <button
+            // onClick={handleClick}
+            className={`w-full flex ${json["save-button"].css}`}
+          >
+            {json["save-button"].icon === "FaSave" && <FaSave />}{" "}
+            {json["save-button"].text}
+          </button>
+        </div>
+
+        <ProfileActions slug={slug} />
+      </main>
+
       {/* <Modal.Window name="obrisi"> */}
       {/* <Window handle={handleDelete} odjavi={false} /> */}
       {/* </Modal.Window> */}

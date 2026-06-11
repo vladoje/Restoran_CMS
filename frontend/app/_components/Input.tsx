@@ -1,5 +1,13 @@
 import { Dispatch, SetStateAction, ReactNode } from "react";
-
+const json = {
+  label: {
+    css: "text-xs font-semibold uppercase tracking-wide ml-1 mb-2",
+  },
+  input: {
+    css: `w-full text-base font-medium border-2 border-slate-200 rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300 
+disabled:opacity-60 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed disabled:border-slate-200`,
+  },
+};
 function Input({
   type = "text",
   label,
@@ -19,28 +27,15 @@ function Input({
   placeholder?: string;
   setValue?: Dispatch<SetStateAction<string>>;
 }) {
-  const isDarkMode = true;
-
-  const style = `w-full text-base font-medium border-2 ${
-    isDarkMode
-      ? "text-text bg-surface border-slate-200"
-      : "text-text-dark bg-surface-dark border-slate-700"
-  } rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300 
-disabled:opacity-60 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed disabled:border-slate-200`;
-
   return (
     <div>
-      {label && (
-        <label className="block text-xs font-semibold uppercase tracking-wide ml-1 mb-2">
-          {label}
-        </label>
-      )}
+      {label && <label className={`block ${json["label"].css}`}>{label}</label>}
 
       <input
         disabled={disabled}
         name={name}
         type={type}
-        className={style}
+        className={`w-full ${json.input.css}`}
         value={value ?? ""}
         defaultValue={defaultValue}
         placeholder={placeholder}
@@ -62,26 +57,13 @@ export function InputNumber({
   defaultValue?: number;
   setValue?: Dispatch<SetStateAction<number>>;
 }) {
-  const isDarkMode = true;
-
-  const style = `w-full text-base font-medium border-2 ${
-    isDarkMode
-      ? "text-text bg-surface border-slate-200"
-      : "text-text-dark bg-surface-dark border-slate-700"
-  } rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300 
-disabled:opacity-60 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed disabled:border-slate-200`;
-
   return (
     <div>
-      {label && (
-        <label className="block text-xs font-semibold uppercase tracking-wide ml-1 mb-2">
-          {label}
-        </label>
-      )}
+      {label && <label className={`block ${json["label"].css}`}>{label}</label>}
 
       <input
         type="number"
-        className={style}
+        className={`w-full ${json.input.css}`}
         value={value ?? ""}
         defaultValue={defaultValue}
         onChange={(e) => {

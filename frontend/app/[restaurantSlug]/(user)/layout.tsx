@@ -14,7 +14,9 @@ export default async function Layout({
   // console.log(restaurantSlug);
 
   return (
-    <div className="min-h-screen text-gray-800 flex flex-col bg-gray-50">
+    <div
+      className={`min-h-screen text-${globalStyles.text} flex flex-col bg-${globalStyles.bg}`}
+    >
       <Header slug={restaurantSlug} />
 
       <main className="flex-1">{children}</main>
@@ -23,3 +25,10 @@ export default async function Layout({
     </div>
   );
 }
+export const globalStyles = {
+  bg: "white",
+  primary: "gray-900",
+  secondary: "gray-200",
+  surface: "gray-50",
+  text: "gray-600",
+};

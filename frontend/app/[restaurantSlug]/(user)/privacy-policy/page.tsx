@@ -1,3 +1,6 @@
+//nepotrebno za sada jer da bi imalo smisla admin treba da moze dodavati svoje odredbe?
+//ruzan templejt koji sam samo kopirao i mora biti promjenjen
+
 import { FaShieldHalved, FaLock, FaEnvelope } from "react-icons/fa6";
 function Page() {
   const isDarkMode = true;

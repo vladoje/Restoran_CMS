@@ -1,7 +1,7 @@
 import { getRestoranWithSlug } from "@/app/_lib/getRestoran";
 import { getUser } from "@/app/_lib/getUser";
 import { getAllTablesFromSala, getSala } from "@/app/_lib/getTables";
-import ReserveTable from "@/app/_components/ReserveTable";
+import ReserveTable from "@/app/_components/ReserveTable/ReserveTable";
 import {
   OpeningHour,
   Restoran,

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import PrezentacijaSale from "../PrezentacijaSale";
 import { Sala, Sto } from "@/app/_lib/Interfaces";
-import { SelectBrojGostiju } from "../ReserveTable";
+import { SelectBrojGostiju } from "../ReserveTable/ReserveTable";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { createRezervacija } from "@/app/_lib/createRezervacija";
