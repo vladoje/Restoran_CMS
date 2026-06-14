@@ -9,6 +9,7 @@ export interface Restoran {
   ownerId: number;
   siteId: number;
   name: string;
+  email: string;
   address: string;
   phone: string;
   buffer: number;

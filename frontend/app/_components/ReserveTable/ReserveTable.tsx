@@ -17,9 +17,11 @@ import { useRouter } from "next/navigation";
 import { useCanvasSize } from "./useCanvasSize";
 import { useDisableTime, useOpeningHour } from "./useDisableTime";
 import ReservationDetails from "./ReservationDetails";
+import { MojJSON } from "../ReservationList";
 
 function ReserveTable({
   sala,
+  json,
   allTables,
   user,
   restoran,
@@ -29,6 +31,7 @@ function ReserveTable({
   openingHours,
 }: {
   sala: Sala;
+  json: Record<string, MojJSON>;
   allTables: Sto[];
   user: User;
   rezervacije: Rezervacija[];
@@ -57,17 +60,7 @@ function ReserveTable({
     openingHours,
     date,
   );
-  const json = {
-    "reserve-table": { css: " mx-auto px-4 py-6 lg:py-10 bg-gray-50" },
-    grid: { css: "gap-6" },
-    "odaberi-sto": {
-      css: "bg-white rounded-2xl shadow p-4 lg:p-6 overflow-hidden",
-    },
-    "odaberi-sto-naslov": {
-      css: "text-lg lg:text-xl font-semibold mb-4",
-      text: "Odaberi sto",
-    },
-  };
+
   return (
     <form
       onSubmit={async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -96,15 +89,24 @@ function ReserveTable({
         }
       }}
     >
-      <div className={`min-h-screen max-w-7xl ${json["reserve-table"].css}`}>
+      <div
+        id="reserve-table"
+        className={`min-h-screen max-w-7xl  ${json["reserve-table"].css}`}
+      >
         {/* GRID */}
-        <div className={`grid grid-cols-1 lg:grid-cols-2 ${json["grid"].css}`}>
+        <div
+          id="reserve-table-grid"
+          className={`grid grid-cols-1 lg:grid-cols-2 ${json["reserve-table-grid"].css}`}
+        >
           {/* LEFT */}
-          <div className={json["odaberi-sto"].css}>
+          <div className={json["reserve-table-odaberi-sto"].css}>
             {" "}
             {/* Dodat overflow-hidden */}
-            <h2 className={json["odaberi-sto-naslov"].css}>
-              {json["odaberi-sto-naslov"].text}
+            <h2
+              id="reserve-table-odaberi-sto-naslov"
+              className={json["reserve-table-odaberi-sto-naslov"].css}
+            >
+              {json["reserve-table-odaberi-sto-naslov"].text}
             </h2>
             <input type="hidden" value={tableId || ""} name="tableId" />
             <div className="w-full flex justify-center">
@@ -112,6 +114,7 @@ function ReserveTable({
               {/* Izbačen min-w-75 */}
               <PrezentacijaSale
                 sala={sala}
+                json={json}
                 stolovi={allTables}
                 x={canvasSize}
                 y={canvasSize}

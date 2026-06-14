@@ -6,8 +6,9 @@ import Modal from "@/app/_components/Modal";
 import { UserAvatar } from "./UserAvatar";
 import Input from "./Input";
 import { ProfileActions, Window } from "./ProfileActions";
+import { MojJSON } from "./ReservationList";
 
-function Page({ slug }: { slug: string }) {
+function Page({ slug, json }: { slug: string; json: Record<string, MojJSON> }) {
   const {
     username,
     setUsername,
@@ -16,41 +17,28 @@ function Page({ slug }: { slug: string }) {
     // handleDelete,
     handleLogout,
   } = useProfile();
-  const json = {
-    profile: {
-      css: "mx-auto px-6 pt-10",
-    },
-    inputs: {
-      css: "space-y-4",
-    },
-    "input-username": {
-      css: "items-center gap-2",
-      text: "Korisničko ime",
-      icon: "FaUser",
-    },
-    "save-button": {
-      css: "mt-4 font-bold py-4 rounded-2xl transition-all active:scale-[0.97]  items-center justify-center gap-3 shadow-lg cursor-pointer",
-      text: "Sacuvaj promjene",
-      icon: "FaSave",
-    },
-  };
+
   return (
     <Modal>
-      <main className={`max-w-md ${json["profile"].css}`}>
+      <main id="profile" className={`max-w-md ${json["profile"].css}`}>
         {/* AVATAR SEKCIJA */}
-        <UserAvatar username={user.name} />
+        <UserAvatar json={json} username={user.name} />
 
         {/* FORMA ZA PODATKE */}
-        <div className={json["inputs"].css}>
+        <div id="profile-inputs" className={json["profile-inputs"].css}>
           {/* KORISNIČKO IME */}
           <div className={`group `}>
             <Input
+              clientJSON={json}
               label={
-                <p className={`flex ${json["input-username"].css}`}>
-                  {json["input-username"].icon === "FaUser" && (
+                <p
+                  id="profile-input-username"
+                  className={`flex ${json["profile-input-username"].css}`}
+                >
+                  {json["profile-input-username"].icon === "FaUser" && (
                     <FaUser size={10} />
                   )}
-                  <span>{json["input-username"].text}</span>
+                  <span>{json["profile-input-username"].text}</span>
                 </p>
               }
               value={username}
@@ -61,14 +49,15 @@ function Page({ slug }: { slug: string }) {
           {/* DUGME ZA SPAŠAVANJE */}
           <button
             // onClick={handleClick}
-            className={`w-full flex ${json["save-button"].css}`}
+            id="profile-save-button"
+            className={`w-full flex ${json["profile-save-button"].css}`}
           >
-            {json["save-button"].icon === "FaSave" && <FaSave />}{" "}
-            {json["save-button"].text}
+            {json["profile-save-button"].icon === "FaSave" && <FaSave />}{" "}
+            {json["profile-save-button"].text}
           </button>
         </div>
 
-        <ProfileActions slug={slug} />
+        <ProfileActions slug={slug} json={json} />
       </main>
 
       {/* <Modal.Window name="obrisi"> */}
@@ -76,7 +65,7 @@ function Page({ slug }: { slug: string }) {
       {/* </Modal.Window> */}
 
       <Modal.Window name="odjavi">
-        <Window handle={handleLogout} href="/login" odjavi={true} />
+        <Window handle={handleLogout} href="/login" odjavi={true} json={json} />
       </Modal.Window>
     </Modal>
   );

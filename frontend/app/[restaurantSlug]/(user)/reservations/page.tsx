@@ -8,6 +8,7 @@ import { getAllTablesFromSala, getSala } from "@/app/_lib/getTables";
 
 import ReservationList from "@/app/_components/ReservationList";
 import { Rezervacija, User } from "@/app/_lib/Interfaces";
+import { _json } from "../_json";
 
 async function Page() {
   const user: User = await getUser(1);
@@ -18,37 +19,14 @@ async function Page() {
     ]);
   const restoranId =
     activeReservations.at(0)?.restoranId ?? pastReservations.at(0)?.restoranId;
-  const json = {
-    nema: {
-      css: "mt-16 text-sm text-gray-500 border border-dashed rounded-xl p-6 text-center",
-      text: "Nema rezervacija",
-    },
-    active: {
-      css: "",
-    },
-    "active-naslov": {
-      css: "",
-      text: "Aktivni termini",
-    },
-    "active-ukupno": {
-      css: "",
-    },
-    inactive: {
-      css: "",
-    },
-    "inactive-naslov": {
-      css: "",
-      text: "Prosli termini",
-    },
-    "inactive-ukupno": {
-      css: "",
-    },
-  };
+  const json = _json();
   if (!restoranId) {
     // nema ništa → render empty state
     return (
       <div className="space-y-4 ">
-        <div className={json.nema.css}>{json.nema.text}</div>
+        <div className={json["reservations-nema"].css}>
+          {json["reservations-nema"].text}
+        </div>
       </div>
     );
   }
@@ -58,28 +36,45 @@ async function Page() {
   const allTables = await getAllTablesFromSala(sala.salaId);
   return (
     <div>
-      <div className={json.active.css}>
-        <h2 className={json["active-naslov"].css}>
-          {json["active-naslov"].text}
+      <div id="reservations-active" className={json["reservations-active"].css}>
+        <h2
+          id="reservations-active-naslov"
+          className={json["reservations-active-naslov"].css}
+        >
+          {json["reservations-active-naslov"].text}
         </h2>
-        <p className={json["active-ukupno"].css}>
+        <p
+          id="reservations-active-ukupno"
+          className={json["reservations-active-ukupno"].css}
+        >
           {activeReservations.length} Ukupno
         </p>
         <ReservationList
           sala={sala}
+          json={json}
           activeReservations={activeReservations}
           allTables={allTables}
         />
       </div>
-      <div className={json.inactive.css}>
-        <h2 className={json["inactive-naslov"].css}>
-          {json["inactive-naslov"].text}
+      <div
+        id="reservations-inactive"
+        className={json["reservations-inactive"].css}
+      >
+        <h2
+          id="reservations-inactive-naslov"
+          className={json["reservations-inactive-naslov"].css}
+        >
+          {json["reservations-inactive-naslov"].text}
         </h2>
-        <p className={json["inactive-ukupno"].css}>
+        <p
+          id="reservations-inactive-ukupno"
+          className={json["reservations-inactive-ukupno"].css}
+        >
           {pastReservations.length} Ukupno
         </p>
         <ReservationList
           sala={sala}
+          json={json}
           activeReservations={pastReservations}
           allTables={allTables}
         />

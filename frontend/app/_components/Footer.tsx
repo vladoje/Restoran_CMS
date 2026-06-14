@@ -7,6 +7,7 @@ import { getFooter, getLinkWithFooterId } from "../_lib/getLinks";
 import { Foooter, Linkk, Sajt } from "../_lib/Interfaces";
 import { getServerSession } from "next-auth";
 import { options } from "../api/auth/[...nextauth]/options";
+import { _json } from "../[restaurantSlug]/(user)/_json";
 
 async function Footer({ slug }: { slug: string }) {
   const restoran = await getRestoranWithSlug(slug);
@@ -18,30 +19,56 @@ async function Footer({ slug }: { slug: string }) {
     getLinkWithFooterId(site.footerId),
   ] as const);
 
+  const json = _json(restoran, undefined, footer);
   return (
-    <footer className="w-full border-t mt-16">
-      <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col gap-8 md:flex-row md:justify-between">
+    <footer id="footer" className={`w-full ${json["footer"].css}`}>
+      <div className={`max-w-7xl flex flex-col ${json["footer-body"].css}`}>
         {/* LOGO + TEXT */}
-        <div className="flex flex-col gap-3 max-w-sm">
+        <div
+          id="footer-body-logo"
+          className={`flex flex-col  max-w-sm ${json["footer-body-logo"].css}`}
+        >
           {footer.hasLogo && (
-            <div className="flex items-center gap-2">
+            <div
+              id="footer-body-logo-image"
+              className={`flex ${json["footer-body-logo-image"].css}`}
+            >
               <Image src={site.logoUrl} alt="logo" width={32} height={32} />
-              <span className="font-semibold text-lg">{footer.text}</span>
+              <span
+                id="footer-body-logo-image-text"
+                className={json["footer-body-logo-image-text"].css}
+              >
+                {json["footer-body-logo-image-text"].text}
+              </span>
             </div>
           )}
 
-          <p className="text-sm opacity-70">{footer.text}</p>
+          <p
+            id="footer-body-logo-text"
+            className={json["footer-body-logo-text"].css}
+          >
+            {json["footer-body-logo-text"].text}
+          </p>
         </div>
 
         {/* LINKOVI */}
-        <div className="flex flex-col gap-2">
-          <span className="font-semibold text-sm mb-2">Navigacija</span>
+        <div
+          id="footer-body-links"
+          className={`flex flex-col ${json["footer-body-links"].css}`}
+        >
+          <span
+            id="footer-body-links-naslov"
+            className={json["footer-body-links-naslov"].css}
+          >
+            {json["footer-body-links-naslov"].text}
+          </span>
 
           {links.map((link) => (
             <Link
               key={link.linkId}
               href={link.url}
-              className={`text-sm opacity-80 hover:opacity-100 transition ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`}
+              id="footer-body-links-link"
+              className={`${json["footer-body-links-link"].css} ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`}
             >
               {link.text}
             </Link>
@@ -50,18 +77,36 @@ async function Footer({ slug }: { slug: string }) {
 
         {/* KONTAKT (placeholder za kasnije CMS) */}
         {footer.hasContactInfo && (
-          <div className="flex flex-col gap-2">
-            <span className="font-semibold text-sm mb-2">Kontakt</span>
+          <div
+            id="footer-body-contact"
+            className={`flex flex-col ${json["footer-body-contact"].css}`}
+          >
+            <span
+              id="footer-body-contact-naslov"
+              className={json["footer-body-contact-naslov"].css}
+            >
+              {json["footer-body-contact-naslov"].text}
+            </span>
 
-            <p className="text-sm opacity-80">Adresa: Nije postavljena</p>
-            <p className="text-sm opacity-80">Telefon: Nije postavljen</p>
+            <p
+              id="footer-body-contact-adresa"
+              className={json["footer-body-contact-adresa"].css}
+            >
+              {json["footer-body-contact-adresa"].text}
+            </p>
+            <p
+              id="footer-body-contact-adresa"
+              className={json["footer-body-contact-telefon"].css}
+            >
+              {json["footer-body-contact-telefon"].text}
+            </p>
           </div>
         )}
       </div>
 
       {/* BOTTOM BAR */}
-      <div className="border-t py-4 text-center text-xs opacity-60">
-        © {new Date().getFullYear()} {footer.text}. Sva prava zadržana.
+      <div id="footer-reserved" className={json["footer-reserved"].css}>
+        {json["footer-reserved"].text}
       </div>
     </footer>
   );

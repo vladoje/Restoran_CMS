@@ -1,6 +1,7 @@
 "use client";
 import { Dispatch, SetStateAction } from "react";
 import { Sala, Sto } from "../_lib/Interfaces";
+import { MojJSON } from "./ReservationList";
 export function renderTemplate(
   template: string,
   data: {
@@ -19,6 +20,7 @@ function PrezentacijaSale({
   x,
   y,
   i,
+  json,
   tId,
   setTable,
   setTableId,
@@ -28,6 +30,7 @@ function PrezentacijaSale({
   stolovi: Sto[];
   x: number;
   y: number;
+  json: Record<string, MojJSON>;
   sala: Sala;
   i: number;
   tId: number | null;
@@ -37,21 +40,11 @@ function PrezentacijaSale({
   setTime?: Dispatch<SetStateAction<string | null>>;
 }) {
   const scale = x / sala.width;
-  const json = {
-    sala: {
-      css: "mx-auto relative border border-gray-200 rounded-xl bg-gray-100",
-    },
-    "sto-reserved": {
-      css: "rounded-lg  items-center justify-center text-xs font-medium cursor-pointer transition-all  bg-green-500 text-white shadow-md scale-105",
-      title: "Sto {tableNumber} ({capacity} mjesta)",
-    },
-    "sto-not-reserved": {
-      css: "rounded-lg  items-center justify-center text-xs font-medium cursor-pointer transition-all  bg-white text-gray-700 border hover:bg-gray-100 hover:scale-105",
-    },
-  };
+
   return (
     <div
-      className={json["sala"].css}
+      id="prezentacija-sale-sala"
+      className={json["prezentacija-sale-sala"].css}
       style={{
         width: x + 4,
         height: y + 4,
@@ -83,14 +76,18 @@ function PrezentacijaSale({
               setTime?.(null);
             }}
             key={`${table.tableId}-${i}-${k}`}
-            title={renderTemplate(json["sto-reserved"].title, {
-              tableNumber: table.tableNumber,
-              capacity: table.capacity,
-            })}
+            title={renderTemplate(
+              json["prezentacija-sale-sto-reserved"].text || "",
+              {
+                tableNumber: table.tableNumber,
+                capacity: table.capacity,
+              },
+            )}
+            id="prezentacija-sale-sto-reserved"
             className={`absolute flex ${
               isReserved
-                ? json["sto-reserved"].css
-                : json["sto-not-reserved"].css
+                ? json["prezentacija-sale-sto-reserved"].css
+                : json["prezentacija-sale-sto-not-reserved"].css
             }`}
             style={{
               left,

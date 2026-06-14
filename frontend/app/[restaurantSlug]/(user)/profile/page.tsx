@@ -1,8 +1,10 @@
 import Profile from "@/app/_components/Profile";
+import { _json } from "../_json";
 
 async function Page({ params }: { params: { restaurantSlug: string } }) {
   const slug = (await params).restaurantSlug;
-  return <Profile slug={slug} />;
+  const json = _json();
+  return <Profile json={json} slug={slug} />;
 }
 
 export default Page;

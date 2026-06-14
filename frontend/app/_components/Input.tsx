@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, ReactNode } from "react";
-const json = {
-  label: {
+import { MojJSON } from "./ReservationList";
+const adminJSON = {
+  "input-label": {
     css: "text-xs font-semibold uppercase tracking-wide ml-1 mb-2",
   },
   input: {
@@ -16,6 +17,7 @@ function Input({
   placeholder,
   setValue,
   name,
+  clientJSON,
   disabled,
 }: {
   type?: string;
@@ -23,15 +25,22 @@ function Input({
   value?: string | number;
   name?: string;
   disabled?: boolean;
+  clientJSON?: Record<string, MojJSON>;
   defaultValue?: string | number;
   placeholder?: string;
   setValue?: Dispatch<SetStateAction<string>>;
 }) {
+  const json = clientJSON || adminJSON;
   return (
     <div>
-      {label && <label className={`block ${json["label"].css}`}>{label}</label>}
+      {label && (
+        <label id="input-label" className={`block ${json["input-label"].css}`}>
+          {label}
+        </label>
+      )}
 
       <input
+        id="input"
         disabled={disabled}
         name={name}
         type={type}
@@ -49,19 +58,27 @@ export default Input;
 export function InputNumber({
   label,
   value,
+  clientJSON,
   defaultValue,
   setValue,
 }: {
   label?: ReactNode;
   value?: number;
   defaultValue?: number;
+  clientJSON?: Record<string, MojJSON>;
   setValue?: Dispatch<SetStateAction<number>>;
 }) {
+  const json = clientJSON || adminJSON;
   return (
     <div>
-      {label && <label className={`block ${json["label"].css}`}>{label}</label>}
+      {label && (
+        <label id="input-label" className={`block ${json["input-label"].css}`}>
+          {label}
+        </label>
+      )}
 
       <input
+        id="input"
         type="number"
         className={`w-full ${json.input.css}`}
         value={value ?? ""}

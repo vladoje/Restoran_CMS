@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Headerr, Linkk, Sajt } from "../_lib/Interfaces";
 import { getServerSession } from "next-auth";
 import { options } from "../api/auth/[...nextauth]/options";
+import { _json } from "../[restaurantSlug]/(user)/_json";
 
 async function Header({ slug }: { slug: string }) {
   const session = await getServerSession(options);
@@ -23,38 +24,53 @@ async function Header({ slug }: { slug: string }) {
     getLinkWithHeaderId(site.headerId),
   ] as const);
 
+  const json = _json(restoran, header);
   return (
     // "sticky" drži header na vrhu dok skroluješ, "backdrop-blur" pravi onaj Apple-ov efekat stakla
-    <header className="sticky top-0 z-50 w-full border-b bg-white">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-        {/* LOGO */}
-        {header.hasLogo && (
-          <Link href={`/${slug}`} className="flex items-center gap-2">
-            <Image src={site.logoUrl} alt="logo" width={32} height={32} />
-            <span className="font-semibold text-lg">{header.text}</span>
+    <header
+      id="header"
+      className={`sticky top-0 z-50 w-full ${json["header"].css} max-w-7xl flex `}
+    >
+      {/* LOGO */}
+      {header.hasLogo && (
+        <Link
+          href={`/${slug}`}
+          id="header-logo"
+          className={`flex ${json["header-logo"].css}`}
+        >
+          <Image src={site.logoUrl} alt="logo" width={32} height={32} />
+          <span
+            id="header-logo-naslov"
+            className={json["header-logo-naslov"].css}
+          >
+            {json["header-logo-naslov"].text}
+          </span>
+        </Link>
+      )}
+
+      {/* NAV */}
+      <nav
+        id="header-navigation"
+        className={`flex ${json["header-navigation"].css}`}
+      >
+        {links.map((link) => (
+          <Link
+            key={link.linkId}
+            href={link.url}
+            id="header-navigation-link"
+            className={`${json["header-navigation-link"].css} ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`}
+          >
+            {link.text}
           </Link>
-        )}
+        ))}
+      </nav>
 
-        {/* NAV */}
-        <nav className="flex items-center gap-6">
-          {links.map((link) => (
-            <Link
-              key={link.linkId}
-              href={link.url}
-              className={`text-sm font-medium hover:opacity-70 transition ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`}
-            >
-              {link.text}
-            </Link>
-          ))}
-        </nav>
-
-        {/* TOGGLE (kasnije)
+      {/* TOGGLE (kasnije)
         {header.hasLightModeSwitch && (
           <button>
             <FaMoon />
           </button>
         )} */}
-      </div>
     </header>
   );
 }

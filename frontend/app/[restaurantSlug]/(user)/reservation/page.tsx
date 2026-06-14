@@ -13,6 +13,7 @@ import {
   getAllSpecialDates,
   getOpeningHours,
 } from "@/app/_lib/getWorkingHours";
+import { _json } from "../_json";
 
 export default async function Page({
   params,
@@ -38,8 +39,11 @@ export default async function Page({
     restoran.restoranId,
   );
 
+  const json = _json(restoran);
+
   return (
     <ReserveTable
+      json={json}
       specialDates={specialDates}
       openingHours={openingHours}
       user={user}
