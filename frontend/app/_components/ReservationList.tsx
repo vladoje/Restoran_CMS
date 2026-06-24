@@ -1,5 +1,6 @@
 "use client";
 export interface MojJSON {
+  name: string;
   css?: string;
   text?: string;
   icon?: string;

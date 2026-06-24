@@ -27,6 +27,7 @@
     "react-hot-toast": "^2.6.0",
     "react-icons": "^5.6.0",
     "slugify": "^1.6.9",
+    "tailwind-merge": "^3.6.0",
     "validator": "^13.15.35",
     "zustand": "^5.0.12"
   },
