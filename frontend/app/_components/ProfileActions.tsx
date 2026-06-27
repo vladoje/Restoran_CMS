@@ -3,7 +3,7 @@ import { FaShieldHalved } from "react-icons/fa6";
 import Modal from "./Modal";
 import { useModal } from "../_hooks/useModal";
 import Link from "next/link";
-import { MojJSON } from "./ReservationList";
+import { convertCSS, globalStyles, MojJSON } from "./ReservationList";
 const closeButtonJSON = {
   "close-button": {
     css: "flex-1 px-4 py-3 text-sm font-bold  rounded-xl hover:bg-gray-100 transition-colors border-2 text-gray-700",
@@ -18,7 +18,7 @@ export function CloseButton(clientJSON: Record<string, MojJSON>) {
     <button
       id="close-button"
       onClick={close}
-      className={json["close-button"].css}
+      className={convertCSS(json["close-button"].css, globalStyles)}
     >
       {json["close-button"].text}
     </button>
@@ -34,12 +34,15 @@ export function ProfileActions({
   return (
     <div
       id="profile-actions"
-      className={`flex  flex-col ${json["profile-actions"].css}`}
+      className={`flex  flex-col ${convertCSS(json["profile-actions"].css, globalStyles)}`}
     >
       <Modal.Open opens="odjavi">
         <button
           id="profile-actions-odjavi-button"
-          className={json["profile-actions-odjavi-button"].css}
+          className={convertCSS(
+            json["profile-actions-odjavi-button"].css,
+            globalStyles,
+          )}
         >
           {json["profile-actions-odjavi-button"].text}
         </button>
@@ -47,7 +50,10 @@ export function ProfileActions({
       <Modal.Open opens="obrisi">
         <button
           id="profile-actions-obrisi-button"
-          className={json["profile-actions-obrisi-button"].css}
+          className={convertCSS(
+            json["profile-actions-obrisi-button"].css,
+            globalStyles,
+          )}
         >
           {json["profile-actions-obrisi-button"].text}
         </button>
@@ -55,7 +61,7 @@ export function ProfileActions({
       <Link
         id="profile-actions-privacy-policy-link"
         href={`/${slug}/privacy-policy`}
-        className={`flex ${json["profile-actions-privacy-policy-link"].css}`}
+        className={`flex ${convertCSS(json["profile-actions-privacy-policy-link"].css, globalStyles)}`}
       >
         {json["profile-actions-privacy-policy-link"].icon ===
           "FaShieldHalved" && <FaShieldHalved size={12} />}{" "}
@@ -76,10 +82,13 @@ export function Window({
   json: Record<string, MojJSON>;
 }) {
   return (
-    <div id="window" className={`flex flex-col ${json["window"].css}  `}>
+    <div
+      id="window"
+      className={`flex flex-col ${convertCSS(json["window"].css, globalStyles)}  `}
+    >
       <h2
         id="window-naslov-odjavi"
-        className={json["window-naslov-odjavi"].css}
+        className={convertCSS(json["window-naslov-odjavi"].css, globalStyles)}
       >
         {odjavi
           ? json["window-naslov-odjavi"].text
@@ -87,20 +96,26 @@ export function Window({
       </h2>
       <p
         id="window-paragraf-odjavi"
-        className={json["window-paragraf-odjavi"].css}
+        className={convertCSS(json["window-paragraf-odjavi"].css, globalStyles)}
       >
         {odjavi
           ? json["window-paragraf-odjavi"].text
           : json["window-paragraf-obrisi"].text}
       </p>
-      <div id="window-buttons" className={`flex ${json["window-buttons"].css}`}>
+      <div
+        id="window-buttons"
+        className={`flex ${convertCSS(json["window-buttons"].css, globalStyles)}`}
+      >
         <CloseButton />
         {href ? (
           <Link href={href}>
             <button
               id="window-button-odjavi"
               onClick={handle}
-              className={json["window-button-odjavi"].css}
+              className={convertCSS(
+                json["window-button-odjavi"].css,
+                globalStyles,
+              )}
             >
               {odjavi
                 ? json["window-button-odjavi"].text
@@ -111,7 +126,10 @@ export function Window({
           <button
             id="window-button-odjavi"
             onClick={handle}
-            className={json["window-button-odjavi"].css}
+            className={convertCSS(
+              json["window-button-odjavi"].css,
+              globalStyles,
+            )}
           >
             {odjavi
               ? json["window-button-odjavi"].text

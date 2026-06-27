@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, ReactNode } from "react";
-import { MojJSON } from "./ReservationList";
+import { convertCSS, globalStyles, MojJSON } from "./ReservationList";
 const adminJSON = {
   "input-label": {
     css: "text-xs font-semibold uppercase tracking-wide ml-1 mb-2",
@@ -34,7 +34,10 @@ function Input({
   return (
     <div>
       {label && (
-        <label id="input-label" className={`block ${json["input-label"].css}`}>
+        <label
+          id="input-label"
+          className={`block ${convertCSS(json["input-label"].css, globalStyles)}`}
+        >
           {label}
         </label>
       )}
@@ -44,7 +47,7 @@ function Input({
         disabled={disabled}
         name={name}
         type={type}
-        className={`w-full ${json.input.css}`}
+        className={`w-full ${convertCSS(json.input.css, globalStyles)}`}
         value={value ?? ""}
         defaultValue={defaultValue}
         placeholder={placeholder}
@@ -72,7 +75,10 @@ export function InputNumber({
   return (
     <div>
       {label && (
-        <label id="input-label" className={`block ${json["input-label"].css}`}>
+        <label
+          id="input-label"
+          className={`block ${convertCSS(json["input-label"].css, globalStyles)}`}
+        >
           {label}
         </label>
       )}
@@ -80,7 +86,7 @@ export function InputNumber({
       <input
         id="input"
         type="number"
-        className={`w-full ${json.input.css}`}
+        className={`w-full ${convertCSS(json.input.css, globalStyles)}`}
         value={value ?? ""}
         defaultValue={defaultValue}
         onChange={(e) => {

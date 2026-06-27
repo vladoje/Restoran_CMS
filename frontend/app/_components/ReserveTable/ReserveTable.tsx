@@ -17,11 +17,12 @@ import { useRouter } from "next/navigation";
 import { useCanvasSize } from "./useCanvasSize";
 import { useDisableTime, useOpeningHour } from "./useDisableTime";
 import ReservationDetails from "./ReservationDetails";
-import { MojJSON } from "../ReservationList";
+import { convertCSS, MojJSON } from "../ReservationList";
 
 function ReserveTable({
   sala,
   json,
+  globalStyles,
   allTables,
   user,
   restoran,
@@ -32,6 +33,7 @@ function ReserveTable({
 }: {
   sala: Sala;
   json: Record<string, MojJSON>;
+  globalStyles: Record<string, string>;
   allTables: Sto[];
   user: User;
   rezervacije: Rezervacija[];
@@ -91,20 +93,28 @@ function ReserveTable({
     >
       <div
         id="reserve-table"
-        className={`min-h-screen max-w-7xl  ${json["reserve-table"].css}`}
+        className={`min-h-screen max-w-7xl  ${convertCSS(json["reserve-table"].css, globalStyles)}`}
       >
         {/* GRID */}
         <div
           id="reserve-table-grid"
-          className={`grid grid-cols-1 lg:grid-cols-2 ${json["reserve-table-grid"].css}`}
+          className={`grid grid-cols-1 lg:grid-cols-2 ${convertCSS(json["reserve-table-grid"].css, globalStyles)}`}
         >
           {/* LEFT */}
-          <div className={json["reserve-table-odaberi-sto"].css}>
+          <div
+            className={convertCSS(
+              json["reserve-table-odaberi-sto"].css,
+              globalStyles,
+            )}
+          >
             {" "}
             {/* Dodat overflow-hidden */}
             <h2
               id="reserve-table-odaberi-sto-naslov"
-              className={json["reserve-table-odaberi-sto-naslov"].css}
+              className={convertCSS(
+                json["reserve-table-odaberi-sto-naslov"].css,
+                globalStyles,
+              )}
             >
               {json["reserve-table-odaberi-sto-naslov"].text}
             </h2>
@@ -115,6 +125,7 @@ function ReserveTable({
               <PrezentacijaSale
                 sala={sala}
                 json={json}
+                globalStyles={globalStyles}
                 stolovi={allTables}
                 x={canvasSize}
                 y={canvasSize}

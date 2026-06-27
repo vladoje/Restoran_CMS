@@ -1,29 +1,36 @@
 "use client";
+
+import { useState } from "react";
+import PrezentacijaSale from "./PrezentacijaSale";
+import { Rezervacija, Sala, Sto } from "../_lib/Interfaces";
+const allowedKeys = new Set(["bg", "text", "primary", "secondary"]);
+export function convertCSS(
+  css: string | undefined,
+  globalStyles: Record<string, string>,
+) {
+  return css?.replace(/\{([a-zA-Z0-9_-]+)\}/g, (match, key) => {
+    if (allowedKeys.has(key)) {
+      return globalStyles[key];
+    }
+    return match;
+  });
+}
 export interface MojJSON {
-  name: string;
   css?: string;
   text?: string;
   icon?: string;
 }
-import { useState } from "react";
-import PrezentacijaSale from "./PrezentacijaSale";
-import { Rezervacija, Sala, Sto } from "../_lib/Interfaces";
-export const globalStyles = {
-  bg: "white",
-  primary: "gray-900",
-  secondary: "gray-200",
-  surface: "gray-50",
-  text: "gray-600",
-};
 
 function ReservationList({
   activeReservations,
   json,
+  globalStyles,
   sala,
   allTables,
 }: {
   activeReservations: Rezervacija[];
   json: Record<string, MojJSON>;
+  globalStyles: Record<string, string>;
   allTables: Sto[];
   sala: Sala;
 }) {
@@ -38,7 +45,7 @@ function ReservationList({
       {!activeReservations.length ? (
         <div
           id="ReservationList-nema"
-          className={json["ReservationList-nema"].css}
+          className={convertCSS(json["ReservationList-nema"].css, globalStyles)}
         >
           {json["ReservationList-nema"].text}
         </div>
@@ -67,49 +74,67 @@ function ReservationList({
                 <div
                   key={i}
                   id="ReservationList-res-card"
-                  className={json["ReservationList-res-card"].css}
+                  className={convertCSS(
+                    json["ReservationList-res-card"].css,
+                    globalStyles,
+                  )}
                 >
                   <div
                     id="ReservationList-res-information-poravnanje"
-                    className={`flex ${json["ReservationList-res-information-poravnanje"].css}`}
+                    className={`flex ${convertCSS(json["ReservationList-res-information-poravnanje"].css, globalStyles)}`}
                   >
                     {/* LEFT */}
                     <div className="space-y-2">
                       <div
                         id="ReservationList-res-datum-start"
-                        className={`flex ${json["ReservationList-res-datum-start"].css}`}
+                        className={`flex ${convertCSS(json["ReservationList-res-datum-start"].css, globalStyles)}`}
                       >
                         <span
                           id="ReservationList-res-datum"
-                          className={json["ReservationList-res-datum"].css}
+                          className={convertCSS(
+                            json["ReservationList-res-datum"].css,
+                            globalStyles,
+                          )}
                         >
                           {datum}
                         </span>
 
                         <span
                           id="ReservationList-res-tacka"
-                          className={json["ReservationList-res-tacka"].css}
+                          className={convertCSS(
+                            json["ReservationList-res-tacka"].css,
+                            globalStyles,
+                          )}
                         >
                           {json["ReservationList-res-tacka"].text}
                         </span>
 
                         <span
                           id="ReservationList-res-start"
-                          className={json["ReservationList-res-start"].css}
+                          className={convertCSS(
+                            json["ReservationList-res-start"].css,
+                            globalStyles,
+                          )}
                         >
                           {start}
                         </span>
 
                         <span
                           id="ReservationList-res-tacka"
-                          className={json["ReservationList-res-tacka"].css}
+                          className={convertCSS(
+                            json["ReservationList-res-tacka"].css,
+                            globalStyles,
+                          )}
                         >
                           {json["ReservationList-res-tacka"].text}
                         </span>
 
                         <span
                           id="ReservationList-res-gost"
-                          className={json["ReservationList-res-gost"].css}
+                          className={convertCSS(
+                            json["ReservationList-res-gost"].css,
+                            globalStyles,
+                          )}
                         >
                           {res.numberOfPeople}{" "}
                           {res.numberOfPeople > 1 ? "gosta" : "gost"}
@@ -120,8 +145,14 @@ function ReservationList({
                           id="ReservationList-res-status-past"
                           className={` ${
                             isPast
-                              ? json["ReservationList-res-status-past"].css
-                              : json["ReservationList-res-status-new"].css
+                              ? convertCSS(
+                                  json["ReservationList-res-status-past"].css,
+                                  globalStyles,
+                                )
+                              : convertCSS(
+                                  json["ReservationList-res-status-new"].css,
+                                  globalStyles,
+                                )
                           }`}
                         >
                           {isPast
@@ -132,7 +163,10 @@ function ReservationList({
 
                       <div
                         id="ReservationList-res-sto"
-                        className={json["ReservationList-res-sto"].css}
+                        className={convertCSS(
+                          json["ReservationList-res-sto"].css,
+                          globalStyles,
+                        )}
                       >
                         Sto {table?.tableNumber ?? "—"}
                       </div>
@@ -143,13 +177,19 @@ function ReservationList({
                       <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
                         <button
                           id="ReservationList-res-izmjeni"
-                          className={json["ReservationList-res-izmjeni"].css}
+                          className={convertCSS(
+                            json["ReservationList-res-izmjeni"].css,
+                            globalStyles,
+                          )}
                         >
                           {json["ReservationList-res-izmjeni"].text}
                         </button>
                         <button
                           id="ReservationList-res-otkazi"
-                          className={json["ReservationList-res-otkazi"].css}
+                          className={convertCSS(
+                            json["ReservationList-res-otkazi"].css,
+                            globalStyles,
+                          )}
                         >
                           {json["ReservationList-res-otkazi"].text}
                         </button>
@@ -160,6 +200,7 @@ function ReservationList({
                     stolovi={allTables}
                     sala={sala}
                     json={json}
+                    globalStyles={globalStyles}
                     x={60}
                     y={60}
                     i={i}
@@ -174,7 +215,7 @@ function ReservationList({
           {activeReservations.length > 3 && (
             <div
               id="ReservationList-showMore-div"
-              className={`flex ${json["ReservationList-showMore-div"].css}`}
+              className={`flex ${convertCSS(json["ReservationList-showMore-div"].css, globalStyles)}`}
             >
               <button
                 onClick={() =>
@@ -182,7 +223,10 @@ function ReservationList({
                     isExpanded ? 3 : Math.min(activeReservations.length, n + 3),
                   )
                 }
-                className={json["ReservationList-showMore-button-manje"].css}
+                className={convertCSS(
+                  json["ReservationList-showMore-button-manje"].css,
+                  globalStyles,
+                )}
                 id="ReservationList-showMore-button-manje"
               >
                 {isExpanded

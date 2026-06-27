@@ -59,16 +59,21 @@ export interface Foooter {
   classname: string;
   text: string;
 }
+export interface MojJSON {
+  css?: string;
+  text?: string;
+  icon?: string;
+}
 export interface Sajt {
   siteId: number;
   headerId: number;
   footerId: number;
-  adminHeaderId: number;
-  adminFooterId: number;
   primaryColor: string;
   secondaryColor: string;
   surfaceColor: string;
+  textColor: string;
   backgroundColor: string;
+  jsonCSS: Record<string, MojJSON>;
   logoUrl: string;
 }
 export interface Headerr {

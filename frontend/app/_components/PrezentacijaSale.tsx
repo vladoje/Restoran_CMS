@@ -1,7 +1,7 @@
 "use client";
 import { Dispatch, SetStateAction } from "react";
 import { Sala, Sto } from "../_lib/Interfaces";
-import { MojJSON } from "./ReservationList";
+import { convertCSS, MojJSON } from "./ReservationList";
 export function renderTemplate(
   template: string,
   data: {
@@ -21,6 +21,7 @@ function PrezentacijaSale({
   y,
   i,
   json,
+  globalStyles,
   tId,
   setTable,
   setTableId,
@@ -31,6 +32,7 @@ function PrezentacijaSale({
   x: number;
   y: number;
   json: Record<string, MojJSON>;
+  globalStyles: Record<string, string>;
   sala: Sala;
   i: number;
   tId: number | null;
@@ -44,7 +46,7 @@ function PrezentacijaSale({
   return (
     <div
       id="prezentacija-sale-sala"
-      className={json["prezentacija-sale-sala"].css}
+      className={convertCSS(json["prezentacija-sale-sala"].css, globalStyles)}
       style={{
         width: x + 4,
         height: y + 4,
@@ -86,8 +88,14 @@ function PrezentacijaSale({
             id="prezentacija-sale-sto-reserved"
             className={`absolute flex ${
               isReserved
-                ? json["prezentacija-sale-sto-reserved"].css
-                : json["prezentacija-sale-sto-not-reserved"].css
+                ? convertCSS(
+                    json["prezentacija-sale-sto-reserved"].css,
+                    globalStyles,
+                  )
+                : convertCSS(
+                    json["prezentacija-sale-sto-not-reserved"].css,
+                    globalStyles,
+                  )
             }`}
             style={{
               left,

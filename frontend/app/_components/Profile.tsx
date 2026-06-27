@@ -6,9 +6,17 @@ import Modal from "@/app/_components/Modal";
 import { UserAvatar } from "./UserAvatar";
 import Input from "./Input";
 import { ProfileActions, Window } from "./ProfileActions";
-import { MojJSON } from "./ReservationList";
+import { convertCSS, MojJSON } from "./ReservationList";
 
-function Page({ slug, json }: { slug: string; json: Record<string, MojJSON> }) {
+function Page({
+  slug,
+  json,
+  globalStyles,
+}: {
+  slug: string;
+  json: Record<string, MojJSON>;
+  globalStyles: Record<string, string>;
+}) {
   const {
     username,
     setUsername,
@@ -20,12 +28,18 @@ function Page({ slug, json }: { slug: string; json: Record<string, MojJSON> }) {
 
   return (
     <Modal>
-      <main id="profile" className={`max-w-md ${json["profile"].css}`}>
+      <main
+        id="profile"
+        className={`max-w-md ${convertCSS(json["profile"].css, globalStyles)}`}
+      >
         {/* AVATAR SEKCIJA */}
         <UserAvatar json={json} username={user.name} />
 
         {/* FORMA ZA PODATKE */}
-        <div id="profile-inputs" className={json["profile-inputs"].css}>
+        <div
+          id="profile-inputs"
+          className={convertCSS(json["profile-inputs"].css, globalStyles)}
+        >
           {/* KORISNIČKO IME */}
           <div className={`group `}>
             <Input
@@ -33,7 +47,7 @@ function Page({ slug, json }: { slug: string; json: Record<string, MojJSON> }) {
               label={
                 <p
                   id="profile-input-username"
-                  className={`flex ${json["profile-input-username"].css}`}
+                  className={`flex ${convertCSS(json["profile-input-username"].css, globalStyles)}`}
                 >
                   {json["profile-input-username"].icon === "FaUser" && (
                     <FaUser size={10} />
@@ -50,7 +64,7 @@ function Page({ slug, json }: { slug: string; json: Record<string, MojJSON> }) {
           <button
             // onClick={handleClick}
             id="profile-save-button"
-            className={`w-full flex ${json["profile-save-button"].css}`}
+            className={`w-full flex ${convertCSS(json["profile-save-button"].css, globalStyles)}`}
           >
             {json["profile-save-button"].icon === "FaSave" && <FaSave />}{" "}
             {json["profile-save-button"].text}

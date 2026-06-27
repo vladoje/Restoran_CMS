@@ -6,12 +6,14 @@ import { getRestoranWithSlug } from "../../_lib/getRestoran";
 import { getUser } from "../../_lib/getUser";
 import { getUserReservations } from "../../_lib/getRezervacije";
 import { getAllTablesFromSala, getSala } from "../../_lib/getTables";
-import { Restoran, Rezervacija, User } from "../../_lib/Interfaces";
+import { Restoran, Rezervacija, Sajt, Sala, User } from "../../_lib/Interfaces";
 import { getServerSession } from "next-auth";
 import NewUserDashboard from "@/app/_components/NewUserDashboard";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { globalStyles } from "./layout";
-import { _json } from "./_json";
+
+import { _json, convertCSS, getDefaultGlobalStyles } from "./_json";
+import { getSite } from "@/app/_lib/getSite";
+import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 
 async function Page({ params }: { params: { restaurantSlug: string } }) {
   const slug = (await params).restaurantSlug;
@@ -22,26 +24,37 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
     getUser(session.user.id),
   ]);
 
-  const activeReservations: Rezervacija[] = await getUserReservations(
-    user.userId,
-  );
+  const [activeReservations, site, sala]: [Rezervacija[], Sajt, Sala] =
+    await Promise.all([
+      getUserReservations(user.userId),
+      getSite(restoran.siteId),
+      getSala(restoran.restoranId),
+    ]);
 
-  const sala = await getSala(restoran.restoranId);
   const allTables = await getAllTablesFromSala(sala.salaId);
 
-  const json = _json(restoran);
+  console.log(site.jsonCSS);
+  const globalStyles =
+    createGlobalStylesObject(site) || getDefaultGlobalStyles();
+  const json = site.jsonCSS || _json(restoran);
 
   return (
     <div
       className={`bg-${globalStyles.bg} text-${globalStyles.text} max-w-6xl mx-auto px-4 py-8`}
     >
       {/* Restoran header */}
-      <div id="homepage-header" className={json["homepage-header"].css}>
+      <div
+        id="homepage-header"
+        className={convertCSS(json["homepage-header"].css, globalStyles)}
+      >
         <div className="flex items-start justify-between">
           <div>
             <h1
               id="homepage-header-naslov"
-              className={json["homepage-header-naslov"].css}
+              className={convertCSS(
+                json["homepage-header-naslov"].css,
+                globalStyles,
+              )}
             >
               {json["homepage-header-naslov"].text}
             </h1>
@@ -53,7 +66,7 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
             </p>
             <div
               id="homepage-header-information"
-              className={`flex gap-6 ${json["homepage-header-information"].css}`}
+              className={`flex gap-6 ${convertCSS(json["homepage-header-information"].css, globalStyles)}`}
             >
               <div id="homepage-header-information-address">
                 {json["homepage-header-information-address"].text}
@@ -72,24 +85,30 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
       <div className="grid md:grid-cols-2 gap-6">
         <div
           id="homepage-brzeAkcije"
-          className={json["homepage-brzeAkcije"].css}
+          className={convertCSS(json["homepage-brzeAkcije"].css, globalStyles)}
         >
           <h2
             id="homepage-brzeAkcije-naslov"
-            className={json["homepage-brzeAkcije-naslov"].css}
+            className={convertCSS(
+              json["homepage-brzeAkcije-naslov"].css,
+              globalStyles,
+            )}
           >
             {json["homepage-brzeAkcije-naslov"].text}
           </h2>
           <p
             id="homepage-brzeAkcije-text"
-            className={json["homepage-brzeAkcije-text"].css}
+            className={convertCSS(
+              json["homepage-brzeAkcije-text"].css,
+              globalStyles,
+            )}
           >
             {json["homepage-brzeAkcije-text"].text}
           </p>
           <Link
             id="homepage-brzeAkcije-link"
             href={`${slug}/reservation`}
-            className={`inline-block ${json["homepage-brzeAkcije-link"].css}`}
+            className={`inline-block ${convertCSS(json["homepage-brzeAkcije-link"].css, globalStyles)}`}
           >
             {json["homepage-brzeAkcije-link"].text}
           </Link>
@@ -99,11 +118,14 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
       {/* Lista rezervacija */}
       <div
         id="homepage-rezervacije"
-        className={json["homepage-rezervacije"].css}
+        className={convertCSS(json["homepage-rezervacije"].css, globalStyles)}
       >
         <h2
           id="homepage-rezervacije-naslov"
-          className={json["homepage-rezervacije-naslov"].css}
+          className={convertCSS(
+            json["homepage-rezervacije-naslov"].css,
+            globalStyles,
+          )}
         >
           {json["homepage-rezervacije-naslov"].text}
         </h2>
@@ -113,7 +135,10 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
         {!activeReservations.length ? (
           <div
             id="homepage-rezervacije-nema"
-            className={json["homepage-rezervacije-nema"].css}
+            className={convertCSS(
+              json["homepage-rezervacije-nema"].css,
+              globalStyles,
+            )}
           >
             {json["homepage-rezervacije-nema"].text}
           </div>
@@ -134,38 +159,56 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
               <div
                 key={i}
                 id="homepage-rezervacije-rezervacija"
-                className={json["homepage-rezervacije-rezervacija"].css}
+                className={convertCSS(
+                  json["homepage-rezervacije-rezervacija"].css,
+                  globalStyles,
+                )}
               >
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <span
                         id="homepage-rezervacije-datum"
-                        className={json["homepage-rezervacije-datum"].css}
+                        className={convertCSS(
+                          json["homepage-rezervacije-datum"].css,
+                          globalStyles,
+                        )}
                       >
                         {datum}
                       </span>
                       <span
                         id="homepage-rezervacije-tacka"
-                        className={json["homepage-rezervacije-tacka"].css}
+                        className={convertCSS(
+                          json["homepage-rezervacije-tacka"].css,
+                          globalStyles,
+                        )}
                       >
                         {json["homepage-rezervacije-tacka"].text}
                       </span>
                       <span
                         id="homepage-rezervacije-start"
-                        className={json["homepage-rezervacije-start"].css}
+                        className={convertCSS(
+                          json["homepage-rezervacije-start"].css,
+                          globalStyles,
+                        )}
                       >
                         {start}
                       </span>
                       <span
                         id="homepage-rezervacije-tacka"
-                        className={json["homepage-rezervacije-tacka"].css}
+                        className={convertCSS(
+                          json["homepage-rezervacije-tacka"].css,
+                          globalStyles,
+                        )}
                       >
                         {json["homepage-rezervacije-tacka"].text}
                       </span>
                       <span
                         id="homepage-rezervacije-gost"
-                        className={json["homepage-rezervacije-gost"].css}
+                        className={convertCSS(
+                          json["homepage-rezervacije-gost"].css,
+                          globalStyles,
+                        )}
                       >
                         {res.numberOfPeople}{" "}
                         {res.numberOfPeople > 1 ? "gosta" : "gost"}
@@ -173,7 +216,10 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
                     </div>
                     <div
                       id="homepage-rezervacije-sto"
-                      className={json["homepage-rezervacije-sto"].css}
+                      className={convertCSS(
+                        json["homepage-rezervacije-sto"].css,
+                        globalStyles,
+                      )}
                     >
                       Sto{" "}
                       {
@@ -185,13 +231,19 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
                   <div className="flex gap-2">
                     <button
                       id="homepage-rezervacije-izmjeni"
-                      className={json["homepage-rezervacije-izmjeni"].css}
+                      className={convertCSS(
+                        json["homepage-rezervacije-izmjeni"].css,
+                        globalStyles,
+                      )}
                     >
                       {json["homepage-rezervacije-izmjeni"].text}
                     </button>
                     <button
                       id="homepage-rezervacije-otkazi"
-                      className={json["homepage-rezervacije-otkazi"].css}
+                      className={convertCSS(
+                        json["homepage-rezervacije-otkazi"].css,
+                        globalStyles,
+                      )}
                     >
                       {json["homepage-rezervacije-otkazi"].text}
                     </button>

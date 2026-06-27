@@ -1,4 +1,4 @@
-import { MojJSON } from "./ReservationList";
+import { convertCSS, globalStyles, MojJSON } from "./ReservationList";
 
 export function UserAvatar({
   username,
@@ -10,17 +10,20 @@ export function UserAvatar({
   return (
     <div
       id="user-avatar"
-      className={`flex flex-col ${json["user-avatar"].css}`}
+      className={`flex flex-col ${convertCSS(json["user-avatar"].css, globalStyles)}`}
     >
       <div
         id="user-avatar-prvo-slovo"
-        className={json["user-avatar-prvo-slovo"].css}
+        className={convertCSS(json["user-avatar-prvo-slovo"].css, globalStyles)}
       >
         {username.at(0)?.toUpperCase()}
       </div>
       <h1
         id="user-avatar-naslov-username"
-        className={json["user-avatar-naslov-username"].css}
+        className={convertCSS(
+          json["user-avatar-naslov-username"].css,
+          globalStyles,
+        )}
       >
         {json["user-avatar-naslov-username"].text}
         {username}{" "}

@@ -9,7 +9,7 @@ import isEmail from "validator/lib/isEmail";
 import bcrypt from "bcrypt";
 import { Restoran, Sajt, User } from "./Interfaces";
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { log } from "console";
+import { _json } from "../[restaurantSlug]/(user)/_json";
 
 interface Ids {
   userId: null | number;
@@ -47,11 +47,7 @@ export async function adminRegisterAPI({
     openingSucces: false,
     linksSuccess: false,
   };
-  console.log("ARAPI", email,
-  name,
-  password,
-  slug,
-  restoranName,)
+  console.log("ARAPI", email, name, password, slug, restoranName);
   const supabase = await createClient(await cookies());
   try {
     if (!slug || !restoranName || !name || !password || !email)
@@ -101,7 +97,12 @@ export async function adminRegisterAPI({
       .single();
     if (!user || error) throw new Error("DB didnt create a new user");
     ids.userId = user?.userId;
-    const sajt: Sajt = await konfiguracijaSajta(supabase, restoranName, ids);
+    const sajt: Sajt = await konfiguracijaSajta(
+      supabase,
+      restoranName,
+      email,
+      ids,
+    );
 
     const [linksRes, restoranRes] = await Promise.all([
       supabase.from("Links").insert([
@@ -146,13 +147,11 @@ export async function adminRegisterAPI({
 
     if (linksRes.error) throw new Error("DB didnt create links");
     ids.linksSuccess = true;
-    const restoran = restoranRes.data;
-    if (!restoran || restoranRes.error)
-    {
-
+    const restoran: Restoran | null = restoranRes.data;
+    if (!restoran || restoranRes.error) {
       throw new Error("DB didnt create a new restoran");
     }
-    ids.restoranId = restoranRes?.data.restoranId;
+    ids.restoranId = restoran.restoranId;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, restoranUserRes] = await Promise.all([
@@ -172,9 +171,9 @@ export async function adminRegisterAPI({
       throw new Error("Database error4");
     }
     ids.restoranUserId = restoranUserRes?.data.id;
-  } catch(e) {
+  } catch (e) {
     console.log("ARAPI Error", e);
-    
+
     await Promise.all([
       ids.userId
         ? supabase.from("Users").delete().eq("userId", ids.userId)
@@ -227,9 +226,9 @@ async function konfiguracijaSaleIRadnogVremena(
   restoran: Restoran,
   ids: Ids,
 ) {
-  const sedam = "07:00:00"
-  const deset = "22:00:00"
-  
+  const sedam = "07:00:00";
+  const deset = "22:00:00";
+
   const [salaRes, openingHoursRes] = await Promise.all([
     supabase
       .from("Sale")
@@ -243,7 +242,7 @@ async function konfiguracijaSaleIRadnogVremena(
     supabase.from("OpeningHours").insert([
       {
         dayOfWeek: 0,
-        startTime: sedam  ,
+        startTime: sedam,
         endTime: deset,
         isOpen: true,
         restoranId: restoran.restoranId,
@@ -292,13 +291,13 @@ async function konfiguracijaSaleIRadnogVremena(
       },
     ]),
   ]);
-  if (salaRes?.error || !salaRes){
-console.log("ARAPI Sala error", salaRes.error);
+  if (salaRes?.error || !salaRes) {
+    console.log("ARAPI Sala error", salaRes.error);
     throw new Error("DB didnt create working hours or sala");
   }
   ids.salaId = salaRes?.data.salaId;
-  if (openingHoursRes?.error || !openingHoursRes){
-console.log("ARAPI Opening hours error", openingHoursRes.error);
+  if (openingHoursRes?.error || !openingHoursRes) {
+    console.log("ARAPI Opening hours error", openingHoursRes.error);
     throw new Error("DB didnt create working hours or sala");
   }
   ids.openingSucces = true;
@@ -307,6 +306,7 @@ console.log("ARAPI Opening hours error", openingHoursRes.error);
 async function konfiguracijaSajta(
   supabase: SupabaseClient,
   restoranName: string,
+  email: string,
   ids: Ids,
 ) {
   const [headerRes, footerRes] = await Promise.all([
@@ -332,12 +332,8 @@ async function konfiguracijaSajta(
       .single(),
   ]);
 
-  if (!headerRes || headerRes?.error)
-  {
-    
-    
+  if (!headerRes || headerRes?.error) {
     throw new Error("DB didnt create a new header");
-  
   }
   ids.headerId = headerRes?.data?.headerId;
   if (!footerRes || footerRes?.error)
@@ -345,7 +341,18 @@ async function konfiguracijaSajta(
   ids.footerId = footerRes?.data?.footerId;
   const header = headerRes.data;
   const footer = footerRes.data;
-
+  const restoran = {
+    restoranId: 1,
+    ownerId: 1,
+    siteId: 1,
+    name: restoranName,
+    email,
+    address: "",
+    phone: "",
+    buffer: 15,
+    trajanjeRezervacije: 120,
+    slug: "",
+  };
   const {
     data: sajt,
     error: error4,
@@ -356,6 +363,8 @@ async function konfiguracijaSajta(
       secondaryColor: "pink-500",
       backgroundColor: "white",
       surfaceColor: "gray-100",
+      textColor: "gray-600",
+      jsonCSS: _json(restoran, header, footer),
       headerId: header.headerId,
       footerId: footer.footerId,
     })

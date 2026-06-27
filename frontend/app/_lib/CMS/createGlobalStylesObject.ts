@@ -1,16 +1,12 @@
-function createGlobalStylesObject(
-  backgroundColor: string,
-  primaryColor: string,
-  secondaryColor: string,
-  surfaceColor: string,
-  textColor: string,
-) {
+import { Sajt } from "../Interfaces";
+
+function createGlobalStylesObject(sajt: Sajt) {
   return {
-    bg: backgroundColor,
-    primary: primaryColor,
-    secondary: secondaryColor,
-    surface: surfaceColor,
-    text: textColor,
+    bg: sajt.backgroundColor,
+    primary: sajt.primaryColor,
+    secondary: sajt.secondaryColor,
+    surface: sajt.surfaceColor,
+    text: sajt.textColor,
   };
 }
 

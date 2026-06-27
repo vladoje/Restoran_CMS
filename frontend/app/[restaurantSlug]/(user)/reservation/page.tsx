@@ -13,7 +13,9 @@ import {
   getAllSpecialDates,
   getOpeningHours,
 } from "@/app/_lib/getWorkingHours";
-import { _json } from "../_json";
+import { _json, getDefaultGlobalStyles } from "../_json";
+import { getSite } from "@/app/_lib/getSite";
+import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 
 export default async function Page({
   params,
@@ -39,11 +41,16 @@ export default async function Page({
     restoran.restoranId,
   );
 
-  const json = _json(restoran);
+  const site = await getSite(restoran.siteId);
+
+  const globalStyles =
+    createGlobalStylesObject(site) || getDefaultGlobalStyles();
+  const json = site.jsonCSS || _json(restoran);
 
   return (
     <ReserveTable
       json={json}
+      globalStyles={globalStyles}
       specialDates={specialDates}
       openingHours={openingHours}
       user={user}

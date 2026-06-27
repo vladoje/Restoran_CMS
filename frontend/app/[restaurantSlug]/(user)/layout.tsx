@@ -1,5 +1,9 @@
+import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 import Footer from "../../_components/Footer";
 import Header from "../../_components/Header";
+import { getDefaultGlobalStyles } from "./_json";
+import { getRestoranWithSlug } from "@/app/_lib/getRestoran";
+import { getSite } from "@/app/_lib/getSite";
 
 export default async function Layout({
   children,
@@ -10,8 +14,11 @@ export default async function Layout({
 }) {
   // console.log(await params);
   const { restaurantSlug } = await params;
+  const restoran = await getRestoranWithSlug(restaurantSlug);
+  const site = await getSite(restoran.siteId);
 
-  // console.log(restaurantSlug);
+  const globalStyles =
+    createGlobalStylesObject(site) || getDefaultGlobalStyles();
 
   return (
     <div
@@ -25,10 +32,3 @@ export default async function Layout({
     </div>
   );
 }
-export const globalStyles = {
-  bg: "white",
-  primary: "gray-900",
-  secondary: "gray-200",
-  surface: "gray-50",
-  text: "gray-600",
-};
