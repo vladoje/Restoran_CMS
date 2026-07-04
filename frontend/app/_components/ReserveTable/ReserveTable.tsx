@@ -17,12 +17,13 @@ import { useRouter } from "next/navigation";
 import { useCanvasSize } from "./useCanvasSize";
 import { useDisableTime, useOpeningHour } from "./useDisableTime";
 import ReservationDetails from "./ReservationDetails";
-import { convertCSS, MojJSON } from "../ReservationList";
+import {  MojJSON } from "../ReservationList";
+import { twj } from "tw-to-css";
 
 function ReserveTable({
   sala,
   json,
-  globalStyles,
+  
   allTables,
   user,
   restoran,
@@ -33,7 +34,7 @@ function ReserveTable({
 }: {
   sala: Sala;
   json: Record<string, MojJSON>;
-  globalStyles: Record<string, string>;
+  
   allTables: Sto[];
   user: User;
   rezervacije: Rezervacija[];
@@ -93,27 +94,27 @@ function ReserveTable({
     >
       <div
         id="reserve-table"
-        className={`min-h-screen max-w-7xl  ${convertCSS(json["reserve-table"].css, globalStyles)}`}
+        style={twj(`min-h-screen max-w-7xl  ${(json["reserve-table"].css||'')}`)}
       >
         {/* GRID */}
         <div
           id="reserve-table-grid"
-          className={`grid grid-cols-1 lg:grid-cols-2 ${convertCSS(json["reserve-table-grid"].css, globalStyles)}`}
+          style={twj(`grid grid-cols-1 lg:grid-cols-2 ${(json["reserve-table-grid"].css||'')}`)}
         >
           {/* LEFT */}
           <div
-            className={convertCSS(
-              json["reserve-table-odaberi-sto"].css,
-              globalStyles,
+            style={twj(
+              json["reserve-table-odaberi-sto"].css||''
+              
             )}
           >
             {" "}
             {/* Dodat overflow-hidden */}
             <h2
               id="reserve-table-odaberi-sto-naslov"
-              className={convertCSS(
-                json["reserve-table-odaberi-sto-naslov"].css,
-                globalStyles,
+              style={twj(
+                json["reserve-table-odaberi-sto-naslov"].css||''
+                
               )}
             >
               {json["reserve-table-odaberi-sto-naslov"].text}
@@ -125,7 +126,6 @@ function ReserveTable({
               <PrezentacijaSale
                 sala={sala}
                 json={json}
-                globalStyles={globalStyles}
                 stolovi={allTables}
                 x={canvasSize}
                 y={canvasSize}

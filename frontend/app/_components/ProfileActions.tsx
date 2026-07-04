@@ -3,7 +3,9 @@ import { FaShieldHalved } from "react-icons/fa6";
 import Modal from "./Modal";
 import { useModal } from "../_hooks/useModal";
 import Link from "next/link";
-import { convertCSS, globalStyles, MojJSON } from "./ReservationList";
+import {  MojJSON } from "./ReservationList";
+
+import { twj } from "tw-to-css";
 const closeButtonJSON = {
   "close-button": {
     css: "flex-1 px-4 py-3 text-sm font-bold  rounded-xl hover:bg-gray-100 transition-colors border-2 text-gray-700",
@@ -11,14 +13,15 @@ const closeButtonJSON = {
   },
 };
 
-export function CloseButton(clientJSON: Record<string, MojJSON>) {
+export function CloseButton(clientJSON?: Record<string, MojJSON>) {
   const { close } = useModal();
   const json = clientJSON || closeButtonJSON;
+  
   return (
     <button
       id="close-button"
       onClick={close}
-      className={convertCSS(json["close-button"].css, globalStyles)}
+      style={twj(json["close-button"].css||"")}
     >
       {json["close-button"].text}
     </button>
@@ -27,21 +30,24 @@ export function CloseButton(clientJSON: Record<string, MojJSON>) {
 export function ProfileActions({
   slug,
   json,
+  
 }: {
   slug: string;
   json: Record<string, MojJSON>;
+  
 }) {
-  return (
+  
+    return (
     <div
       id="profile-actions"
-      className={`flex  flex-col ${convertCSS(json["profile-actions"].css, globalStyles)}`}
+      style={twj(`flex  flex-col ${(json["profile-actions"].css)}`)}
     >
       <Modal.Open opens="odjavi">
         <button
           id="profile-actions-odjavi-button"
-          className={convertCSS(
-            json["profile-actions-odjavi-button"].css,
-            globalStyles,
+          style={twj(
+            json["profile-actions-odjavi-button"].css||""
+            
           )}
         >
           {json["profile-actions-odjavi-button"].text}
@@ -50,9 +56,9 @@ export function ProfileActions({
       <Modal.Open opens="obrisi">
         <button
           id="profile-actions-obrisi-button"
-          className={convertCSS(
-            json["profile-actions-obrisi-button"].css,
-            globalStyles,
+          style={twj(
+            json["profile-actions-obrisi-button"].css
+            ||""
           )}
         >
           {json["profile-actions-obrisi-button"].text}
@@ -61,7 +67,7 @@ export function ProfileActions({
       <Link
         id="profile-actions-privacy-policy-link"
         href={`/${slug}/privacy-policy`}
-        className={`flex ${convertCSS(json["profile-actions-privacy-policy-link"].css, globalStyles)}`}
+        style={twj(`flex ${(json["profile-actions-privacy-policy-link"].css)}`)}
       >
         {json["profile-actions-privacy-policy-link"].icon ===
           "FaShieldHalved" && <FaShieldHalved size={12} />}{" "}
@@ -75,20 +81,23 @@ export function Window({
   odjavi = false,
   href,
   json,
+  
 }: {
   handle: MouseEventHandler<HTMLButtonElement>;
   odjavi?: boolean;
   href?: string;
   json: Record<string, MojJSON>;
+  
 }) {
+  
   return (
     <div
       id="window"
-      className={`flex flex-col ${convertCSS(json["window"].css, globalStyles)}  `}
+      style={twj(`flex flex-col ${(json["window"].css)}  `)}
     >
       <h2
         id="window-naslov-odjavi"
-        className={convertCSS(json["window-naslov-odjavi"].css, globalStyles)}
+        style={twj(json["window-naslov-odjavi"].css||"")}
       >
         {odjavi
           ? json["window-naslov-odjavi"].text
@@ -96,7 +105,7 @@ export function Window({
       </h2>
       <p
         id="window-paragraf-odjavi"
-        className={convertCSS(json["window-paragraf-odjavi"].css, globalStyles)}
+        style={twj(json["window-paragraf-odjavi"].css||"")}
       >
         {odjavi
           ? json["window-paragraf-odjavi"].text
@@ -104,17 +113,17 @@ export function Window({
       </p>
       <div
         id="window-buttons"
-        className={`flex ${convertCSS(json["window-buttons"].css, globalStyles)}`}
+        style={twj(`flex ${(json["window-buttons"].css)}`)}
       >
-        <CloseButton />
+        <CloseButton clientJSON={json}  />
         {href ? (
           <Link href={href}>
             <button
               id="window-button-odjavi"
               onClick={handle}
-              className={convertCSS(
-                json["window-button-odjavi"].css,
-                globalStyles,
+              style={twj(
+                json["window-button-odjavi"].css||""
+                
               )}
             >
               {odjavi
@@ -126,9 +135,9 @@ export function Window({
           <button
             id="window-button-odjavi"
             onClick={handle}
-            className={convertCSS(
-              json["window-button-odjavi"].css,
-              globalStyles,
+            style={twj(
+              json["window-button-odjavi"].css||""
+              
             )}
           >
             {odjavi

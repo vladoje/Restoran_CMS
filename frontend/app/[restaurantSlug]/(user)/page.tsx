@@ -1,7 +1,7 @@
 //odraditi ovako isto css za sve ostale user fajlove a i za admin nesto skontati pa zapamtiti u bazi json varijablu za svaku stranicu pa je ucitati
 // i na kraju napraviti modifikovanje klasa
 import Link from "next/link";
-
+import { twj } from "tw-to-css";
 import { getRestoranWithSlug } from "../../_lib/getRestoran";
 import { getUser } from "../../_lib/getUser";
 import { getUserReservations } from "../../_lib/getRezervacije";
@@ -11,7 +11,7 @@ import { getServerSession } from "next-auth";
 import NewUserDashboard from "@/app/_components/NewUserDashboard";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 
-import { _json, convertCSS, getDefaultGlobalStyles } from "./_json";
+import { _json, convertJSON, getDefaultGlobalStyles } from "./_json";
 import { getSite } from "@/app/_lib/getSite";
 import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 
@@ -33,40 +33,40 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
 
   const allTables = await getAllTablesFromSala(sala.salaId);
 
-  console.log(site.jsonCSS);
+ 
   const globalStyles =
     createGlobalStylesObject(site) || getDefaultGlobalStyles();
-  const json = site.jsonCSS || _json(restoran);
+  const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
 
   return (
     <div
-      className={`bg-${globalStyles.bg} text-${globalStyles.text} max-w-6xl mx-auto px-4 py-8`}
+      style={twj(`bg-${globalStyles.bg} text-${globalStyles.text} max-w-6xl mx-auto px-4 py-8`||"")}
     >
       {/* Restoran header */}
       <div
         id="homepage-header"
-        className={convertCSS(json["homepage-header"].css, globalStyles)}
+        style={twj(json["homepage-header"].css||"")}
       >
-        <div className="flex items-start justify-between">
+        <div className=" flex items-start justify-between">
           <div>
             <h1
               id="homepage-header-naslov"
-              className={convertCSS(
-                json["homepage-header-naslov"].css,
-                globalStyles,
-              )}
+              style={twj(
+                json["homepage-header-naslov"].css||"")
+                
+              }
             >
               {json["homepage-header-naslov"].text}
             </h1>
             <p
               id="homepage-header-text"
-              className={json["homepage-header-text"].text}
+              style={twj(json["homepage-header-text"].css||"")}
             >
               {json["homepage-header-text"].text}
             </p>
             <div
               id="homepage-header-information"
-              className={`flex gap-6 ${convertCSS(json["homepage-header-information"].css, globalStyles)}`}
+              style={twj(`flex gap-6 ${json["homepage-header-information"].css }`||"")}
             >
               <div id="homepage-header-information-address">
                 {json["homepage-header-information-address"].text}
@@ -85,30 +85,30 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
       <div className="grid md:grid-cols-2 gap-6">
         <div
           id="homepage-brzeAkcije"
-          className={convertCSS(json["homepage-brzeAkcije"].css, globalStyles)}
+          style={twj(json["homepage-brzeAkcije"].css||"") }
         >
           <h2
             id="homepage-brzeAkcije-naslov"
-            className={convertCSS(
-              json["homepage-brzeAkcije-naslov"].css,
-              globalStyles,
-            )}
+            style={twj(
+              json["homepage-brzeAkcije-naslov"].css||"")
+              
+            }
           >
             {json["homepage-brzeAkcije-naslov"].text}
           </h2>
           <p
             id="homepage-brzeAkcije-text"
-            className={convertCSS(
-              json["homepage-brzeAkcije-text"].css,
-              globalStyles,
-            )}
+            style={twj(
+              json["homepage-brzeAkcije-text"].css||"")
+              
+            }
           >
             {json["homepage-brzeAkcije-text"].text}
           </p>
           <Link
             id="homepage-brzeAkcije-link"
             href={`${slug}/reservation`}
-            className={`inline-block ${convertCSS(json["homepage-brzeAkcije-link"].css, globalStyles)}`}
+            style={twj(`inline-block ${json["homepage-brzeAkcije-link"].css }`||"")}
           >
             {json["homepage-brzeAkcije-link"].text}
           </Link>
@@ -118,14 +118,14 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
       {/* Lista rezervacija */}
       <div
         id="homepage-rezervacije"
-        className={convertCSS(json["homepage-rezervacije"].css, globalStyles)}
+        style={twj(json["homepage-rezervacije"].css ||"")}
       >
         <h2
           id="homepage-rezervacije-naslov"
-          className={convertCSS(
-            json["homepage-rezervacije-naslov"].css,
-            globalStyles,
-          )}
+          style={twj(
+            json["homepage-rezervacije-naslov"].css||"")
+            
+          }
         >
           {json["homepage-rezervacije-naslov"].text}
         </h2>
@@ -135,10 +135,10 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
         {!activeReservations.length ? (
           <div
             id="homepage-rezervacije-nema"
-            className={convertCSS(
-              json["homepage-rezervacije-nema"].css,
-              globalStyles,
-            )}
+            style={twj(
+              json["homepage-rezervacije-nema"].css||"")
+              
+            }
           >
             {json["homepage-rezervacije-nema"].text}
           </div>
@@ -159,56 +159,56 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
               <div
                 key={i}
                 id="homepage-rezervacije-rezervacija"
-                className={convertCSS(
-                  json["homepage-rezervacije-rezervacija"].css,
-                  globalStyles,
-                )}
+                style={twj(
+                  json["homepage-rezervacije-rezervacija"].css||"")
+                
+                }
               >
                 <div className="flex justify-between items-start">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <span
                         id="homepage-rezervacije-datum"
-                        className={convertCSS(
-                          json["homepage-rezervacije-datum"].css,
-                          globalStyles,
-                        )}
+                        style={twj(
+                          json["homepage-rezervacije-datum"].css||"")
+                          
+                        }
                       >
                         {datum}
                       </span>
                       <span
                         id="homepage-rezervacije-tacka"
-                        className={convertCSS(
-                          json["homepage-rezervacije-tacka"].css,
-                          globalStyles,
-                        )}
+                        style={twj(
+                          json["homepage-rezervacije-tacka"].css||"")
+                          
+                        }
                       >
                         {json["homepage-rezervacije-tacka"].text}
                       </span>
                       <span
                         id="homepage-rezervacije-start"
-                        className={convertCSS(
-                          json["homepage-rezervacije-start"].css,
-                          globalStyles,
-                        )}
+                        style={twj(
+                          json["homepage-rezervacije-start"].css||"")
+                          
+                        }
                       >
                         {start}
                       </span>
                       <span
                         id="homepage-rezervacije-tacka"
-                        className={convertCSS(
-                          json["homepage-rezervacije-tacka"].css,
-                          globalStyles,
-                        )}
+                        style={twj(
+                          json["homepage-rezervacije-tacka"].css||"")
+                          
+                        }
                       >
                         {json["homepage-rezervacije-tacka"].text}
                       </span>
                       <span
                         id="homepage-rezervacije-gost"
-                        className={convertCSS(
-                          json["homepage-rezervacije-gost"].css,
-                          globalStyles,
-                        )}
+                        style={twj(
+                          json["homepage-rezervacije-gost"].css||"")
+                          
+                        }
                       >
                         {res.numberOfPeople}{" "}
                         {res.numberOfPeople > 1 ? "gosta" : "gost"}
@@ -216,10 +216,10 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
                     </div>
                     <div
                       id="homepage-rezervacije-sto"
-                      className={convertCSS(
-                        json["homepage-rezervacije-sto"].css,
-                        globalStyles,
-                      )}
+                      style={twj(
+                        json["homepage-rezervacije-sto"].css||"")
+                        
+                      }
                     >
                       Sto{" "}
                       {
@@ -231,19 +231,19 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
                   <div className="flex gap-2">
                     <button
                       id="homepage-rezervacije-izmjeni"
-                      className={convertCSS(
-                        json["homepage-rezervacije-izmjeni"].css,
-                        globalStyles,
-                      )}
+                      style={twj(
+                        json["homepage-rezervacije-izmjeni"].css||"")
+                        
+                      }
                     >
                       {json["homepage-rezervacije-izmjeni"].text}
                     </button>
                     <button
                       id="homepage-rezervacije-otkazi"
-                      className={convertCSS(
-                        json["homepage-rezervacije-otkazi"].css,
-                        globalStyles,
-                      )}
+                      style={twj(
+                        json["homepage-rezervacije-otkazi"].css||"")
+                        
+                      }
                     >
                       {json["homepage-rezervacije-otkazi"].text}
                     </button>

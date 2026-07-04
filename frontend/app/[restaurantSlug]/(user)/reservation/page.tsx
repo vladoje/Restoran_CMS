@@ -13,7 +13,7 @@ import {
   getAllSpecialDates,
   getOpeningHours,
 } from "@/app/_lib/getWorkingHours";
-import { _json, getDefaultGlobalStyles } from "../_json";
+import { _json, convertJSON, getDefaultGlobalStyles } from "../_json";
 import { getSite } from "@/app/_lib/getSite";
 import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 
@@ -45,12 +45,12 @@ export default async function Page({
 
   const globalStyles =
     createGlobalStylesObject(site) || getDefaultGlobalStyles();
-  const json = site.jsonCSS || _json(restoran);
-
+    const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
+  
   return (
     <ReserveTable
       json={json}
-      globalStyles={globalStyles}
+      
       specialDates={specialDates}
       openingHours={openingHours}
       user={user}

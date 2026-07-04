@@ -5,9 +5,10 @@ import { Restoran } from "@/app/_lib/Interfaces";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import { FaRegCircleDot, FaEnvelope } from "react-icons/fa6";
-import { _json, convertCSS, getDefaultGlobalStyles } from "../_json";
+import { _json, getDefaultGlobalStyles, convertJSON } from "../_json";
 import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 import { getSite } from "@/app/_lib/getSite";
+import { twj } from "tw-to-css";
 
 export async function Page({ params }: { params: { restaurantSlug: string } }) {
   const slug = (await params).restaurantSlug;
@@ -18,27 +19,28 @@ export async function Page({ params }: { params: { restaurantSlug: string } }) {
   const site = await getSite(restoran.siteId);
   const globalStyles =
     createGlobalStylesObject(site) || getDefaultGlobalStyles();
-  const json = site.jsonCSS || _json(restoran);
+    const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
+  
   return (
     <div
-      className={`min-h-screen max-w-2xl ${convertCSS(json["privacy"].css, globalStyles)}`}
+      style={twj(`min-h-screen max-w-2xl ${(json["privacy"].css||"")}`)}
     >
       {/* HEADER */}
       <div
-        className={`flex flex-col ${convertCSS(json["privacy-header"].css, globalStyles)}`}
+        style={twj(`flex flex-col ${(json["privacy-header"].css||"")}`)}
       >
         <h1
-          className={convertCSS(
-            json["privacy-header-naslov"].css,
-            globalStyles,
+          style={twj(
+            json["privacy-header-naslov"].css||""
+            
           )}
         >
           {json["privacy-header-naslov"].text}
         </h1>
         <p
-          className={convertCSS(
-            json["privacy-header-paragraf"].css,
-            globalStyles,
+          style={twj(
+            json["privacy-header-paragraf"].css||""
+            
           )}
         >
           {json["privacy-header-paragraf"].text}
@@ -47,33 +49,33 @@ export async function Page({ params }: { params: { restaurantSlug: string } }) {
       </div>
 
       {/* SADRŽAJ DOKUMENTA */}
-      <div className={convertCSS(json["privacy-body"].css, globalStyles)}>
+      <div style={twj(json["privacy-body"].css||"")}>
         {/* Default sekcija 1 */}
         <section
-          className={convertCSS(json["privacy-body-section"].css, globalStyles)}
+          style={twj(json["privacy-body-section"].css||"")}
         >
           <div
-            className={`flex ${convertCSS(json["privacy-body-section-header"].css, globalStyles)}`}
+            style={twj(`flex ${(json["privacy-body-section-header"].css||"")}`)}
           >
             <FaRegCircleDot
-              className={convertCSS(
-                json["privacy-body-section-header-circle"].css,
-                globalStyles,
+              style={twj(
+                json["privacy-body-section-header-circle"].css||""
+                
               )}
             />
             <h2
-              className={convertCSS(
-                json["privacy-body-section-header-naslov"].css,
-                globalStyles,
+              style={twj(
+                json["privacy-body-section-header-naslov"].css||""
+                
               )}
             >
               {json["privacy-body-section-header-naslov"].text}
             </h2>
           </div>
           <p
-            className={convertCSS(
-              json["privacy-body-section-body"].css,
-              globalStyles,
+            style={twj(
+              json["privacy-body-section-body"].css||""
+              
             )}
           >
             {json["privacy-body-section-body"].text}
@@ -82,30 +84,30 @@ export async function Page({ params }: { params: { restaurantSlug: string } }) {
 
         {/* Default sekcija 2 */}
         <section
-          className={convertCSS(json["privacy-body-section"].css, globalStyles)}
+          style={twj(json["privacy-body-section"].css||"")}
         >
           <div
-            className={`flex ${convertCSS(json["privacy-body-section-header"].css, globalStyles)}`}
+            style={twj(`flex ${(json["privacy-body-section-header"].css||"")}`)}
           >
             <FaRegCircleDot
-              className={convertCSS(
-                json["privacy-body-section-header-circle"].css,
-                globalStyles,
+              style={twj(
+                json["privacy-body-section-header-circle"].css||""
+                
               )}
             />
             <h2
-              className={convertCSS(
-                json["privacy-body-section-header-naslov2"].css,
-                globalStyles,
+              style={twj(
+                json["privacy-body-section-header-naslov2"].css||""
+                
               )}
             >
               {json["privacy-body-section-header-naslov2"].text}
             </h2>
           </div>
           <p
-            className={convertCSS(
-              json["privacy-body-section-body2"].css,
-              globalStyles,
+            style={twj(
+              json["privacy-body-section-body2"].css||""
+              
             )}
           >
             {json["privacy-body-section-body2"].text}
@@ -113,22 +115,22 @@ export async function Page({ params }: { params: { restaurantSlug: string } }) {
         </section>
 
         {/* INFO BOX / KONTAKT */}
-        <div className={convertCSS(json["privacy-info"].css, globalStyles)}>
+        <div style={twj(json["privacy-info"].css||"")}>
           <FaEnvelope
-            className={convertCSS(
-              json["privacy-info-koverta"].css,
-              globalStyles,
+            style={twj(
+              json["privacy-info-koverta"].css||""
+              
             )}
           />
           <div
-            className={convertCSS(json["privacy-info-div"].css, globalStyles)}
+            style={twj(json["privacy-info-div"].css||"")}
           >
             <p>
               {json["privacy-info-div-paragraf"].text}
               <span
-                className={convertCSS(
-                  json["privacy-info-div-paragraf-span"].css,
-                  globalStyles,
+                style={twj(
+                  json["privacy-info-div-paragraf-span"].css||""
+                  
                 )}
               >
                 {json["privacy-info-div-paragraf-span"].text}
@@ -138,9 +140,9 @@ export async function Page({ params }: { params: { restaurantSlug: string } }) {
               {json["privacy-info-div-paragraf2"].text}
               <a
                 href={`mailto:${restoran.email}`}
-                className={convertCSS(
-                  json["privacy-info-div-paragraf2-anchor"].css,
-                  globalStyles,
+                style={twj(
+                  json["privacy-info-div-paragraf2-anchor"].css||""
+                  
                 )}
               >
                 {json["privacy-info-div-paragraf2-anchor"].text}
@@ -151,7 +153,7 @@ export async function Page({ params }: { params: { restaurantSlug: string } }) {
       </div>
 
       {/* FOOTER */}
-      <p className={convertCSS(json["privacy-footer"].css, globalStyles)}>
+      <p style={twj(json["privacy-footer"].css||"")}>
         {json["privacy-footer"].text}
       </p>
     </div>

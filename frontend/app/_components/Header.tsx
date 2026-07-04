@@ -19,10 +19,13 @@ import { getServerSession } from "next-auth";
 import { options } from "../api/auth/[...nextauth]/options";
 import {
   _json,
-  convertCSS,
+  
+  convertJSON,
+  
   getDefaultGlobalStyles,
 } from "../[restaurantSlug]/(user)/_json";
 import createGlobalStylesObject from "../_lib/CMS/createGlobalStylesObject";
+import { twj } from "tw-to-css";
 
 async function Header({ slug }: { slug: string }) {
   const session = await getServerSession(options);
@@ -33,27 +36,28 @@ async function Header({ slug }: { slug: string }) {
     getLinkWithHeaderId(site.headerId),
   ] as const);
 
-  const json = site.jsonCSS || _json(restoran, header);
   const globalStyles =
-    createGlobalStylesObject(site) || getDefaultGlobalStyles();
-  console.log(json["header"].css);
+  createGlobalStylesObject(site) || getDefaultGlobalStyles();
+    const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
+  
   return (
     // "sticky" drži header na vrhu dok skroluješ, "backdrop-blur" pravi onaj Apple-ov efekat stakla
     <header
       id="header"
-      className={`sticky top-0 z-50 w-full ${convertCSS(json["header"].css, globalStyles)} max-w-7xl flex `}
+      style={twj(`sticky top-0 z-50 w-full ${json["header"].css||""} max-w-7xl flex `)}
     >
+      
       {/* LOGO */}
       {header.hasLogo && (
         <Link
           href={`/${slug}`}
           id="header-logo"
-          className={`flex ${convertCSS(json["header-logo"].css, globalStyles)}`}
+          style={twj(`flex ${json["header-logo"].css||""}`)}
         >
           <Image src={site.logoUrl} alt="logo" width={32} height={32} />
           <span
             id="header-logo-naslov"
-            className={convertCSS(json["header-logo-naslov"].css, globalStyles)}
+            style={twj(json["header-logo-naslov"].css||"")}
           >
             {json["header-logo-naslov"].text}
           </span>
@@ -63,14 +67,14 @@ async function Header({ slug }: { slug: string }) {
       {/* NAV */}
       <nav
         id="header-navigation"
-        className={`flex ${convertCSS(json["header-navigation"].css, globalStyles)}`}
+        style={twj(`flex ${json["header-navigation"].css||""}`)}
       >
         {links.map((link) => (
           <Link
             key={link.linkId}
             href={link.url}
             id="header-navigation-link"
-            className={`${convertCSS(json["header-navigation-link"].css, globalStyles)} ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`}
+            style={twj(`${json["header-navigation-link"].css||""} ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`)}
           >
             {link.text}
           </Link>

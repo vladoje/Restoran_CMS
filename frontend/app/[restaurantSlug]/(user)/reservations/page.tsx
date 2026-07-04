@@ -8,10 +8,11 @@ import { getAllTablesFromSala, getSala } from "@/app/_lib/getTables";
 
 import ReservationList from "@/app/_components/ReservationList";
 import { Rezervacija, User } from "@/app/_lib/Interfaces";
-import { _json, convertCSS, getDefaultGlobalStyles } from "../_json";
+import { _json, convertJSON, getDefaultGlobalStyles } from "../_json";
 import { getRestoranWithSlug } from "@/app/_lib/getRestoran";
 import { getSite } from "@/app/_lib/getSite";
 import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
+import { twj } from "tw-to-css";
 
 async function Page({ params }: { params: { restaurantSlug: string } }) {
   const user: User = await getUser(1);
@@ -28,15 +29,18 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
 
   const globalStyles =
     createGlobalStylesObject(site) || getDefaultGlobalStyles();
-  const json = site.jsonCSS || _json(restoran);
+    const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
+  
+
+  
   if (!restoranId) {
     // nema ništa → render empty state
     return (
       <div className="space-y-4 ">
         <div
-          className={convertCSS(json["reservations-nema"].css, globalStyles)}
+          style={twj(json["reservations-nema"]?.css||"")}
         >
-          {json["reservations-nema"].text}
+          {json["reservations-nema"]?.text}
         </div>
       </div>
     );
@@ -49,29 +53,29 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
     <div>
       <div
         id="reservations-active"
-        className={convertCSS(json["reservations-active"].css, globalStyles)}
+        style={twj(json["reservations-active"].css||"")}
       >
         <h2
           id="reservations-active-naslov"
-          className={convertCSS(
-            json["reservations-active-naslov"].css,
-            globalStyles,
+          style={twj(
+            json["reservations-active-naslov"].css||""
+          
           )}
         >
           {json["reservations-active-naslov"].text}
         </h2>
         <p
           id="reservations-active-ukupno"
-          className={convertCSS(
-            json["reservations-active-ukupno"].css,
-            globalStyles,
+          style={twj(
+            json["reservations-active-ukupno"].css||""
+          
           )}
         >
           {activeReservations.length} Ukupno
         </p>
         <ReservationList
           sala={sala}
-          globalStyles={globalStyles}
+          
           json={json}
           activeReservations={activeReservations}
           allTables={allTables}
@@ -79,29 +83,29 @@ async function Page({ params }: { params: { restaurantSlug: string } }) {
       </div>
       <div
         id="reservations-inactive"
-        className={convertCSS(json["reservations-inactive"].css, globalStyles)}
+        style={twj(json["reservations-inactive"].css||"")}
       >
         <h2
           id="reservations-inactive-naslov"
-          className={convertCSS(
-            json["reservations-inactive-naslov"].css,
-            globalStyles,
+          style={twj(
+            json["reservations-inactive-naslov"].css||""
+          
           )}
         >
           {json["reservations-inactive-naslov"].text}
         </h2>
         <p
           id="reservations-inactive-ukupno"
-          className={convertCSS(
-            json["reservations-inactive-ukupno"].css,
-            globalStyles,
+          style={twj(
+            json["reservations-inactive-ukupno"].css||""
+          
           )}
         >
           {pastReservations.length} Ukupno
         </p>
         <ReservationList
           sala={sala}
-          globalStyles={globalStyles}
+          
           json={json}
           activeReservations={pastReservations}
           allTables={allTables}

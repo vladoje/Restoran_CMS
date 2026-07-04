@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import PrezentacijaSale from "../PrezentacijaSale";
 import { Sala, Sto } from "@/app/_lib/Interfaces";
-import { SelectBrojGostiju } from "../ReserveTable/ReserveTable";
+
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { createRezervacija } from "@/app/_lib/createRezervacija";
 import { Restoran } from "../../_lib/Interfaces";
 import Link from "next/link";
+import { SelectBrojGostiju } from "../ReserveTable/ReservationDetails";
+import { _json, getDefaultGlobalStyles } from "@/app/[restaurantSlug]/(user)/_json";
 
 function TwoButtons({
   sala,
@@ -88,6 +90,8 @@ function TwoButtons({
               <div className="rounded-xl overflow-hidden border border-gray-300">
                 <PrezentacijaSale
                   sala={sala}
+                  json={_json(restoran)}
+                  globalStyles={getDefaultGlobalStyles()}
                   stolovi={stolovi}
                   x={canvasSize}
                   y={canvasSize}

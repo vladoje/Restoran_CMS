@@ -1,5 +1,5 @@
 //poceti koristiti global styles i jsonCSS iz baze
-import { Foooter, Headerr, Restoran } from "@/app/_lib/Interfaces";
+import { Foooter, Headerr, MojJSON, Restoran } from "@/app/_lib/Interfaces";
 
 export function getDefaultGlobalStyles() {
   return {
@@ -10,22 +10,34 @@ export function getDefaultGlobalStyles() {
     text: "gray-600",
   };
 }
-const allowedKeys = new Set(["bg", "text", "primary", "secondary"]);
 export function convertCSS(
   css: string | undefined,
   globalStyles: Record<string, string>,
 ) {
-  return css?.replace(/\{([a-zA-Z0-9_-]+)\}/g, (match, key) => {
-    if (allowedKeys.has(key)) {
-      return globalStyles[key];
-    }
-    return match;
-  });
+  if (!css) return "";
+
+  return css
+    .replace(/\{([a-zA-Z0-9_-]+)\}/g, (_, key) => {
+      return globalStyles[key] || "";
+    })
+    .replace(/\s+/g, " ")
+    .trim();
+}
+export function convertJSON(
+  json: Record<string, MojJSON>,
+  globalStyles: Record<string, string>,
+) {
+const newJSON:Record<string, MojJSON>= {}
+Object.entries(json).map(([ime,{css,text,icon}])=>{
+  
+ newJSON[ime]={"css":convertCSS(css,globalStyles),text,icon}}
+)
+return newJSON
 }
 export function _json(restoran?: Restoran, header?: Headerr, footer?: Foooter) {
   return {
     header: {
-      css: `border-b bg-{bg} mx-auto  items-center justify-between px-6 py-4`,
+      css: `border-b bg-{bg}  min-w-full items-center justify-between px-6 py-4`,
     },
     "header-logo": {
       css: "items-center gap-2",
@@ -147,10 +159,10 @@ export function _json(restoran?: Restoran, header?: Headerr, footer?: Foooter) {
       css: `bg-{surface} border border-{secondary} rounded-lg p-8 mb-8`,
     },
     "homepage-brzeAkcije": {
-      css: `bg-{surface} border border-{secondary} rounded-lg p-6  mb-8 `,
+      css: `bg-{surface} shadow-lg  border border-{secondary} rounded-lg p-6  mb-8 `,
     },
     "homepage-brzeAkcije-link": {
-      css: `bg-{primary} text-{bg} px-6 py-3 rounded-lg hover:bg-{primary}/40 transition-colors`,
+      css: `bg-{primary} text-{text} px-6 py-3 rounded-lg hover:bg-{primary}/40 transition-colors`,
       text: "rezerviši",
     },
     "homepage-rezervacije": {
@@ -196,7 +208,7 @@ export function _json(restoran?: Restoran, header?: Headerr, footer?: Foooter) {
       text: "Nema rezervacija",
     },
     "reservationList-res-card": {
-      css: `border border-gray-200 rounded-xl p-5 bg-{bg} hover:shadow-sm hover:border-gray-300 transition-all`,
+      css: `border border-gray-200 rounded-xl p-5 bg-{bg}  hover:border-gray-300 transition-all`,
     },
     "reservationList-res-information-poravnanje": {
       css: "justify-between items-start gap-4",
@@ -256,7 +268,7 @@ export function _json(restoran?: Restoran, header?: Headerr, footer?: Foooter) {
       css: "gap-6",
     },
     "reserve-table-odaberi-sto": {
-      css: `bg-{bg} rounded-2xl shadow p-4 lg:p-6 overflow-hidden`,
+      css: `bg-{bg} rounded-2xl  p-4 lg:p-6 overflow-hidden`,
     },
     "reserve-table-odaberi-sto-naslov": {
       css: "text-lg lg:text-xl font-semibold mb-4",
@@ -266,7 +278,7 @@ export function _json(restoran?: Restoran, header?: Headerr, footer?: Foooter) {
       css: `mx-auto relative border border-gray-200 rounded-xl bg-{secondary}`,
     },
     "prezentacija-sale-sto-reserved": {
-      css: "rounded-lg  items-center justify-center text-xs font-medium cursor-pointer transition-all  bg-green-500 text-white shadow-md scale-105",
+      css: "rounded-lg  items-center justify-center text-xs font-medium cursor-pointer transition-all  bg-green-500 text-white  scale-105",
       text: "Sto {tableNumber} ({capacity} mjesta)",
     },
     "prezentacija-sale-sto-not-reserved": {
@@ -284,7 +296,7 @@ export function _json(restoran?: Restoran, header?: Headerr, footer?: Foooter) {
       icon: "FaUser",
     },
     "profile-save-button": {
-      css: "mt-4 font-bold py-4 rounded-2xl transition-all active:scale-[0.97]  items-center justify-center gap-3 shadow-lg cursor-pointer",
+      css: "mt-4 font-bold py-4 rounded-2xl transition-all active:scale-[0.97]  items-center justify-center gap-3  cursor-pointer",
       text: "Sacuvaj promjene",
       icon: "FaSave",
     },
@@ -292,7 +304,7 @@ export function _json(restoran?: Restoran, header?: Headerr, footer?: Foooter) {
       css: "items-center mb-10",
     },
     "user-avatar-prvo-slovo": {
-      css: "w-24 h-24 bg-gray-500   rounded-full flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-indigo-200 dark:shadow-none mb-4",
+      css: "w-24 h-24 bg-gray-500   rounded-full flex items-center justify-center text-white text-3xl font-black  mb-4",
     },
     "user-avatar-naslov-username": {
       css: "text-2xl font-bold ",
@@ -368,7 +380,7 @@ disabled:opacity-60 disabled:bg-{secondary} disabled:text-slate-400 disabled:cur
     },
 
     "privacy-body": {
-      css: `space-y-10 bg-{bg} border border-slate-200 rounded-2xl p-6 md:p-10 shadow-sm`,
+      css: `space-y-10 bg-{bg} border border-slate-200 rounded-2xl p-6 md:p-10 `,
     },
     "privacy-body-section": {
       css: "space-y-3",

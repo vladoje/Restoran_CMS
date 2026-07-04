@@ -1,7 +1,8 @@
 "use client";
 import { Dispatch, SetStateAction } from "react";
 import { Sala, Sto } from "../_lib/Interfaces";
-import { convertCSS, MojJSON } from "./ReservationList";
+import {  MojJSON } from "./ReservationList";
+import { twj } from "tw-to-css";
 export function renderTemplate(
   template: string,
   data: {
@@ -21,7 +22,6 @@ function PrezentacijaSale({
   y,
   i,
   json,
-  globalStyles,
   tId,
   setTable,
   setTableId,
@@ -32,7 +32,7 @@ function PrezentacijaSale({
   x: number;
   y: number;
   json: Record<string, MojJSON>;
-  globalStyles: Record<string, string>;
+  
   sala: Sala;
   i: number;
   tId: number | null;
@@ -46,11 +46,12 @@ function PrezentacijaSale({
   return (
     <div
       id="prezentacija-sale-sala"
-      className={convertCSS(json["prezentacija-sale-sala"].css, globalStyles)}
+    
       style={{
         width: x + 4,
         height: y + 4,
         maxWidth: "100%",
+        ...twj(json["prezentacija-sale-sala"].css||"" )
       }}
     >
       {stolovi.map((table: Sto, k) => {
@@ -86,22 +87,23 @@ function PrezentacijaSale({
               },
             )}
             id="prezentacija-sale-sto-reserved"
-            className={`absolute flex ${
-              isReserved
-                ? convertCSS(
-                    json["prezentacija-sale-sto-reserved"].css,
-                    globalStyles,
-                  )
-                : convertCSS(
-                    json["prezentacija-sale-sto-not-reserved"].css,
-                    globalStyles,
-                  )
-            }`}
+          
             style={{
               left,
               top,
               width,
               height,
+              ...twj(`absolute flex ${
+              isReserved
+                ? 
+                    json["prezentacija-sale-sto-reserved"].css
+                    
+                  
+                : 
+                    json["prezentacija-sale-sto-not-reserved"].css
+                    
+                  
+            }`)
             }}
           >
             {table.tableNumber}

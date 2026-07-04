@@ -6,16 +6,16 @@ import Modal from "@/app/_components/Modal";
 import { UserAvatar } from "./UserAvatar";
 import Input from "./Input";
 import { ProfileActions, Window } from "./ProfileActions";
-import { convertCSS, MojJSON } from "./ReservationList";
+import {  MojJSON } from "./ReservationList";
+import { twj } from "tw-to-css";
 
 function Page({
   slug,
   json,
-  globalStyles,
 }: {
   slug: string;
   json: Record<string, MojJSON>;
-  globalStyles: Record<string, string>;
+  
 }) {
   const {
     username,
@@ -30,24 +30,25 @@ function Page({
     <Modal>
       <main
         id="profile"
-        className={`max-w-md ${convertCSS(json["profile"].css, globalStyles)}`}
+        style={twj(`max-w-md ${(json["profile"].css||"")}`)}
       >
         {/* AVATAR SEKCIJA */}
-        <UserAvatar json={json} username={user.name} />
+        <UserAvatar json={json}  username={user.name} />
 
         {/* FORMA ZA PODATKE */}
         <div
           id="profile-inputs"
-          className={convertCSS(json["profile-inputs"].css, globalStyles)}
+          style={twj(json["profile-inputs"].css||"")}
         >
           {/* KORISNIČKO IME */}
           <div className={`group `}>
             <Input
               clientJSON={json}
+             
               label={
                 <p
                   id="profile-input-username"
-                  className={`flex ${convertCSS(json["profile-input-username"].css, globalStyles)}`}
+                  style={twj(`flex ${(json["profile-input-username"].css||"")}`)}
                 >
                   {json["profile-input-username"].icon === "FaUser" && (
                     <FaUser size={10} />
@@ -64,14 +65,14 @@ function Page({
           <button
             // onClick={handleClick}
             id="profile-save-button"
-            className={`w-full flex ${convertCSS(json["profile-save-button"].css, globalStyles)}`}
+            style={twj(`w-full flex ${(json["profile-save-button"].css||"")}`)}
           >
             {json["profile-save-button"].icon === "FaSave" && <FaSave />}{" "}
             {json["profile-save-button"].text}
           </button>
         </div>
 
-        <ProfileActions slug={slug} json={json} />
+        <ProfileActions slug={slug} json={json}  />
       </main>
 
       {/* <Modal.Window name="obrisi"> */}
@@ -79,7 +80,7 @@ function Page({
       {/* </Modal.Window> */}
 
       <Modal.Window name="odjavi">
-        <Window handle={handleLogout} href="/login" odjavi={true} json={json} />
+        <Window handle={handleLogout}  href="/login" odjavi={true} json={json} />
       </Modal.Window>
     </Modal>
   );

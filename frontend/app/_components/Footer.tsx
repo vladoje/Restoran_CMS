@@ -9,10 +9,11 @@ import { getServerSession } from "next-auth";
 import { options } from "../api/auth/[...nextauth]/options";
 import {
   _json,
-  convertCSS,
+  convertJSON,
   getDefaultGlobalStyles,
 } from "../[restaurantSlug]/(user)/_json";
 import createGlobalStylesObject from "../_lib/CMS/createGlobalStylesObject";
+import { twj } from "tw-to-css";
 
 async function Footer({ slug }: { slug: string }) {
   const restoran = await getRestoranWithSlug(slug);
@@ -24,35 +25,35 @@ async function Footer({ slug }: { slug: string }) {
     getLinkWithFooterId(site.footerId),
   ] as const);
 
-  const json = site.jsonCSS || _json(restoran, undefined, footer);
+  
   const globalStyles =
     createGlobalStylesObject(site) || getDefaultGlobalStyles();
-
+const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
   return (
     <footer
       id="footer"
-      className={`w-full ${convertCSS(json["footer"].css, globalStyles)}`}
+      style={twj(`w-full ${json["footer"].css}`||"")}
     >
       <div
-        className={`max-w-7xl flex flex-col ${convertCSS(json["footer-body"].css, globalStyles)}`}
+        style={twj(`max-w-7xl flex flex-col ${json["footer-body"].css}`||"")}
       >
         {/* LOGO + TEXT */}
         <div
           id="footer-body-logo"
-          className={`flex flex-col  max-w-sm ${convertCSS(json["footer-body-logo"].css, globalStyles)}`}
+          style={twj(`flex flex-col  max-w-sm ${json["footer-body-logo"].css}`||"")}
         >
           {footer.hasLogo && (
             <div
               id="footer-body-logo-image"
-              className={`flex ${convertCSS(json["footer-body-logo-image"].css, globalStyles)}`}
+              style={twj(`flex ${json["footer-body-logo-image"].css}`||"")}
             >
               <Image src={site.logoUrl} alt="logo" width={32} height={32} />
               <span
                 id="footer-body-logo-image-text"
-                className={convertCSS(
-                  json["footer-body-logo-image-text"].css,
-                  globalStyles,
-                )}
+                style={twj(
+                  json["footer-body-logo-image-text"].css
+                  
+                ||"")}
               >
                 {json["footer-body-logo-image-text"].text}
               </span>
@@ -61,9 +62,9 @@ async function Footer({ slug }: { slug: string }) {
 
           <p
             id="footer-body-logo-text"
-            className={convertCSS(
-              json["footer-body-logo-text"].css,
-              globalStyles,
+            style={twj(
+              json["footer-body-logo-text"].css
+             ||""
             )}
           >
             {json["footer-body-logo-text"].text}
@@ -73,13 +74,13 @@ async function Footer({ slug }: { slug: string }) {
         {/* LINKOVI */}
         <div
           id="footer-body-links"
-          className={`flex flex-col ${convertCSS(json["footer-body-links"].css, globalStyles)}`}
+          style={twj(`flex flex-col ${json["footer-body-links"].css}`||"")}
         >
           <span
             id="footer-body-links-naslov"
-            className={convertCSS(
-              json["footer-body-links-naslov"].css,
-              globalStyles,
+            style={twj(
+              json["footer-body-links-naslov"].css
+             ||""
             )}
           >
             {json["footer-body-links-naslov"].text}
@@ -90,7 +91,7 @@ async function Footer({ slug }: { slug: string }) {
               key={link.linkId}
               href={link.url}
               id="footer-body-links-link"
-              className={`${convertCSS(json["footer-body-links-link"].css, globalStyles)} ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`}
+              style={twj(`${json["footer-body-links-link"].css} ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`||"")}
             >
               {link.text}
             </Link>
@@ -101,13 +102,13 @@ async function Footer({ slug }: { slug: string }) {
         {footer.hasContactInfo && (
           <div
             id="footer-body-contact"
-            className={`flex flex-col ${convertCSS(json["footer-body-contact"].css, globalStyles)}`}
+            style={twj(`flex flex-col ${json["footer-body-contact"].css}`||"")}
           >
             <span
               id="footer-body-contact-naslov"
-              className={convertCSS(
-                json["footer-body-contact-naslov"].css,
-                globalStyles,
+              style={twj(
+                json["footer-body-contact-naslov"].css
+               ||""
               )}
             >
               {json["footer-body-contact-naslov"].text}
@@ -115,18 +116,18 @@ async function Footer({ slug }: { slug: string }) {
 
             <p
               id="footer-body-contact-adresa"
-              className={convertCSS(
-                json["footer-body-contact-adresa"].css,
-                globalStyles,
+              style={twj(
+                json["footer-body-contact-adresa"].css
+               ||""
               )}
             >
               {json["footer-body-contact-adresa"].text}
             </p>
             <p
               id="footer-body-contact-adresa"
-              className={convertCSS(
-                json["footer-body-contact-telefon"].css,
-                globalStyles,
+              style={twj(
+                json["footer-body-contact-telefon"].css
+               ||""
               )}
             >
               {json["footer-body-contact-telefon"].text}
@@ -138,7 +139,7 @@ async function Footer({ slug }: { slug: string }) {
       {/* BOTTOM BAR */}
       <div
         id="footer-reserved"
-        className={convertCSS(json["footer-reserved"].css, globalStyles)}
+        style={twj(json["footer-reserved"].css||"")}
       >
         {json["footer-reserved"].text}
       </div>

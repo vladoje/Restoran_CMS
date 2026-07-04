@@ -20,6 +20,7 @@ export default async function Layout({
   const globalStyles =
     createGlobalStylesObject(site) || getDefaultGlobalStyles();
 
+
   return (
     <div
       className={`min-h-screen text-${globalStyles.text} flex flex-col bg-${globalStyles.bg}`}

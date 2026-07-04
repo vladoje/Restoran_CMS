@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, ReactNode } from "react";
-import { convertCSS, globalStyles, MojJSON } from "./ReservationList";
+import {  MojJSON } from "./ReservationList";
+import { twj } from "tw-to-css";
 const adminJSON = {
   "input-label": {
     css: "text-xs font-semibold uppercase tracking-wide ml-1 mb-2",
@@ -9,6 +10,13 @@ const adminJSON = {
 disabled:opacity-60 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed disabled:border-slate-200`,
   },
 };
+export const adminGlobalStyles={
+    bg: "white",
+    primary: "gray-900",
+    secondary: "gray-200",
+    surface: "gray-50",
+    text: "gray-600",
+  };
 function Input({
   type = "text",
   label,
@@ -19,6 +27,7 @@ function Input({
   name,
   clientJSON,
   disabled,
+
 }: {
   type?: string;
   label?: ReactNode;
@@ -29,14 +38,16 @@ function Input({
   defaultValue?: string | number;
   placeholder?: string;
   setValue?: Dispatch<SetStateAction<string>>;
+  
 }) {
   const json = clientJSON || adminJSON;
+  
   return (
     <div>
       {label && (
         <label
           id="input-label"
-          className={`block ${convertCSS(json["input-label"].css, globalStyles)}`}
+          style={twj(`block ${(json["input-label"].css)}`)}
         >
           {label}
         </label>
@@ -47,7 +58,7 @@ function Input({
         disabled={disabled}
         name={name}
         type={type}
-        className={`w-full ${convertCSS(json.input.css, globalStyles)}`}
+        style={twj(`w-full ${(json.input.css)}`)}
         value={value ?? ""}
         defaultValue={defaultValue}
         placeholder={placeholder}
@@ -64,20 +75,22 @@ export function InputNumber({
   clientJSON,
   defaultValue,
   setValue,
+  
 }: {
   label?: ReactNode;
   value?: number;
   defaultValue?: number;
   clientJSON?: Record<string, MojJSON>;
   setValue?: Dispatch<SetStateAction<number>>;
+  
 }) {
   const json = clientJSON || adminJSON;
-  return (
+    return (
     <div>
       {label && (
         <label
           id="input-label"
-          className={`block ${convertCSS(json["input-label"].css, globalStyles)}`}
+          style={twj(`block ${(json["input-label"].css)}`)}
         >
           {label}
         </label>
@@ -86,7 +99,7 @@ export function InputNumber({
       <input
         id="input"
         type="number"
-        className={`w-full ${convertCSS(json.input.css, globalStyles)}`}
+        style={twj(`w-full ${(json.input.css)}`)}
         value={value ?? ""}
         defaultValue={defaultValue}
         onChange={(e) => {

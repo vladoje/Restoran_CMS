@@ -1,8 +1,14 @@
+/*
+kao da json ne postoji nekad, ili ga cekati ali kolikosa obzirom da u konzoli postoji ili pronaci sta je problem
+*/
+
+
 "use client";
 
 import { useState } from "react";
 import PrezentacijaSale from "./PrezentacijaSale";
 import { Rezervacija, Sala, Sto } from "../_lib/Interfaces";
+import { twj } from "tw-to-css";
 const allowedKeys = new Set(["bg", "text", "primary", "secondary"]);
 export function convertCSS(
   css: string | undefined,
@@ -24,30 +30,39 @@ export interface MojJSON {
 function ReservationList({
   activeReservations,
   json,
-  globalStyles,
+  
   sala,
   allTables,
 }: {
   activeReservations: Rezervacija[];
   json: Record<string, MojJSON>;
-  globalStyles: Record<string, string>;
+
   allTables: Sto[];
   sala: Sala;
 }) {
+
+
+
+
+
   const now = new Date();
   const [numShown, setNumShown] = useState(3);
 
+
   const visibleReservations = activeReservations.slice(0, numShown);
   const isExpanded = numShown >= activeReservations.length;
-
+if (!json || Object.keys(json).length === 0) {
+    return <div className="text-center p-4">Učitavanje stilova i podataka...</div>; 
+    // Ili jednostavno vrati: return null; ako želiš tišinu na ekranu
+  }
   return (
     <div className="space-y-4">
       {!activeReservations.length ? (
         <div
           id="ReservationList-nema"
-          className={convertCSS(json["ReservationList-nema"].css, globalStyles)}
+          style={twj(json["ReservationList-nema"]?.css||"")}
         >
-          {json["ReservationList-nema"].text}
+          {json["ReservationList-nema"]?.text}
         </div>
       ) : (
         <>
@@ -74,26 +89,26 @@ function ReservationList({
                 <div
                   key={i}
                   id="ReservationList-res-card"
-                  className={convertCSS(
-                    json["ReservationList-res-card"].css,
-                    globalStyles,
+                  style={twj(
+                    json["ReservationList-res-card"]?.css||""
+                   
                   )}
                 >
                   <div
                     id="ReservationList-res-information-poravnanje"
-                    className={`flex ${convertCSS(json["ReservationList-res-information-poravnanje"].css, globalStyles)}`}
+                    style={twj(`flex ${(json["ReservationList-res-information-poravnanje"]?.css||"")}`)}
                   >
                     {/* LEFT */}
                     <div className="space-y-2">
                       <div
                         id="ReservationList-res-datum-start"
-                        className={`flex ${convertCSS(json["ReservationList-res-datum-start"].css, globalStyles)}`}
+                        style={twj(`flex ${(json["ReservationList-res-datum-start"]?.css||"")}`)}
                       >
                         <span
                           id="ReservationList-res-datum"
-                          className={convertCSS(
-                            json["ReservationList-res-datum"].css,
-                            globalStyles,
+                          style={twj(
+                            json["ReservationList-res-datum"]?.css||""
+                            
                           )}
                         >
                           {datum}
@@ -101,19 +116,19 @@ function ReservationList({
 
                         <span
                           id="ReservationList-res-tacka"
-                          className={convertCSS(
-                            json["ReservationList-res-tacka"].css,
-                            globalStyles,
+                          style={twj(
+                            json["ReservationList-res-tacka"]?.css||""
+                            
                           )}
                         >
-                          {json["ReservationList-res-tacka"].text}
+                          {json["ReservationList-res-tacka"]?.text}
                         </span>
 
                         <span
                           id="ReservationList-res-start"
-                          className={convertCSS(
-                            json["ReservationList-res-start"].css,
-                            globalStyles,
+                          style={twj(
+                            json["ReservationList-res-start"]?.css||""
+                            
                           )}
                         >
                           {start}
@@ -121,19 +136,19 @@ function ReservationList({
 
                         <span
                           id="ReservationList-res-tacka"
-                          className={convertCSS(
-                            json["ReservationList-res-tacka"].css,
-                            globalStyles,
+                          style={twj(
+                            json["ReservationList-res-tacka"]?.css||""
+                            
                           )}
                         >
-                          {json["ReservationList-res-tacka"].text}
+                          {json["ReservationList-res-tacka"]?.text}
                         </span>
 
                         <span
                           id="ReservationList-res-gost"
-                          className={convertCSS(
-                            json["ReservationList-res-gost"].css,
-                            globalStyles,
+                          style={twj(
+                            json["ReservationList-res-gost"]?.css||""
+                            
                           )}
                         >
                           {res.numberOfPeople}{" "}
@@ -143,29 +158,29 @@ function ReservationList({
                         {/* STATUS */}
                         <span
                           id="ReservationList-res-status-past"
-                          className={` ${
+                          style={twj(` ${
                             isPast
-                              ? convertCSS(
-                                  json["ReservationList-res-status-past"].css,
-                                  globalStyles,
+                              ? twj(
+                                  json["ReservationList-res-status-past"]?.css||""
+                                  
                                 )
-                              : convertCSS(
-                                  json["ReservationList-res-status-new"].css,
-                                  globalStyles,
+                              : twj(
+                                  json["ReservationList-res-status-new"]?.css||""
+                                  
                                 )
-                          }`}
+                          }`)}
                         >
                           {isPast
-                            ? json["ReservationList-res-status-past"].text
-                            : json["ReservationList-res-status-new"].text}
+                            ? json["ReservationList-res-status-past"]?.text
+                            : json["ReservationList-res-status-new"]?.text}
                         </span>
                       </div>
 
                       <div
                         id="ReservationList-res-sto"
-                        className={convertCSS(
-                          json["ReservationList-res-sto"].css,
-                          globalStyles,
+                        style={twj(
+                          json["ReservationList-res-sto"]?.css||""
+                          
                         )}
                       >
                         Sto {table?.tableNumber ?? "—"}
@@ -177,21 +192,21 @@ function ReservationList({
                       <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition">
                         <button
                           id="ReservationList-res-izmjeni"
-                          className={convertCSS(
-                            json["ReservationList-res-izmjeni"].css,
-                            globalStyles,
+                          style={twj(
+                            json["ReservationList-res-izmjeni"]?.css||""
+                            
                           )}
                         >
-                          {json["ReservationList-res-izmjeni"].text}
+                          {json["ReservationList-res-izmjeni"]?.text}
                         </button>
                         <button
                           id="ReservationList-res-otkazi"
-                          className={convertCSS(
-                            json["ReservationList-res-otkazi"].css,
-                            globalStyles,
+                          style={twj(
+                            json["ReservationList-res-otkazi"]?.css||""
+                            
                           )}
                         >
-                          {json["ReservationList-res-otkazi"].text}
+                          {json["ReservationList-res-otkazi"]?.text}
                         </button>
                       </div>
                     )}
@@ -200,7 +215,7 @@ function ReservationList({
                     stolovi={allTables}
                     sala={sala}
                     json={json}
-                    globalStyles={globalStyles}
+                    
                     x={60}
                     y={60}
                     i={i}
@@ -215,7 +230,7 @@ function ReservationList({
           {activeReservations.length > 3 && (
             <div
               id="ReservationList-showMore-div"
-              className={`flex ${convertCSS(json["ReservationList-showMore-div"].css, globalStyles)}`}
+              style={twj(`flex ${(json["ReservationList-showMore-div"]?.css||"")}`)}
             >
               <button
                 onClick={() =>
@@ -223,15 +238,15 @@ function ReservationList({
                     isExpanded ? 3 : Math.min(activeReservations.length, n + 3),
                   )
                 }
-                className={convertCSS(
-                  json["ReservationList-showMore-button-manje"].css,
-                  globalStyles,
+                style={twj(
+                  json["ReservationList-showMore-button-manje"]?.css||""
+                  
                 )}
                 id="ReservationList-showMore-button-manje"
               >
                 {isExpanded
-                  ? json["ReservationList-showMore-button-manje"].text
-                  : json["ReservationList-showMore-button-jos"].text}
+                  ? json["ReservationList-showMore-button-manje"]?.text
+                  : json["ReservationList-showMore-button-jos"]?.text}
               </button>
             </div>
           )}
