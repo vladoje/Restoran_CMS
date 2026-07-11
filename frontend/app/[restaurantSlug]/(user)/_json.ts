@@ -1,4 +1,3 @@
-//poceti koristiti global styles i jsonCSS iz baze
 import { Foooter, Headerr, MojJSON, Restoran } from "@/app/_lib/Interfaces";
 
 export function getDefaultGlobalStyles() {
