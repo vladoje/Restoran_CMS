@@ -1,0 +1,125 @@
+/* 1. Globalni reset svega što pravi odvratne filter boje */
+.fontpicker,
+.fontpicker * {
+  box-sizing: border-box !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* 2. Glavni kontejner (moderni minimalizam, poravnat lijevo) */
+.fontpicker {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 320px !important;
+  height: 2.5em !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  cursor: pointer !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.fontpicker:hover {
+  border-color: #94a3b8 !important;
+}
+
+.fontpicker:focus-within {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* 3. Prikaz izabranog fonta (skroz lijevo, centrirano po visini) */
+.fontpicker__preview {
+  display: block !important;
+  width: 100% !important;
+  height: calc(100% - 3px) !important;
+  margin-top: 3px !important;
+  margin-left: 0 !important;
+  background-repeat: no-repeat !important;
+  background-position-x: 8px !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+/* 4. Polje za pretragu */
+.fontpicker__search {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 12px !important;
+  font-size: 14px !important;
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  border: 1px solid #2563eb !important;
+  border-radius: 8px !important;
+  outline: none !important;
+  z-index: 5 !important;
+  cursor: text !important;
+}
+
+.fontpicker__search:not(:focus) {
+  opacity: 0 !important;
+}
+
+/* 5. Padajući meni (uredan prozor sa sjenkom) */
+.fontpicker__popout {
+  position: absolute !important;
+  top: calc(100% + 4px) !important;
+  left: 0 !important;
+  width: 100% !important;
+  max-height: calc(12.5em + 2px) !important;
+  overflow-y: auto !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.03) !important;
+  z-index: 9999 !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+  display: none !important;
+}
+
+.fontpicker__popout.fontpicker__active {
+  display: block !important;
+}
+
+/* 6. Stavke u listi */
+.fontpicker__option {
+  display: block !important;
+  width: 100% !important;
+  height: 2.5em !important;
+  background-repeat: no-repeat !important;
+  background-position-x: 8px !important;
+  background-color: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+  transition: background-color 0.1s ease !important;
+}
+
+/* Normalan hover - blaga siva pozadina bez kvarenja fonta */
+.fontpicker__option:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* 7. Selektovana stavka - moderna tamnoplava sa bijelim tekstom BEZ filtera */
+.fontpicker__option.selected {
+  background-color: #e0e7ff !important; /* Elegantna svijetlo plavo-ljubičasta podloga */
+  border-left: 3px solid #4f46e5 !important; /* Jasna indikacija izbora */
+}
+
+/* 8. Nema rezultata */
+.fontpicker__nomatches {
+  height: 2.5em !important;
+  line-height: 2.5em !important;
+  text-align: left !important;
+  padding-left: 12px !important;
+  color: #64748b !important;
+  font-size: 13px !important;
+}

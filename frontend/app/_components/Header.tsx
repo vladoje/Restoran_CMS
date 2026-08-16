@@ -79,6 +79,14 @@ async function Header({ slug }: { slug: string }) {
             {link.text}
           </Link>
         ))}
+{         session?.user?.role==="admin"&&         <Link
+            
+            href={`/${slug}/admin`}
+            id="header-navigation-link"
+            style={twj(`${json["header-navigation-link"].css||""}`)}
+          >
+            Admin dashboard
+          </Link>}
       </nav>
 
       {/* TOGGLE (kasnije)

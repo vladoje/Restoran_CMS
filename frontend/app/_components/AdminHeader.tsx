@@ -33,6 +33,10 @@ export const links =(slug:string)=> [
     text: "Rezervisi",
     url: `/${slug}/admin/rezervisi`,
   },
+   {
+    text: "Uredi stranicu",
+    url: `/${slug}/admin/edit/`,
+  },
 ];
 
 import Link from "next/link";
@@ -53,8 +57,8 @@ async function Header({ slug }: { slug: string }) {
 
   return (
     // "sticky" drži header na vrhu dok skroluješ, "backdrop-blur" pravi onaj Apple-ov efekat stakla
-    <header className="sticky top-0 z-50 w-full border-b bg-white">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+<header className="sticky top-0 z-50 h-16 w-full border-b bg-white">
+  <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
         {/* LOGO */}
 
         <Link href={`/${slug}`} className="flex items-center gap-2">
@@ -78,6 +82,12 @@ async function Header({ slug }: { slug: string }) {
               {link.text}
             </Link>
           ))}
+          <Link
+            href={`/${slug}`}
+             className="text-sm font-medium hover:opacity-70 transition"
+          >
+            User stranica
+          </Link>
         </nav>
       </div>
     </header>

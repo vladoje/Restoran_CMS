@@ -23,17 +23,18 @@ export const useSelectMode = create<SelectElementStore>((set) => ({
   },
 }));
 /*
-font 
-boja 
+font https://ae9is.github.io/react-fontpicker/
+boja npx untitledui@latest add color-picker https://www.untitledui.com/react/components/color-pickers
 tekst
-border-radius
-poravnanje(lijevo,centar,desno)
-border
+border-radius (0-30)
+poravnanje (lijevo,centar,desno)
+border (0-10)
 boja bordera
-padding
-margina
-velicina fonta 
-:hover
-shadow
+padding (0-48)
+margina (0-48)
+velicina fonta (12-48(72))
+shadow (none 2xl xl lg md sm xs 2xs)
+shadow boja
 font weight (bold italic)
 */
+//napraviti sidebar za editovanje ovih vrijednostiS

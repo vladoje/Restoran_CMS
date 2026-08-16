@@ -1,4 +1,4 @@
-import AdminFooter from "../../_components/AdminFooter";
+// import AdminFooter from "../../_components/AdminFooter";
 import AdminHeader from "../../_components/AdminHeader";
 
 export default async function Layout({
@@ -19,7 +19,7 @@ export default async function Layout({
 
       <main className="flex-1">{children}</main>
 
-      <AdminFooter slug={restaurantSlug} />
+      {/* <AdminFooter slug={restaurantSlug} /> */}
     </div>
   );
 }
