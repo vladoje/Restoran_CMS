@@ -1,12 +1,12 @@
 "use client";
 import { FaSave } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
-import { useProfile } from "../_hooks/useProfile";
+import { useProfile } from "../../_hooks/useProfile";
 import Modal from "@/app/_components/Modal";
-import { UserAvatar } from "./UserAvatar";
-import Input from "./Input";
-import { ProfileActions, Window } from "./ProfileActions";
-import {  MojJSON } from "./ReservationList";
+import { UserAvatar } from "../UserAvatar";
+import Input from "../Input";
+import { ProfileActions, Window } from "../ProfileActions";
+import {  MojJSON } from "../ReservationList";
 import { twj } from "tw-to-css";
 
 function Page({

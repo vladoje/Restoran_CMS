@@ -1,27 +1,30 @@
 /*
-font rijesen
-linijice koje razdvajaju polja
-range-ovi sa state-om
-preload state
+siderbar
+  preload state
+main 
+  napraviti izgled telefona u stvarnim velicinama i ucitati pocentu stranicu URADJENO
+  izdvojiti user komponente da se mogu pozvati umjesto homepage URADJENO
+  
+  napraviti novi/prepraviti header i footer i iskljuciti sve linkove u komponentama da samo mjenjaju edit/pageSlug
+  napraviti funkcionalnu navigaciju 
+  napraviti moguce izabrati elemente i dobiti infomracije o elementu
+negdje napraviti sacuvaj button i cuvati promjene izgleda sajta
 */
 
 
 
 import { Sidebar } from '@/app/_components/AdminEditPages/Sidebar';
 
-export default function Page() {
+import { Main } from './[pageSlug]/page';
+
+export default async function Page({ params }: { params: { restaurantSlug: string } }) {
+  const slug = (await params).restaurantSlug;
+
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden">
       <Sidebar />
-      <Main />
+      <Main slug={slug} />
     </div>
   );
 }
 
-export function Main() {
-  return (
-    <main className="min-w-0 flex-1 overflow-auto bg-white">
-      Main
-    </main>
-  );
-}
