@@ -84,7 +84,8 @@ async function Page({
           </div>
         </div>
       </div>
-      <TwoButtons stolovi={stolovi} sala={sala} restoran={restoran} />
+      <TwoButtons stolovi={stolovi} sala={sala} restoran={restoran} /> {/*komponenta u kojoj su dugmad koja otvaraju 2 prozora za dodavanje
+      rezervacija brzo*/}
       <div>
         <AdminSveRezervacije
           stolovi={stolovi}

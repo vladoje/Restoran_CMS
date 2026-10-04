@@ -44,6 +44,7 @@ export default async function Page({
       <ReserveTable
         specialDates={specialDates}
         openingHours={openingHours}
+        isEditing={false}
         isAdmin={true}
         user={user}
         restoran={restoran}

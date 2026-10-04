@@ -2,20 +2,24 @@
 import { MojJSON } from "@/app/_components/ReservationList";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
-import { twMerge } from "tailwind-merge";
-//dodati provjeru da li su dodati stilovi koji ne bi trebali biti u css-u ali tek kada napravim listu dozvoljenih stilova
-const allowedClasses = new Set<string>();
-function sanitizeCSS(css?: string) {
-  if (!css) return "";
 
-  return (
-    css
-      .split(/\s+/)
-      /* .split(" ") ne radi za dupli space */
-      .filter((cls) => allowedClasses.has(cls))
-      .join(" ")
-  );
-}
+//dodati provjeru da li su dodati stilovi koji ne bi trebali biti u css-u ali tek kada napravim listu dozvoljenih stilova
+//popraviti tj napraviti provjeru json-a koji dolazi sa fe
+
+
+
+// const allowedClasses = new Set<string>();
+// function sanitizeCSS(css?: string) {
+//   if (!css) return "";
+//
+//   return (
+//     css
+//       .split(/\s+/)
+//       /* .split(" ") ne radi za dupli space */
+//       .filter((cls) => allowedClasses.has(cls))
+//       .join(" ")
+//   );
+// }
 
 export async function updateCMS(
   json: Record<string, MojJSON>,
@@ -47,9 +51,12 @@ export async function updateCMS(
 
     const updateJSON: Record<string, MojJSON> = {};
     Object.entries(json).forEach(([name, obj]) => {
-      const newObj = { ...obj, css: twMerge(sanitizeCSS(obj.css)) };
-      updateJSON[name] = newObj;
+      // const newObj = { ...obj, css: {...obj.css,}};
+      updateJSON[name] = obj;
     });
+    //   const newObj = { ...obj, css: twMerge(sanitizeCSS(obj.css)) };
+    //   updateJSON[name] = newObj;
+    // });
 
     const { error: updateError } = await supabase
       .from("Sajtovi")

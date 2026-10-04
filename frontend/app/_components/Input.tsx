@@ -1,13 +1,42 @@
 import { Dispatch, SetStateAction, ReactNode } from "react";
-import {  MojJSON } from "./ReservationList";
 import { twj } from "tw-to-css";
+import { MojJSON } from '@/app/_lib/Interfaces';
 const adminJSON = {
   "input-label": {
-    css: "text-xs font-semibold uppercase tracking-wide ml-1 mb-2",
+    css: {
+      marginBottom: "0.5rem",
+marginLeft:" 0.25rem",
+fontSize:" 0.75rem",
+lineHeight: "1rem",
+fontWeight: "600",
+textTransform: "uppercase",
+letterSpacing: "0.025em",
+      display: "block",
+    },
   },
   input: {
-    css: `w-full text-base font-medium border-2 border-slate-200 rounded-2xl py-3.5 px-5 outline-none transition-all placeholder:text-gray-300 
-disabled:opacity-60 disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed disabled:border-slate-200`,
+    css: {
+      width: "100%",
+      borderRadius: "1rem",
+borderWidth: "2px",
+borderColor: "rgb(226,232,240)",
+paddingLeft: "1.25rem",
+paddingRight: "1.25rem",
+paddingTop: "0.875rem",
+paddingBottom: "0.875rem",
+fontSize: "1rem",
+lineHeight: "1.5rem",
+fontWeight: "500",
+outline: "2px solid transparent",
+outlineOffset: "2px",
+transitionProperty: "all",
+transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
+transitionDuration: "150ms",
+color: "rgb(148,163,184)",
+cursor: "not-allowed",
+backgroundColor: "rgb(241,245,249)",
+opacity: "0.6",
+    },
   },
 };
 export const adminGlobalStyles={
@@ -45,10 +74,7 @@ function Input({
   return (
     <div>
       {label && (
-        <label
-          id="input-label"
-          style={twj(`block ${(json["input-label"].css)}`)}
-        >
+        <label id="input-label" style={json['input-label'].css || {}}>
           {label}
         </label>
       )}
@@ -58,11 +84,14 @@ function Input({
         disabled={disabled}
         name={name}
         type={type}
-        style={twj(`w-full ${(json.input.css)}`)}
-        value={value ?? ""}
+        style={{
+          ...json.input.css,
+          ...(disabled ? { caretColor: 'transparent' } : {}),
+        }}
+        value={value ?? ''}
         defaultValue={defaultValue}
         placeholder={placeholder}
-        onChange={(e) => setValue?.(e.target.value)}
+        onChange={(e) => !disabled && setValue?.(e.target.value)}
       />
     </div>
   );
@@ -90,7 +119,7 @@ export function InputNumber({
       {label && (
         <label
           id="input-label"
-          style={twj(`block ${(json["input-label"].css)}`)}
+          style={json["input-label"].css||{}}
         >
           {label}
         </label>
@@ -99,7 +128,7 @@ export function InputNumber({
       <input
         id="input"
         type="number"
-        style={twj(`w-full ${(json.input.css)}`)}
+        style={json.input.css||{}}
         value={value ?? ""}
         defaultValue={defaultValue}
         onChange={(e) => {

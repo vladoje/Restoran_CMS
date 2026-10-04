@@ -11,142 +11,87 @@ import { getSite } from "@/app/_lib/getSite";
 import { twj } from "tw-to-css";
 import { _json, getDefaultGlobalStyles, convertJSON } from "@/app/[restaurantSlug]/(user)/_json";
 
-export async function PrivacyPolicy({ slug }: { slug: string  }) {
-  
+export async function PrivacyPolicy({ slug, isEditing=false }: { slug: string; isEditing?: boolean }) {
+  // const session = await getServerSession(options);
+  console.time('SESSION');
   const session = await getServerSession(options);
   if (!session?.user) return <NewUserDashboard restaurantSlug={slug} />;
+  console.timeEnd('SESSION');
 
+  console.time('RESTORAN');
   const restoran: Restoran = await getRestoranWithSlug(slug);
+  console.timeEnd('RESTORAN');
+
+  console.time('SITE');
   const site = await getSite(restoran.siteId);
-  const globalStyles =
-    createGlobalStylesObject(site) || getDefaultGlobalStyles();
-    const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
-  
+  console.timeEnd('SITE');
+
+  console.time('GLOBAL');
+  const globalStyles = createGlobalStylesObject(site) || getDefaultGlobalStyles();
+  console.timeEnd('GLOBAL');
+
+  console.time('CONVERT JSON');
+  const json = convertJSON(site.jsonCSS || _json(restoran), globalStyles);
+  console.timeEnd('CONVERT JSON');
+
   return (
-    <div
-      style={twj(`min-h-screen max-w-2xl ${(json["privacy"].css||"")}`)}
-    >
+    <div style={json['privacy'].css || {}}>
       {/* HEADER */}
-      <div
-        style={twj(`flex flex-col ${(json["privacy-header"].css||"")}`)}
-      >
-        <h1
-          style={twj(
-            json["privacy-header-naslov"].css||""
-            
-          )}
-        >
-          {json["privacy-header-naslov"].text}
+      <div style={json['privacy-header'].css || {}}>
+        <h1 style={json['privacy-header-naslov'].css || {}}>
+          {json['privacy-header-naslov'].text}
         </h1>
-        <p
-          style={twj(
-            json["privacy-header-paragraf"].css||""
-            
-          )}
-        >
-          {json["privacy-header-paragraf"].text}
+        <p style={json['privacy-header-paragraf'].css || {}}>
+          {json['privacy-header-paragraf'].text}
           <span className="font-semibold text-slate-900">{restoran.name}</span>
         </p>
       </div>
 
       {/* SADRŽAJ DOKUMENTA */}
-      <div style={twj(json["privacy-body"].css||"")}>
+      <div style={json['privacy-body'].css ||{}}>
         {/* Default sekcija 1 */}
-        <section
-          style={twj(json["privacy-body-section"].css||"")}
-        >
-          <div
-            style={twj(`flex ${(json["privacy-body-section-header"].css||"")}`)}
-          >
-            <FaRegCircleDot
-              style={twj(
-                json["privacy-body-section-header-circle"].css||""
-                
-              )}
-            />
-            <h2
-              style={twj(
-                json["privacy-body-section-header-naslov"].css||""
-                
-              )}
-            >
-              {json["privacy-body-section-header-naslov"].text}
+        <section style={json['privacy-body-section'].css || {}}>
+          <div style={json['privacy-body-section-header'].css || {}}>
+            <FaRegCircleDot style={json['privacy-body-section-header-circle'].css || {}} />
+            <h2 style={json['privacy-body-section-header-naslov'].css || {}}>
+              {json['privacy-body-section-header-naslov'].text}
             </h2>
           </div>
-          <p
-            style={twj(
-              json["privacy-body-section-body"].css||""
-              
-            )}
-          >
-            {json["privacy-body-section-body"].text}
+          <p style={json['privacy-body-section-body'].css || {}}>
+            {json['privacy-body-section-body'].text}
           </p>
         </section>
 
         {/* Default sekcija 2 */}
-        <section
-          style={twj(json["privacy-body-section"].css||"")}
-        >
-          <div
-            style={twj(`flex ${(json["privacy-body-section-header"].css||"")}`)}
-          >
-            <FaRegCircleDot
-              style={twj(
-                json["privacy-body-section-header-circle"].css||""
-                
-              )}
-            />
-            <h2
-              style={twj(
-                json["privacy-body-section-header-naslov2"].css||""
-                
-              )}
-            >
-              {json["privacy-body-section-header-naslov2"].text}
+        <section style={json['privacy-body-section'].css || {}}>
+          <div style={json['privacy-body-section-header'].css || {}}>
+            <FaRegCircleDot style={json['privacy-body-section-header-circle'].css|| {}} />
+            <h2 style={json['privacy-body-section-header-naslov2'].css|| {}}>
+              {json['privacy-body-section-header-naslov2'].text}
             </h2>
           </div>
-          <p
-            style={twj(
-              json["privacy-body-section-body2"].css||""
-              
-            )}
-          >
-            {json["privacy-body-section-body2"].text}
+          <p style={json['privacy-body-section-body2'].css||{}}>
+            {json['privacy-body-section-body2'].text}
           </p>
         </section>
 
         {/* INFO BOX / KONTAKT */}
-        <div style={twj(json["privacy-info"].css||"")}>
-          <FaEnvelope
-            style={twj(
-              json["privacy-info-koverta"].css||""
-              
-            )}
-          />
-          <div
-            style={twj(json["privacy-info-div"].css||"")}
-          >
+        <div style={json['privacy-info'].css || {}}>
+          <FaEnvelope style={json['privacy-info-koverta'].css || {}} />
+          <div style={json['privacy-info-div'].css || {}}>
             <p>
-              {json["privacy-info-div-paragraf"].text}
-              <span
-                style={twj(
-                  json["privacy-info-div-paragraf-span"].css||""
-                  
-                )}
-              >
-                {json["privacy-info-div-paragraf-span"].text}
+              {json['privacy-info-div-paragraf'].text}
+              <span style={json['privacy-info-div-paragraf-span'].css || {}}>
+                {json['privacy-info-div-paragraf-span'].text}
               </span>
             </p>
             <p>
-              {json["privacy-info-div-paragraf2"].text}
+              {json['privacy-info-div-paragraf2'].text}
               <a
                 href={`mailto:${restoran.email}`}
-                style={twj(
-                  json["privacy-info-div-paragraf2-anchor"].css||""
-                  
-                )}
+                style={json['privacy-info-div-paragraf2-anchor'].css || {}}
               >
-                {json["privacy-info-div-paragraf2-anchor"].text}
+                {json['privacy-info-div-paragraf2-anchor'].text}
               </a>
             </p>
           </div>
@@ -154,9 +99,7 @@ export async function PrivacyPolicy({ slug }: { slug: string  }) {
       </div>
 
       {/* FOOTER */}
-      <p style={twj(json["privacy-footer"].css||"")}>
-        {json["privacy-footer"].text}
-      </p>
+      <p style={json['privacy-footer'].css || {}}>{json['privacy-footer'].text}</p>
     </div>
   );
 }

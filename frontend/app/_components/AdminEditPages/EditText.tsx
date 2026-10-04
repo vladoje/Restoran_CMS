@@ -29,7 +29,7 @@ export function MojFontPicker({ setFont1 }: { setFont1: Dispatch<SetStateAction<
         defaultValue="Roboto"
         mode="combo"
         value={(font: string) => {
-          console.log('Izabran font:', font);
+
           setFont1(font);
         }}
       />

@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-export function useCanvasSize() {
+export function useCanvasSize(parentRef: React.RefObject<HTMLElement | null>) {
   const [canvasSize, setCanvasSize] = useState(350);
 
-  // simple responsive logic
-
   useEffect(() => {
+    const parent = parentRef.current;
+    if (!parent) return;
+
     const update = () => {
-      // Dodajemo proveru za ekrane manje od 350px
-      const width = window.innerWidth;
+      const width = parent.clientWidth;
+
       if (width < 350) {
-        setCanvasSize(width - 40); // Oduzimamo padding roditelja (20px sa svake strane)
+        setCanvasSize(width - 40);
       } else if (width < 640) {
         setCanvasSize(260);
       } else if (width < 1024) {
@@ -21,8 +22,12 @@ export function useCanvasSize() {
     };
 
     update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
+
+    const observer = new ResizeObserver(update);
+    observer.observe(parent);
+
+    return () => observer.disconnect();
+  }, [parentRef]);
+
   return canvasSize;
 }

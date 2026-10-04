@@ -6,16 +6,18 @@ import Modal from "@/app/_components/Modal";
 import { UserAvatar } from "../UserAvatar";
 import Input from "../Input";
 import { ProfileActions, Window } from "../ProfileActions";
-import {  MojJSON } from "../ReservationList";
 import { twj } from "tw-to-css";
+import { MojJSON } from '@/app/_lib/Interfaces';
 
 function Page({
   slug,
   json,
+isEditing=false,
 }: {
   slug: string;
   json: Record<string, MojJSON>;
-  
+  isEditing?: boolean;
+
 }) {
   const {
     username,
@@ -28,32 +30,21 @@ function Page({
 
   return (
     <Modal>
-      <main
-        id="profile"
-        style={twj(`max-w-md ${(json["profile"].css||"")}`)}
-      >
+      <main id="profile" style={json['profile'].css || {}}>
         {/* AVATAR SEKCIJA */}
-        <UserAvatar json={json}  username={user.name} />
+        <UserAvatar json={json} username={user.name} />
 
         {/* FORMA ZA PODATKE */}
-        <div
-          id="profile-inputs"
-          style={twj(json["profile-inputs"].css||"")}
-        >
+        <div id="profile-inputs" style={json['profile-inputs'].css || {}}>
           {/* KORISNIČKO IME */}
           <div className={`group `}>
             <Input
+              disabled={isEditing}
               clientJSON={json}
-             
               label={
-                <p
-                  id="profile-input-username"
-                  style={twj(`flex ${(json["profile-input-username"].css||"")}`)}
-                >
-                  {json["profile-input-username"].icon === "FaUser" && (
-                    <FaUser size={10} />
-                  )}
-                  <span>{json["profile-input-username"].text}</span>
+                <p id="profile-input-username" style={json['profile-input-username'].css || {}}>
+                  {json['profile-input-username'].icon === 'FaUser' && <FaUser size={10} />}
+                  <span>{json['profile-input-username'].text}</span>
                 </p>
               }
               value={username}
@@ -65,22 +56,28 @@ function Page({
           <button
             // onClick={handleClick}
             id="profile-save-button"
-            style={twj(`w-full flex ${(json["profile-save-button"].css||"")}`)}
+            style={json['profile-save-button'].css || {}}
           >
-            {json["profile-save-button"].icon === "FaSave" && <FaSave />}{" "}
-            {json["profile-save-button"].text}
+            {json['profile-save-button'].icon === 'FaSave' && <FaSave />}{' '}
+            {json['profile-save-button'].text}
           </button>
         </div>
 
-        <ProfileActions slug={slug} json={json}  />
+        <ProfileActions isEditing={isEditing} slug={slug} json={json} />
       </main>
 
       {/* <Modal.Window name="obrisi"> */}
       {/* <Window handle={handleDelete} odjavi={false} /> */}
       {/* </Modal.Window> */}
 
-      <Modal.Window name="odjavi">
-        <Window handle={handleLogout}  href="/login" odjavi={true} json={json} />
+      <Modal.Window isEditing={isEditing} name="odjavi">
+        <Window
+          handle={handleLogout}
+          isEditing={isEditing}
+          href="/login"
+          odjavi={true}
+          json={json}
+        />
       </Modal.Window>
     </Modal>
   );

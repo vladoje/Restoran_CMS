@@ -1,3 +1,4 @@
+
 import { createContext, useContext } from "react";
 
 interface CalendarContextType {
@@ -22,22 +23,22 @@ interface CalendarContextType {
     prosli: boolean,
   ) => 5 | undefined;
 }
+
 export const CalendarContext = createContext<CalendarContextType>({
   day: null,
   dayOfWeek: null,
-  nastavak: "",
+  nastavak: '',
   month: null,
   year: null,
   active: null,
   prviUMjesecu: 0,
   max: 31,
   nedelja: undefined,
-
   prvaSedmica: [],
   prvaSedmicaSledecegMjeseca: [],
   handleNextMonth: () => {},
   handlePrevMonth: () => {},
-  handleSelectDay: () => {},
+  handleSelectDay: ()  => 5,
 });
 export function useCalendar() {
   const context = useContext(CalendarContext);

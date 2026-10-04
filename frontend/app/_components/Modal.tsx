@@ -17,6 +17,7 @@ interface OpenProps {
 
 interface WindowProps {
   name: string;
+  isEditing?: boolean;
   children: ReactNode;
 }
 
@@ -50,7 +51,7 @@ const Modal: ModalComponentType = ({ children }: ModalProps) => {
 // Komponenta za otvaranje modala
 function Open({ children, opens }: OpenProps) {
   const context = useContext(ModalContext);
-  if (!context) throw new Error("Open must be used within a Modal");
+  if (!context) throw new Error('Open must be used within a Modal');
 
   const { open } = context;
 
@@ -61,34 +62,47 @@ function Open({ children, opens }: OpenProps) {
   );
 }
 
-function Window({ name, children }: WindowProps) {
+function Window({ name, children, isEditing = false }: WindowProps) {
   const context = useContext(ModalContext);
-  if (!context) throw new Error("Window must be used within a Modal");
+  if (!context) throw new Error('Window must be used within a Modal');
 
   const { openName, close } = context;
   const ref = useOutsideClick<HTMLDivElement>(close);
 
   if (name !== openName) return null;
 
-  return createPortal(
+  const modalContent = (
     <div
-      className={`fixed top-0 left-0 w-full h-screen  bg-black/30 backdrop-blur-sm z-1000 transition-all duration-500`}
+      className={
+        isEditing
+          ? 'absolute inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-3' // p-3 daje lagan razmak od samih ivica telefona
+          : 'fixed top-0 left-0 w-full h-screen bg-black/30 backdrop-blur-sm z-1000 transition-all duration-500'
+      }
     >
       <div
         ref={ref}
-        className={`bg-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  rounded-2xl shadow-xl p-8 transition-all duration-500 w-[95%] max-w-lg`}
+        className={`bg-white rounded-2xl shadow-xl transition-all duration-300 relative ${
+          isEditing
+            ? 'w-full p-5' // w-full popunjava širinu telefona, sklonjen max-w i scale-90
+            : 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-8 w-[95%] max-w-lg'
+        }`}
       >
         <button
           onClick={close}
-          className={`absolute top-4 right-4 p-1 rounded-md  hover:bg-gray-100 hover:text-gray-600 transition-all `}
+          className="absolute top-3 right-3 p-1 rounded-md hover:bg-gray-100 hover:text-gray-600 transition-all"
         >
-          <HiXMark className="w-6 h-6" />
+          <HiXMark className="w-5 h-5" />
         </button>
-        <div className="mt-4">{children}</div>
+        <div className={isEditing ? 'mt-1' : 'mt-4'}>{children}</div>
       </div>
-    </div>,
-    document.body,
+    </div>
   );
+
+  if (isEditing) {
+    return modalContent;
+  }
+
+  return createPortal(modalContent, document.body);
 }
 // Attach subkomponente
 Modal.Open = Open;

@@ -1,16 +1,3 @@
-zavrsiti admin dio 
+ C:\Users\Korisnik\Desktop\Restoran-CMS\Restoran_CMS\frontend\app\_lib\CMS\updateCMS.ts updateCMS
 
-
-napraviti stranicu za rezervaciju stola
-napraviti admin dashboard i pratece default stranice
-testirati to sve 
-[pageSlug] ne dirati to cu u fazi 2
-pokusati CMS 
-
-
-responzivnost ReserveTable stranice nije nikako dobra, popraviti to
-biranje vremena nije bas user friendly, popraviti to a nije ni owner friendly, popraviti to
-
-
-
-
+smjesti goste neradnim danom ne radi

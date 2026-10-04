@@ -18,12 +18,7 @@ import { getSite } from "@/app/_lib/getSite";
 import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 import { _json, convertJSON, getDefaultGlobalStyles } from "@/app/[restaurantSlug]/(user)/_json";
 
-export default async function Reservation({
-  slug,
-}: {
-  slug: string
-}) {
-
+export default async function Reservation({ slug, isEditing=false }: { slug: string; isEditing?: boolean }) {
   const [restoran, user]: [Restoran, User] = await Promise.all([
     getRestoranWithSlug(slug),
     getUser(1),
@@ -34,23 +29,18 @@ export default async function Reservation({
   const tableIds = allTables.map((t) => t.tableId);
 
   const rezervacije = await get30dayReservationsForTables(tableIds);
-  const specialDates: SlobodanDan[] = await getAllSpecialDates(
-    restoran.restoranId,
-  );
-  const openingHours: OpeningHour[] = await getOpeningHours(
-    restoran.restoranId,
-  );
+  const specialDates: SlobodanDan[] = await getAllSpecialDates(restoran.restoranId);
+  const openingHours: OpeningHour[] = await getOpeningHours(restoran.restoranId);
 
   const site = await getSite(restoran.siteId);
 
-  const globalStyles =
-    createGlobalStylesObject(site) || getDefaultGlobalStyles();
-    const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
-  
+  const globalStyles = createGlobalStylesObject(site) || getDefaultGlobalStyles();
+  const json = convertJSON(site.jsonCSS || _json(restoran), globalStyles);
+
   return (
     <ReserveTable
       json={json}
-      
+      isEditing={isEditing}
       specialDates={specialDates}
       openingHours={openingHours}
       user={user}

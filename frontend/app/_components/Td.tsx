@@ -29,7 +29,7 @@ export default function Td({
 
   let isSelected = false;
   if (active && dan) isSelected = active === dan;
-  let onClickk = (a: 5 | undefined) => {
+  let onClickk: (a:5|undefined) => void = (a: 5 | undefined) => {
     return a;
   };
 

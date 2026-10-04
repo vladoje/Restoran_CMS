@@ -25,9 +25,7 @@ export function Sidebar() {
   const [border, setBorder] = useState("0");
   const [borderRadius, setBorderRadius] = useState("0");
   const [poravnanje, setPoravnanje] = useState("Centar");
-  console.log(font1);
-  console.log(shadow);
-  console.log(poravnanje);
+
 
   return (
     <aside className="w-75 shrink-0 overflow-y-auto border-r border-gray-200 bg-gray-50 px-4 py-5">

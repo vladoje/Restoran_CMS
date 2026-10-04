@@ -60,7 +60,7 @@ export interface Foooter {
   text: string;
 }
 export interface MojJSON {
-  css?: string;
+  css?: Record<string, string>;
   text?: string;
   icon?: string;
 }

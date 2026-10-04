@@ -23,6 +23,7 @@ export default async function Page({ params }: { params: { restaurantSlug: strin
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden">
       <Sidebar />
+
       <Main slug={slug} />
     </div>
   );

@@ -91,7 +91,7 @@ function TwoButtons({
                 <PrezentacijaSale
                   sala={sala}
                   json={_json(restoran)}
-                  globalStyles={getDefaultGlobalStyles()}
+                  // globalStyles={getDefaultGlobalStyles()}
                   stolovi={stolovi}
                   x={canvasSize}
                   y={canvasSize}

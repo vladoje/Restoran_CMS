@@ -15,83 +15,74 @@ import {
 import createGlobalStylesObject from "../_lib/CMS/createGlobalStylesObject";
 import { twj } from "tw-to-css";
 
-async function Footer({ slug }: { slug: string }) {
-  const restoran = await getRestoranWithSlug(slug);
-  const session = await getServerSession(options);
-  const site: Sajt = await getSite(restoran.siteId);
+async function Footer({ slug, isEditing=false }: { slug: string; isEditing?: boolean }) {
+  const [restoran, session] = await Promise.all([
+    getRestoranWithSlug(slug),
+    getServerSession(options),
+  ]);
+
+  const site = await getSite(restoran.siteId);
 
   const [footer, links]: [Foooter, Linkk[]] = await Promise.all([
     getFooter(site.footerId),
     getLinkWithFooterId(site.footerId),
   ] as const);
 
-  
-  const globalStyles =
-    createGlobalStylesObject(site) || getDefaultGlobalStyles();
-const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
+  const globalStyles = createGlobalStylesObject(site) || getDefaultGlobalStyles();
+  const json = convertJSON(site.jsonCSS || _json(restoran), globalStyles);
   return (
-    <footer
-      id="footer"
-      style={twj(`w-full ${json["footer"].css}`||"")}
-    >
-      <div
-        style={twj(`max-w-7xl flex flex-col ${json["footer-body"].css}`||"")}
-      >
+    <footer id="footer" style={json['footer'].css || {}}>
+      <div style={json['footer-body'].css || {}}>
         {/* LOGO + TEXT */}
         <div
           id="footer-body-logo"
-          style={twj(`flex flex-col  max-w-sm ${json["footer-body-logo"].css}`||"")}
+          style={json['footer-body-logo'].css || {}}
         >
           {footer.hasLogo && (
             <div
               id="footer-body-logo-image"
-              style={twj(`flex ${json["footer-body-logo-image"].css}`||"")}
+              style={json['footer-body-logo-image'].css || {}}
             >
               <Image src={site.logoUrl} alt="logo" width={32} height={32} />
               <span
                 id="footer-body-logo-image-text"
-                style={twj(
-                  json["footer-body-logo-image-text"].css
-                  
-                ||"")}
+                style={json['footer-body-logo-image-text'].css || {}}
               >
-                {json["footer-body-logo-image-text"].text}
+                {json['footer-body-logo-image-text'].text}
               </span>
             </div>
           )}
 
-          <p
-            id="footer-body-logo-text"
-            style={twj(
-              json["footer-body-logo-text"].css
-             ||""
-            )}
-          >
-            {json["footer-body-logo-text"].text}
+          <p id="footer-body-logo-text" style={json['footer-body-logo-text'].css || {}}>
+            {json['footer-body-logo-text'].text}
           </p>
         </div>
 
         {/* LINKOVI */}
         <div
           id="footer-body-links"
-          style={twj(`flex flex-col ${json["footer-body-links"].css}`||"")}
+          style={json['footer-body-links'].css || {}}
         >
           <span
             id="footer-body-links-naslov"
-            style={twj(
-              json["footer-body-links-naslov"].css
-             ||""
-            )}
+            style={json['footer-body-links-naslov'].css || {}}
           >
-            {json["footer-body-links-naslov"].text}
+            {json['footer-body-links-naslov'].text}
           </span>
 
           {links.map((link) => (
             <Link
               key={link.linkId}
-              href={link.url}
+              href={
+                !isEditing
+                  ? link.url
+                  : `/${slug}/admin/edit/${link.url.replace(`${slug}/`, '').replace(`/${slug}/`, '')}`
+              }
               id="footer-body-links-link"
-              style={twj(`${json["footer-body-links-link"].css} ${!session?.user ? "aria-disabled:pointer-events-none" : ""}`||"")}
+              style={{
+                ...json['footer-body-links-link'].css,
+                ...(!session?.user ? { pointerEvents: "none" } : {}),
+              }}
             >
               {link.text}
             </Link>
@@ -102,46 +93,34 @@ const json = convertJSON(site.jsonCSS || _json(restoran),globalStyles);
         {footer.hasContactInfo && (
           <div
             id="footer-body-contact"
-            style={twj(`flex flex-col ${json["footer-body-contact"].css}`||"")}
+            style={json['footer-body-contact'].css || {}}
           >
             <span
               id="footer-body-contact-naslov"
-              style={twj(
-                json["footer-body-contact-naslov"].css
-               ||""
-              )}
+              style={json['footer-body-contact-naslov'].css ||{}}
             >
-              {json["footer-body-contact-naslov"].text}
+              {json['footer-body-contact-naslov'].text}
             </span>
 
             <p
               id="footer-body-contact-adresa"
-              style={twj(
-                json["footer-body-contact-adresa"].css
-               ||""
-              )}
+              style={json['footer-body-contact-adresa'].css || {}}
             >
-              {json["footer-body-contact-adresa"].text}
+              {json['footer-body-contact-adresa'].text}
             </p>
             <p
               id="footer-body-contact-adresa"
-              style={twj(
-                json["footer-body-contact-telefon"].css
-               ||""
-              )}
+              style={json['footer-body-contact-telefon'].css || {}}
             >
-              {json["footer-body-contact-telefon"].text}
+              {json['footer-body-contact-telefon'].text}
             </p>
           </div>
         )}
       </div>
 
       {/* BOTTOM BAR */}
-      <div
-        id="footer-reserved"
-        style={twj(json["footer-reserved"].css||"")}
-      >
-        {json["footer-reserved"].text}
+      <div id="footer-reserved" style={json['footer-reserved'].css || {}}>
+        {json['footer-reserved'].text}
       </div>
     </footer>
   );
