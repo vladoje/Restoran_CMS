@@ -2,7 +2,7 @@
 
 import { CSSProperties, Dispatch, SetStateAction } from 'react';
 import { Sala, Sto } from '../_lib/Interfaces';
-import { MojJSON } from './ReservationList';
+import { MojJSON } from './User/Reservations/ReservationList';
 
 export function renderTemplate(
   template: string,
