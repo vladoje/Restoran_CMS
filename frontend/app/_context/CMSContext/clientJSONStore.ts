@@ -4,7 +4,7 @@ Napraviti admin verziju (updateCMS.ts i getServerCMS)
 Poceti koristiti
 */
 
-import { MojJSON } from "@/app/_components/ReservationList";
+import { MojJSON } from "@/app/_components/AdminReservations/ReservationList";
 import { twMerge } from "tailwind-merge";
 import { create } from "zustand";
 

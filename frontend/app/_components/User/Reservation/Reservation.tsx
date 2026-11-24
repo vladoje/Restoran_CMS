@@ -17,12 +17,18 @@ import {
 import { getSite } from "@/app/_lib/getSite";
 import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 import { _json, convertJSON, getDefaultGlobalStyles } from "@/app/[restaurantSlug]/(user)/_json";
+import NewUserDashboard from '@/app/_components/NewUserDashboard';
+import { getServerSession } from 'next-auth';
+import { options } from '@/app/api/auth/[...nextauth]/options';
 
-export default async function Reservation({ slug, isEditing=false }: { slug: string; isEditing?: boolean }) {
+export default async function Reservation({ slug,preset, isEditing=false }: {preset?:string; slug: string; isEditing?: boolean }) {
+  const session = await getServerSession(options);
+  if (!session?.user) return <NewUserDashboard restaurantSlug={slug} />;
   const [restoran, user]: [Restoran, User] = await Promise.all([
     getRestoranWithSlug(slug),
-    getUser(1),
+    getUser(session.user.id),
   ]);
+
   const sala = await getSala(restoran.restoranId);
   const allTables = await getAllTablesFromSala(sala.salaId);
 
@@ -39,6 +45,7 @@ export default async function Reservation({ slug, isEditing=false }: { slug: str
 
   return (
     <ReserveTable
+      preset={preset}
       json={json}
       isEditing={isEditing}
       specialDates={specialDates}

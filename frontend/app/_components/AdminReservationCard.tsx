@@ -18,7 +18,7 @@ const statusConfig = {
     label: "❌ Cancelled",
   },
 };
-export function ReservationCard({ d }: { d: RezervacijaPopunjena }) {
+export function AdminReservationCard({ d }: { d: RezervacijaPopunjena }) {
   const dayOfWeek = new Date(d.dateTime).getDay();
   const [isLoading, setIsLoading] = useState<null | string>(null);
   const [localStatus, setLocalStatus] = useState<string>(d.status);

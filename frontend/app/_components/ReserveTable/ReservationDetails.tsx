@@ -5,7 +5,7 @@ dayjs.locale('sr');
 import { MojJSON, OpeningHour, SlobodanDan, Sto } from '@/app/_lib/Interfaces';
 import { DatePickerInput, getTimeRange, TimeGrid } from '@mantine/dates';
 import { Dispatch, SetStateAction } from 'react';
-import { renderTemplate, tip } from '../PrezentacijaSale';
+import { renderTemplate, tip } from '../PrezentacijaSale/PrezentacijaSale';
 
 export function ReservationDetails({
   date,
@@ -21,6 +21,7 @@ export function ReservationDetails({
   openingHour,
   specijalniDan,
   disableTime,
+isEditing=false,
   json,
 }: {
   date: string | null;
@@ -36,6 +37,7 @@ export function ReservationDetails({
   openingHour: OpeningHour | undefined;
   specijalniDan: SlobodanDan | undefined;
   disableTime: string[];
+  isEditing?:boolean;
   json?: Record<string, MojJSON>;
 }) {
   const todayLocal = new Date();
@@ -58,6 +60,7 @@ const newJSON =json|| selectBrojGostijuJSON;
       </div>
 
       <DatePickerInput
+        disabled={isEditing}
         locale="sr"
         label="Datum"
         valueFormat="DD.MM.YYYY"
@@ -88,6 +91,7 @@ const newJSON =json|| selectBrojGostijuJSON;
             </div>
           ) : (
             <TimeGrid
+              disabled={isEditing}
               data={getTimeRange({
                 startTime: `${specijalniDan ? specijalniDan.start.slice(0, 4) : openingHour?.startTime}`,
                 endTime: `${specijalniDan ? specijalniDan.end.slice(0, 4) : openingHour?.endTime}`,
@@ -97,6 +101,7 @@ const newJSON =json|| selectBrojGostijuJSON;
               onChange={setTime}
               disableTime={[...disableTime]}
               allowDeselect
+
             />
           )}
         </div>
@@ -112,6 +117,7 @@ const newJSON =json|| selectBrojGostijuJSON;
             state={capacity || selectedTable?.capacity || 4}
             setState={setCapacity}
             json={newJSON}
+            isEditing={isEditing}
           />
         </div>
       )}
@@ -120,7 +126,8 @@ const newJSON =json|| selectBrojGostijuJSON;
       <div>
         <p style={newJSON['poruka-label'].css || {}}>{newJSON['poruka-label'].text}</p>
         <textarea
-          style={newJSON['poruka-text'].css||{}}
+          disabled={isEditing}
+          style={newJSON['poruka-text'].css || {}}
           rows={3}
           placeholder={newJSON['poruka-text'].text}
           value={note || ''}
@@ -129,7 +136,7 @@ const newJSON =json|| selectBrojGostijuJSON;
         <input type="hidden" value={note || ''} name="note" />
       </div>
 
-      <button disabled={!table || !date || !time} style={newJSON['potvrdi'].css||{}}>
+      <button disabled={!table || !date || !time ||isEditing} style={newJSON['potvrdi'].css || {}}>
         {newJSON['potvrdi'].text}
       </button>
     </div>
@@ -138,18 +145,21 @@ const newJSON =json|| selectBrojGostijuJSON;
 export function SelectBrojGostiju({
   tableCapacity,
   state,
+  isEditing=false,
   setState,
   json,
 }: {
   tableCapacity: number;
   state: number;
+  isEditing?: boolean;
   setState: Dispatch<SetStateAction<number | null>>;
   json?: Record<string, tip>;
 }) {
   const lista = Array.from({ length: tableCapacity }, (_, i) => i + 1);
-const newJSON = json || selectBrojGostijuJSON;
+  const newJSON = json || selectBrojGostijuJSON;
   return (
     <select
+      disabled={isEditing}
       value={state}
       onChange={(e) => setState?.(Number(e.target.value))}
       style={newJSON['select-broj-gostiju'].css || {}}

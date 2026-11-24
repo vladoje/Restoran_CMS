@@ -87,7 +87,7 @@ export interface Linkk {
   linkId: number;
   text: string;
   url: string;
-  icon: string;
+  icon?: string;
   headerId?: number;
   footerId?: number;
 }

@@ -1,5 +1,5 @@
 
-import Reservation from "@/app/_components/User/Reservation";
+import Reservation from "@/app/_components/User/Reservation/Reservation";
 
 export default async function Page({
   params,

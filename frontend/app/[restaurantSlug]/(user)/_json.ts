@@ -2,20 +2,18 @@ import { Foooter, Headerr, MojJSON, Restoran } from '@/app/_lib/Interfaces';
 
 
 /*
-* SREDITI USER FAJLOVE DA NEMAJU PREKO 100 LINIJA KODA
-*
-* privacy policy samo malo, razloziti na par komponenti
-* profile razdvojiti profile actions i window
-* reserve table izvuci form funkciju i izvuci state u hook
-* prezentacija sale izvuci na manje komponente i izvuci racunanje propertisa u hook
-* reservation ocistiti page.tsx i napraviti folder u components
-* reservation list razloziti na par manjih komponenti
-* homepage razloziti na par manjih komponenti
 *
 *
-* DISABLOVATI INPUTE SA DATUMIMA ALI DA BUDU MOGUCI ZA UREDJIVANJE
+* zavisno od stranice prikazane na telefonu staviti van okira telefona input-e i selectove vezane za podatke koji ce biti slani stranici
 *
-* TEKST KOJI JE VIDLJIV SAMO U SPECIFICNIM SLUCAJEVIMA OMOGUCITI VIDLJIVOST I UREDJIVANJE
+*   homepage ima rezervacija/nema rezervacija 2
+* rezervisi izabran sto 2
+* rezervacije ima/nema rezervacija show less show more 2
+*
+*
+*
+* HOMEPAGE RESERVATION LIST BUTTONS NEMAJU FUNKCIJU
+* RESERVATIONS RESERVATION LIST BUTTONS NEMAJU FUNKCIJU
 *
 * POCETI KORISTITI EDITING CONTEXT I OMOGUCITI MJENJANJE CSS-A U BAZI
 * */
@@ -450,252 +448,279 @@ export function _json(
       },
     },
 
-    "reservations-nema": {
-    "text": "Nema rezervacija",
-        "css": {
-      "marginTop": "1.5rem",
-          "borderRadius": "1rem",
-          "borderWidth": "1.5px",
-          "borderStyle": "dashed",
-          "borderColor": "rgb(229, 231, 235)",
-          "backgroundColor": "rgb(250, 250, 250)",
-          "color": "rgb(156, 163, 175)",
-          "padding": "2.5rem 1.5rem",
-          "textAlign": "center",
-          "fontSize": "0.875rem",
-          "fontWeight": "500"
-    }
-  },
-    "reservations-active": {
-    "css": {
-      "display": "flex",
-          "flexDirection": "column",
-          "gap": "0.875rem",
-          "marginBottom": "2.5rem"
-    }
-  },
-    "reservations-active-naslov": {
-    "text": "Aktivni termini",
-        "css": {
-      "fontSize": "1rem",
-          "fontWeight": "700",
-          "color": "rgb(17, 24, 39)",
-          "letterSpacing": "-0.01em"
-    }
-  },
-    "reservations-active-ukupno": {
-    "css": {
-      "fontSize": "0.75rem",
-          "color": "rgb(107, 114, 128)",
-          "fontWeight": "600",
-          "backgroundColor": "rgb(243, 244, 246)",
-          "padding": "0.2rem 0.6rem",
-          "borderRadius": "9999px",
-          "marginLeft": "0.5rem"
-    }
-  },
-    "reservations-inactive": {
-    "css": {
-      "display": "flex",
-          "flexDirection": "column",
-          "gap": "0.75rem",
-          "marginTop": "2rem"
-    }
-  },
-    "reservations-inactive-naslov": {
-    "text": "Prošli termini",
-        "css": {
-      "fontSize": "0.875rem",
-          "fontWeight": "600",
-          "color": "rgb(107, 114, 128)",
-          "textTransform": "uppercase",
-          "letterSpacing": "0.05em"
-    }
-  },
-    "reservations-inactive-ukupno": {
-    "css": {
-      "fontSize": "0.75rem",
-          "color": "rgb(156, 163, 175)",
-          "fontWeight": "500",
-          "marginLeft": "0.375rem"
-    }
-  },
-    "reservationList-nema": {
-    "text": "Nema rezervacija",
-        "css": {
-      "marginTop": "1.5rem",
-          "borderRadius": "1rem",
-          "borderWidth": "1.5px",
-          "borderStyle": "dashed",
-          "borderColor": "rgb(229, 231, 235)",
-          "backgroundColor": "rgb(250, 250, 250)",
-          "color": "rgb(156, 163, 175)",
-          "padding": "2.5rem 1.5rem",
-          "textAlign": "center",
-          "fontSize": "0.875rem",
-          "fontWeight": "500"
-    }
-  },
-    "reservationList-res-card": {
-    "css": {
-      "borderRadius": "0.875rem",
-          "borderWidth": "1px",
-          "borderStyle": "solid",
-          "borderColor": "rgb(243, 244, 246)",
-          "backgroundColor": "rgb(255, 255, 255)",
-          "padding": "1rem 1.25rem",
-          "boxShadow": "0 1px 2px 0 rgba(0, 0, 0, 0.03)",
-          "display": "flex",
-          "flexDirection": "column",
-          "gap": "0.5rem"
-    }
-  },
-    "reservationList-res-information-poravnanje": {
-    "css": {
-      "display": "flex",
-          "alignItems": "center",
-          "justifyContent": "space-between",
-          "width": "100%"
-    }
-  },
-    "reservationList-res-datum-start": {
-    "css": {
-      "display": "flex",
-          "alignItems": "center",
-          "gap": "0.5rem",
-          "fontSize": "0.875rem"
-    }
-  },
-    "reservationList-res-datum": {
-    "css": {
-      "fontWeight": "600",
-          "color": "rgb(31, 41, 55)"
-    }
-  },
-    "reservationList-res-tacka": {
-    "text": "•",
-        "css": {
-      "color": "rgb(209, 213, 219)"
-    }
-  },
-    "reservationList-res-start": {
-    "css": {
-      "fontWeight": "500",
-          "color": "rgb(107, 114, 128)"
-    }
-  },
-    "reservationList-res-gost": {
-    "css": {
-      "fontSize": "0.875rem",
-          "fontWeight": "600",
-          "color": "rgb(17, 24, 39)"
-    }
-  },
-    "reservationList-res-status-past": {
-    "text": "Završeno",
-        "css": {
-      "borderRadius": "0.375rem",
-          "backgroundColor": "rgb(243, 244, 246)",
-          "color": "rgb(107, 114, 128)",
-          "padding": "0.125rem 0.5rem",
-          "fontSize": "0.75rem",
-          "fontWeight": "500",
-          "letterSpacing": "0.025em"
-    }
-  },
-    "reservationList-res-status-new": {
-    "text": "Aktivna",
-        "css": {
-      "borderRadius": "0.375rem",
-          "backgroundColor": "rgb(236, 253, 245)",
-          "color": "rgb(5, 150, 105)",
-          "padding": "0.125rem 0.5rem",
-          "fontSize": "0.75rem",
-          "fontWeight": "600"
-    }
-  },
-    "reservationList-res-sto": {
-    "css": {
-      "fontSize": "0.8125rem",
-          "color": "rgb(156, 163, 175)",
-          "fontWeight": "400"
-    }
-  },
-    "reservationList-brzeAkcije": {
-    "css": {
-      "display": "flex",
-          "alignItems": "center",
-          "gap": "0.5rem",
-          "marginTop": "0.25rem"
-    }
-  },
-    "reservationList-res-izmjeni": {
-    "text": "Izmeni",
-        "css": {
-      "borderRadius": "0.5rem",
-          "borderWidth": "1px",
-          "borderStyle": "solid",
-          "borderColor": "rgb(229, 231, 235)",
-          "backgroundColor": "rgb(255, 255, 255)",
-          "color": "rgb(55, 65, 81)",
-          "padding": "0.375rem 0.75rem",
-          "fontSize": "0.8125rem",
-          "fontWeight": "500",
-          "cursor": "pointer"
-    }
-  },
-    "reservationList-res-otkazi": {
-    "text": "Otkaži",
-        "css": {
-      "borderRadius": "0.5rem",
-          "borderWidth": "0px",
-          "backgroundColor": "transparent",
-          "color": "rgb(239, 68, 68)",
-          "padding": "0.375rem 0.5rem",
-          "fontSize": "0.8125rem",
-          "fontWeight": "500",
-          "cursor": "pointer"
-    }
-  },
-    "reservationList-showMore-div": {
-    "css": {
-      "display": "flex",
-          "justifyContent": "center",
-          "paddingTop": "1.25rem",
-          "marginTop": "0.5rem"
-    }
-  },
-    "reservationList-showMore-button-manje": {
-    "text": "Prikaži manje",
-        "css": {
-      "borderRadius": "0.5rem",
-          "borderWidth": "1px",
-          "borderStyle": "solid",
-          "borderColor": "rgb(229, 231, 235)",
-          "backgroundColor": "rgb(255, 255, 255)",
-          "color": "rgb(75, 85, 99)",
-          "padding": "0.5rem 1rem",
-          "fontSize": "0.8125rem",
-          "fontWeight": "500",
-          "cursor": "pointer"
-    }
-  },
-    "reservationList-showMore-button-jos": {
-    "text": "Prikaži još prošlih rezervacija",
-        "css": {
-      "borderRadius": "0.5rem",
-          "borderWidth": "1px",
-          "borderStyle": "solid",
-          "borderColor": "rgb(229, 231, 235)",
-          "backgroundColor": "rgb(255, 255, 255)",
-          "color": "rgb(75, 85, 99)",
-          "padding": "0.5rem 1rem",
-          "fontSize": "0.8125rem",
-          "fontWeight": "500",
-          "cursor": "pointer"
-    }
-  },
+    'reservations-nema': {
+      text: 'Nema rezervacija',
+      css: {
+        marginTop: '1.5rem',
+        borderRadius: '1rem',
+        borderWidth: '1.5px',
+        borderStyle: 'dashed',
+        borderColor: 'rgb(229, 231, 235)',
+        backgroundColor: 'rgb(250, 250, 250)',
+        color: 'rgb(156, 163, 175)',
+        padding: '2.5rem 1.5rem',
+        textAlign: 'center',
+        fontSize: '0.875rem',
+        fontWeight: '500',
+      },
+    },
+    'reservations-active': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.875rem',
+        marginBottom: '2.5rem',
+      },
+    },
+    'reservations-active-naslov': {
+      text: 'Aktivni termini',
+      css: {
+        fontSize: '1rem',
+        fontWeight: '700',
+        color: 'rgb(17, 24, 39)',
+        letterSpacing: '-0.01em',
+      },
+    },
+    'reservations-active-ukupno': {
+      css: {
+        fontSize: '0.75rem',
+        color: 'rgb(107, 114, 128)',
+        fontWeight: '600',
+        backgroundColor: 'rgb(243, 244, 246)',
+        padding: '0.2rem 0.6rem',
+        borderRadius: '9999px',
+        marginLeft: '0.5rem',
+      },
+    },
+    'reservations-inactive': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem',
+        marginTop: '2rem',
+      },
+    },
+    'reservations-inactive-naslov': {
+      text: 'Prošli termini',
+      css: {
+        fontSize: '0.875rem',
+        fontWeight: '600',
+        color: 'rgb(107, 114, 128)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em',
+      },
+    },
+    'reservations-inactive-ukupno': {
+      css: {
+        fontSize: '0.75rem',
+        color: 'rgb(156, 163, 175)',
+        fontWeight: '500',
+        marginLeft: '0.375rem',
+      },
+    },
+    'reservationList-nema': {
+      text: 'Nema rezervacija',
+      css: {
+        marginTop: '1.5rem',
+        borderRadius: '1rem',
+        borderWidth: '1.5px',
+        borderStyle: 'dashed',
+        borderColor: 'rgb(229, 231, 235)',
+        backgroundColor: 'rgb(250, 250, 250)',
+        color: 'rgb(156, 163, 175)',
+        padding: '2.5rem 1.5rem',
+        textAlign: 'center',
+        fontSize: '0.875rem',
+        fontWeight: '500',
+      },
+    },
 
+    'reservationList-res-card': {
+      css: {
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        gap: '0.75rem',
+        padding: '0.75rem',
+        borderRadius: '0.75rem',
+        border: '1px solid rgb(229, 231, 235)',
+        backgroundColor: 'rgb(255, 255, 255)',
+      },
+    },
+
+    'reservationList-res-information-poravnanje': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        minWidth: '0',
+        gap: '0.25rem',
+      },
+    },
+
+    'reservationList-res-datum-start': {
+      css: {
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '0.35rem 0.5rem',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+      },
+    },
+
+    'reservationList-res-datum': {
+      css: {
+        fontWeight: '600',
+        color: 'rgb(31, 41, 55)',
+      },
+    },
+
+    'reservationList-res-tacka': {
+      text: '•',
+      css: {
+        color: 'rgb(209, 213, 219)',
+      },
+    },
+
+    'reservationList-res-start': {
+      css: {
+        fontWeight: '500',
+        color: 'rgb(107, 114, 128)',
+      },
+    },
+
+    'reservationList-res-gost': {
+      css: {
+        fontSize: '0.875rem',
+        fontWeight: '600',
+        color: 'rgb(17, 24, 39)',
+      },
+    },
+
+    'reservationList-res-status-past': {
+      text: 'Završeno',
+      css: {
+        borderRadius: '0.375rem',
+        backgroundColor: 'rgb(243, 244, 246)',
+        color: 'rgb(107, 114, 128)',
+        padding: '0.125rem 0.5rem',
+        fontSize: '0.75rem',
+        fontWeight: '500',
+        letterSpacing: '0.025em',
+        whiteSpace: 'nowrap',
+      },
+    },
+
+    'reservationList-res-status-new': {
+      text: 'Aktivna',
+      css: {
+        borderRadius: '0.375rem',
+        backgroundColor: 'rgb(236, 253, 245)',
+        color: 'rgb(5, 150, 105)',
+        padding: '0.125rem 0.5rem',
+        fontSize: '0.75rem',
+        fontWeight: '600',
+        whiteSpace: 'nowrap',
+      },
+    },
+
+    'reservationList-res-sto': {
+      css: {
+        fontSize: '0.8125rem',
+        color: 'rgb(156, 163, 175)',
+        fontWeight: '400',
+      },
+    },
+
+    'reservationList-brzeAkcije': {
+      css: {
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '0.5rem',
+        marginTop: '0.25rem',
+      },
+    },
+
+    'reservationList-res-izmjeni': {
+      text: 'Izmeni',
+      css: {
+        borderRadius: '0.5rem',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'rgb(229, 231, 235)',
+        backgroundColor: 'rgb(255, 255, 255)',
+        color: 'rgb(55, 65, 81)',
+        padding: '0.375rem 0.75rem',
+        fontSize: '0.8125rem',
+        fontWeight: '500',
+        // cursor: 'pointer',
+      },
+    },
+
+    'reservationList-res-otkazi': {
+      text: 'Otkaži',
+      css: {
+        borderRadius: '0.5rem',
+        borderWidth: '0px',
+        backgroundColor: 'transparent',
+        color: 'rgb(239, 68, 68)',
+        padding: '0.375rem 0.5rem',
+        fontSize: '0.8125rem',
+        fontWeight: '500',
+        // cursor: 'pointer',
+      },
+    },
+
+    'reservationList-res-sala': {
+      css: {
+        flexShrink: '0',
+      },
+    },
+
+    'reservationList-showMore-div': {
+      css: {
+        display: 'flex',
+        justifyContent: 'center',
+        paddingTop: '1.25rem',
+        marginTop: '0.5rem',
+      },
+    },
+    'reservationList-showMore-button-manje': {
+      text: 'Prikaži manje',
+      css: {
+        borderRadius: '0.5rem',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'rgb(229, 231, 235)',
+        backgroundColor: 'rgb(255, 255, 255)',
+        color: 'rgb(75, 85, 99)',
+        padding: '0.5rem 1rem',
+        fontSize: '0.8125rem',
+        fontWeight: '500',
+        cursor: 'pointer',
+      },
+    },
+
+    'reservationList-showMore-button-jos': {
+      text: 'Prikaži još prošlih rezervacija',
+      css: {
+        borderRadius: '0.5rem',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'rgb(229, 231, 235)',
+        backgroundColor: 'rgb(255, 255, 255)',
+        color: 'rgb(75, 85, 99)',
+        padding: '0.5rem 1rem',
+        fontSize: '0.8125rem',
+        fontWeight: '500',
+        cursor: 'pointer',
+      },
+    },
+    'reservationList-showMore-button-jos-active':{
+      text: 'Prikaži još aktivnih rezervacija',
+    },
     'reserve-table': {
       css: {
         marginLeft: 'auto',
@@ -733,7 +758,12 @@ export function _json(
     },
     'prezentacija-sale-sala': {
       css: {
-        "caretColor": "transparent",
+        backgroundColor: 'rgb(249, 250, 251)',
+        border: '1px solid rgb(229, 231, 235)',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+        flexShrink: '0',
+        caretColor: 'transparent',
         position: 'relative',
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -807,7 +837,7 @@ export function _json(
       icon: 'FaSave',
       css: {
         marginTop: '1rem',
-        cursor: 'pointer',
+        // cursor: 'pointer',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '0.75rem',
@@ -886,7 +916,7 @@ export function _json(
         transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
         transitionDuration: '150ms',
         color: 'rgb(148,163,184)',
-        cursor: 'not-allowed',
+        // cursor: 'not-allowed',
         opacity: '0.6',
       },
     },
@@ -903,7 +933,7 @@ export function _json(
     'profile-actions-odjavi-button': {
       text: ' Odjavi se sa profila',
       css: {
-        cursor: 'pointer',
+        // cursor: 'pointer',
         fontSize: '0.75rem',
         lineHeight: '1rem',
         fontWeight: '700',
@@ -917,7 +947,7 @@ export function _json(
     'profile-actions-obrisi-button': {
       text: ' Obrisi profil',
       css: {
-        cursor: 'pointer',
+        // cursor: 'pointer',
         fontSize: '0.75rem',
         lineHeight: '1rem',
         fontWeight: '700',
@@ -976,48 +1006,48 @@ export function _json(
       text: 'Ova akcija se ne može poništiti.',
       css: {},
     },
-    "window-buttons": {
-      "css": {
-        "display": "flex",
-        "gap": "0.75rem",
-        "justifyContent": "flex-end"
-      }
+    'window-buttons': {
+      css: {
+        display: 'flex',
+        gap: '0.75rem',
+        justifyContent: 'flex-end',
+      },
     },
-    "close-button": {
-      "text": "Odustani",
-      "css": {
-        "flex": "1 1 0%",
-        "borderRadius": "0.75rem",
-        "borderWidth": "2px",
-        "borderColor": "rgb(229, 231, 235)",
-        "paddingLeft": "1rem",
-        "paddingRight": "1rem",
-        "paddingTop": "0.75rem",
-        "paddingBottom": "0.75rem",
-        "fontSize": "0.875rem",
-        "lineHeight": "1.25rem",
-        "fontWeight": "700",
-        "color": "rgb(55, 65, 81)",
-        "backgroundColor": "rgb(243, 244, 246)"
-      }
+    'close-button': {
+      text: 'Odustani',
+      css: {
+        flex: '1 1 0%',
+        borderRadius: '0.75rem',
+        borderWidth: '2px',
+        borderColor: 'rgb(229, 231, 235)',
+        paddingLeft: '1rem',
+        paddingRight: '1rem',
+        paddingTop: '0.75rem',
+        paddingBottom: '0.75rem',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+        fontWeight: '700',
+        color: 'rgb(55, 65, 81)',
+        backgroundColor: 'rgb(243, 244, 246)',
+      },
     },
-    "window-button-odjavi": {
-      "text": "Odjavi se",
-      "css": {
-        "flex": "1 1 0%",
-        "borderRadius": "0.75rem",
-        "borderWidth": "2px",
-        "borderColor": "transparent",
-        "paddingLeft": "1rem",
-        "paddingRight": "1rem",
-        "paddingTop": "0.75rem",
-        "paddingBottom": "0.75rem",
-        "fontSize": "0.875rem",
-        "lineHeight": "1.25rem",
-        "fontWeight": "700",
-        "color": "rgb(255, 255, 255)",
-        "backgroundColor": "rgb(185, 28, 28)"
-      }
+    'window-button-odjavi': {
+      text: 'Odjavi se',
+      css: {
+        flex: '1 1 0%',
+        borderRadius: '0.75rem',
+        borderWidth: '2px',
+        borderColor: 'transparent',
+        paddingLeft: '1rem',
+        paddingRight: '1rem',
+        paddingTop: '0.75rem',
+        paddingBottom: '0.75rem',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+        fontWeight: '700',
+        color: 'rgb(255, 255, 255)',
+        backgroundColor: 'rgb(185, 28, 28)',
+      },
     },
     'window-button-obrisi': {
       text: 'Obriši',
@@ -1346,7 +1376,456 @@ export function _json(
       },
       text: 'Potvrdite rezervaciju',
     },
+    'login-container': {
+      css: {
+        display: 'flex',
+        minHeight: '100vh',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '3rem 1rem',
+        backgroundColor: 'rgb(250, 250, 250)',
+      },
+    },
 
+    'login-content': {
+      css: {
+        width: '100%',
+        maxWidth: '28rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem',
+      },
+    },
+
+    'login-header': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
+    },
+
+    'login-title': {
+      text: 'Dobrodošli nazad',
+      css: {
+        fontSize: '2.25rem',
+        lineHeight: '2.5rem',
+        fontWeight: '900',
+        letterSpacing: '-0.025em',
+        textAlign: 'center',
+        color: 'rgb(15,23,42)',
+        margin: '0',
+      },
+    },
+
+    'login-subtitle': {
+      text: 'Ulogujte se na vaš nalog',
+      css: {
+        marginTop: '0.5rem',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+        fontWeight: '500',
+        textAlign: 'center',
+        color: 'rgb(100,116,139)',
+        fontStyle: 'italic',
+      },
+    },
+
+    'login-card': {
+      css: {
+        padding: '2rem',
+        backgroundColor: 'rgba(255,255,255,0.9)',
+        backdropFilter: 'blur(12px)',
+        boxShadow: '0 20px 25px -5px rgba(226,232,240,0.8), 0 8px 10px -6px rgba(226,232,240,0.8)',
+        borderRadius: '1.5rem',
+        border: '1px solid rgba(226,232,240,0.6)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.5rem',
+      },
+    },
+
+    'login-inputs': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+      },
+    },
+
+    'login-options': {
+      css: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 0.125rem',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+      },
+    },
+
+    'login-remember-label': {
+      css: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        cursor: 'pointer',
+      },
+    },
+
+    'login-remember-checkbox': {
+      css: {
+        width: '1rem',
+        height: '1rem',
+        borderRadius: '0.25rem',
+        border: '1px solid rgb(203,213,225)',
+        backgroundColor: 'white',
+        accentColor: 'rgb(79,70,229)',
+        cursor: 'pointer',
+      },
+    },
+
+    'login-remember-text': {
+      text: 'Zapamti me',
+      css: {
+        fontWeight: '500',
+        color: 'rgb(71,85,105)',
+        transition: 'color 150ms',
+      },
+    },
+
+    'login-forgot-password': {
+      text: 'Zaboravili ste šifru?',
+      css: {
+        fontWeight: '600',
+        color: 'rgb(79,70,229)',
+        cursor: 'pointer',
+        backgroundColor: 'transparent',
+        border: 'none',
+        padding: '0',
+        transition: 'color 150ms',
+      },
+    },
+
+    'login-buttons': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem',
+        paddingTop: '0.5rem',
+      },
+    },
+
+    'login-submit': {
+      text: 'Uloguj se',
+      css: {
+        width: '100%',
+        padding: '0.875rem 1rem',
+        borderRadius: '0.75rem',
+        fontWeight: '700',
+        letterSpacing: '0.025em',
+        backgroundColor: 'rgb(79,70,229)',
+        color: 'white',
+        boxShadow: '0 10px 15px -3px rgba(79,70,229,0.2)',
+        transition: 'all 150ms',
+        border: 'none',
+        cursor: 'pointer',
+      },
+    },
+
+    'login-loading': {
+      text: 'Provjera podataka...',
+      css: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.5rem',
+      },
+    },
+
+    'login-spinner': {
+      css: {
+        width: '1.25rem',
+        height: '1.25rem',
+        border: '3px solid white',
+        borderTopColor: 'transparent',
+        borderRadius: '9999px',
+        animation: 'login-spin 1s linear infinite',
+      },
+    },
+
+    'login-google-button': {
+      text: 'Nastavi putem Google-a',
+      css: {
+        width: '100%',
+        padding: '0.875rem 1rem',
+        borderRadius: '0.75rem',
+        fontWeight: '600',
+        letterSpacing: '0.025em',
+        border: '1px solid rgb(226,232,240)',
+        backgroundColor: 'white',
+        color: 'rgb(51,65,85)',
+        boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.75rem',
+        transition: 'all 150ms',
+        cursor: 'pointer',
+      },
+    },
+
+    'login-google-logo': {
+      css: {
+        width: '1.25rem',
+        height: '1.25rem',
+      },
+    },
+
+    'login-footer': {
+      text: 'Još nemate nalog?',
+      css: {
+        textAlign: 'center',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+        color: 'rgb(100,116,139)',
+      },
+    },
+
+    'login-register-link': {
+      text: 'Napravite nalog',
+      css: {
+        fontWeight: '700',
+        color: 'rgb(79,70,229)',
+        textDecoration: 'none',
+        transition: 'color 150ms',
+      },
+    },
+    'register-container': {
+      css: {
+        display: 'flex',
+        minHeight: '100vh',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundImage: 'linear-gradient(to bottom right, rgb(248,250,252), rgb(241,245,249))',
+        color: 'rgb(30,41,59)',
+        padding: '3rem 1rem',
+      },
+    },
+
+    'register-content': {
+      css: {
+        width: '100%',
+        maxWidth: '28rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem',
+      },
+    },
+
+    'register-header': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
+    },
+
+    'register-title': {
+      text: 'Dobrodošli',
+      css: {
+        fontSize: '2.25rem',
+        lineHeight: '2.5rem',
+        fontWeight: '900',
+        letterSpacing: '-0.025em',
+        textAlign: 'center',
+        color: 'rgb(15,23,42)',
+        margin: '0',
+      },
+    },
+
+    'register-subtitle': {
+      text: 'Napravite vaš nalog',
+      css: {
+        marginTop: '0.5rem',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+        fontWeight: '500',
+        textAlign: 'center',
+        color: 'rgb(100,116,139)',
+        fontStyle: 'italic',
+      },
+    },
+
+    'register-card': {
+      css: {
+        padding: '2rem',
+        backgroundColor: 'rgba(255,255,255,0.9)',
+        backdropFilter: 'blur(12px)',
+        boxShadow: '0 20px 25px -5px rgba(226,232,240,0.8), 0 8px 10px -6px rgba(226,232,240,0.8)',
+        borderRadius: '1.5rem',
+        border: '1px solid rgba(226,232,240,0.6)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.5rem',
+      },
+    },
+
+    'register-inputs': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+      },
+    },
+
+    'register-options': {
+      css: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 0.125rem',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+      },
+    },
+
+    'register-remember-label': {
+      css: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        cursor: 'pointer',
+      },
+    },
+
+    'register-remember-checkbox': {
+      css: {
+        width: '1rem',
+        height: '1rem',
+        borderRadius: '0.25rem',
+        border: '1px solid rgb(203,213,225)',
+        backgroundColor: 'white',
+        accentColor: 'rgb(79,70,229)',
+        cursor: 'pointer',
+      },
+    },
+
+    'register-remember-text': {
+      text: 'Zapamti me',
+      css: {
+        fontWeight: '500',
+        color: 'rgb(71,85,105)',
+        transition: 'color 150ms',
+      },
+    },
+
+    'register-buttons': {
+      css: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem',
+        paddingTop: '0.5rem',
+      },
+    },
+
+    'register-submit': {
+      text: 'Napravi nalog',
+      css: {
+        width: '100%',
+        padding: '0.875rem 1rem',
+        borderRadius: '0.75rem',
+        fontWeight: '700',
+        letterSpacing: '0.025em',
+        backgroundColor: 'rgb(79,70,229)',
+        color: 'white',
+        boxShadow: '0 10px 15px -3px rgba(79,70,229,0.2)',
+        transition: 'all 150ms',
+        border: 'none',
+        cursor: 'pointer',
+      },
+    },
+    'register-submit-disabled': {
+      css: {
+        opacity: '0.5',
+        cursor: 'not-allowed',
+        boxShadow: 'none',
+      },
+    },
+
+    'register-loading': {
+      text: 'Pravljenje naloga...',
+      css: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.5rem',
+      },
+    },
+
+    'register-spinner': {
+      css: {
+        width: '1.25rem',
+        height: '1.25rem',
+        border: '3px solid white',
+        borderTopColor: 'transparent',
+        borderRadius: '9999px',
+      },
+    },
+
+    'register-google-button': {
+      text: 'Nastavi putem Google-a',
+      css: {
+        width: '100%',
+        padding: '0.875rem 1rem',
+        borderRadius: '0.75rem',
+        fontWeight: '600',
+        letterSpacing: '0.025em',
+        border: '1px solid rgb(226,232,240)',
+        backgroundColor: 'white',
+        color: 'rgb(51,65,85)',
+        boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.75rem',
+        transition: 'all 150ms',
+        cursor: 'pointer',
+      },
+    },
+    'register-google-button-disabled': {
+      css: {
+        opacity: '0.5',
+        cursor: 'not-allowed',
+      },
+    },
+
+    'register-google-logo': {
+      css: {
+        width: '1.25rem',
+        height: '1.25rem',
+      },
+    },
+
+    'register-footer': {
+      text: 'Već imate nalog?',
+      css: {
+        textAlign: 'center',
+        fontSize: '0.875rem',
+        lineHeight: '1.25rem',
+        color: 'rgb(100,116,139)',
+      },
+    },
+
+    'register-login-link': {
+      text: 'Ulogujte se',
+      css: {
+        fontWeight: '700',
+        color: 'rgb(79,70,229)',
+        textDecoration: 'none',
+        transition: 'color 150ms',
+      },
+    },
   };
 
 }

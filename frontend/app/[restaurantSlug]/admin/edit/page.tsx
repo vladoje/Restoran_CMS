@@ -15,16 +15,17 @@ negdje napraviti sacuvaj button i cuvati promjene izgleda sajta
 
 import { Sidebar } from '@/app/_components/AdminEditPages/Sidebar';
 
-import { Main } from './[pageSlug]/page';
+import {CMSEditProps, Main } from './[pageSlug]/page';
 
-export default async function Page({ params }: { params: { restaurantSlug: string } }) {
-  const slug = (await params).restaurantSlug;
+export default async function Page({ params, searchParams }: CMSEditProps ) {
+    const { restaurantSlug: slug } = await params;
+    const { preset } = await searchParams;
 
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden">
       <Sidebar />
 
-      <Main slug={slug} />
+      <Main slug={slug} preset={preset} />
     </div>
   );
 }

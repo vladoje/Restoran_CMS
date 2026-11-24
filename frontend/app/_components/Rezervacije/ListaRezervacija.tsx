@@ -1,6 +1,6 @@
 import { RezervacijaPopunjena } from "@/app/_lib/getRezervacije";
 import { Dispatch, SetStateAction } from "react";
-import { ReservationCard } from "../ReservationCard";
+import { AdminReservationCard } from "../AdminReservationCard";
 
 export function ListaRezervacija({
   visibleRezervacije,
@@ -19,7 +19,7 @@ export function ListaRezervacija({
     <>
       <ul className="space-y-3">
         {visibleRezervacije.length ? (
-          visibleRezervacije.map((d, i) => <ReservationCard key={i} d={d} />)
+          visibleRezervacije.map((d, i) => <AdminReservationCard key={i} d={d} />)
         ) : (
           <p className="text-gray-500 text-lg mt-10 ml-8">
             nema rezervacija za {filterDatum}

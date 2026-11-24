@@ -1,8 +1,9 @@
 'use client';
 
 import { CSSProperties, Dispatch, SetStateAction } from 'react';
-import { Sala, Sto } from '../_lib/Interfaces';
-import { MojJSON } from './User/Reservations/ReservationList';
+import { Sala, Sto } from '../../_lib/Interfaces';
+import { MojJSON } from '@/app/_components/AdminReservations/ReservationList';
+import StoNaSali from '@/app/_components/PrezentacijaSale/StoNaSali';
 
 export function renderTemplate(
   template: string,
@@ -16,37 +17,7 @@ export function renderTemplate(
     (_, key: 'tableNumber' | 'capacity') => `${data[key] ?? ''}`,
   );
 }
-
-function PrezentacijaSale({
-  sala,
-  stolovi,
-  x = 90,
-  y,
-  i,
-  json,
-  tId,
-  setTable,
-  setTableId,
-  setCapacity,
-  setTime,
-  isEditing = false,
-}: {
-  stolovi: Sto[];
-  x?: number;
-  y?: number;
-  json?: Record<string, MojJSON>;
-  isEditing?: boolean;
-  sala: Sala;
-  i: number;
-  tId: number | null;
-  setTable?: Dispatch<SetStateAction<number | null>>;
-  setTableId?: Dispatch<SetStateAction<number | null>>;
-  setCapacity?: Dispatch<SetStateAction<number | null>>;
-  setTime?: Dispatch<SetStateAction<string | null>>;
-}) {
-  const newJSON = json || prezentacijaSaleJSON;
-
-  // Izračunaj proporcije sale
+export function CalculateValuesNeededForPresentation(sala: Sala, x: number, y: number) {
   const aspectRatio = sala.height && sala.width ? sala.height / sala.width : 1;
   const containerWidth = x;
   const containerHeight = y || Math.round(x * aspectRatio);
@@ -64,6 +35,49 @@ function PrezentacijaSale({
 
   // Dinamička dimenzija stola
   const tableSize = Math.max(10, Math.round(usableWidth * 0.16));
+  return {
+    containerWidth,
+    containerHeight,
+    scaleX,
+    scaleY,
+    usableWidth,
+    usableHeight,
+    tableSize,
+    padding,
+  };
+}
+function PrezentacijaSale({
+  sala,
+  stolovi,
+  x = 90,
+  y = 90,
+  i,
+  json,
+  tId,
+  setTable,
+  setTableId,
+  setCapacity,
+  setTime,
+  isEditing = false,
+  preset,
+}: {
+  stolovi: Sto[];
+  x?: number;
+  y?: number;
+  json?: Record<string, MojJSON>;
+  isEditing?: boolean;
+  sala: Sala;
+  i: number;
+  preset?: string;
+  tId: number | null;
+  setTable?: Dispatch<SetStateAction<number | null>>;
+  setTableId?: Dispatch<SetStateAction<number | null>>;
+  setCapacity?: Dispatch<SetStateAction<number | null>>;
+  setTime?: Dispatch<SetStateAction<string | null>>;
+}) {
+  const newJSON = json || prezentacijaSaleJSON;
+
+  const { containerWidth, containerHeight } = CalculateValuesNeededForPresentation(sala, x, y);
 
   return (
     <div
@@ -71,83 +85,29 @@ function PrezentacijaSale({
       style={{
         width: containerWidth,
         height: containerHeight,
-        position: 'relative',
-        borderRadius: '0.625rem',
-        backgroundColor: 'rgb(249, 250, 251)',
-        border: '1px solid rgb(229, 231, 235)',
-        overflow: 'hidden',
-        boxSizing: 'border-box',
-        flexShrink: 0,
         ...(newJSON['prezentacija-sale-sala']?.css || {}),
+        maxWidth: '100%',
+        boxSizing: 'border-box',
       }}
     >
-      {stolovi.map((table: Sto, k) => {
-        const isReserved = table.tableId === tId;
-
-        // Pozicioniranje sa uračunatim padding-om od ivica
-        const left =
-          padding +
-          Math.min(Math.max(0, table.positionX * scaleX - tableSize / 2), usableWidth - tableSize);
-
-        const top =
-          padding +
-          Math.min(Math.max(0, table.positionY * scaleY - tableSize / 2), usableHeight - tableSize);
-
-        const tooltipText = renderTemplate(
-          newJSON['prezentacija-sale-sto-reserved']?.text || 'Sto {tableNumber} ({capacity} mesta)',
-          {
-            tableNumber: table.tableNumber,
-            capacity: table.capacity,
-          },
-        );
-
-        return (
-          <div
-            key={`${table.tableId}-${i}-${k}`}
-            onClick={() => {
-              if (isEditing) return;
-              setTable?.(table.tableNumber);
-              setTableId?.(table.tableId);
-              setCapacity?.(table.capacity);
-              setTime?.(null);
-            }}
-            title={tooltipText}
-            style={{
-              position: 'absolute',
-              left: `${left}px`,
-              top: `${top}px`,
-              width: `${tableSize}px`,
-              height: `${tableSize}px`,
-              borderRadius: '0.25rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: tableSize < 16 ? '9px' : '11px',
-              fontWeight: 600,
-              lineHeight: 1,
-              caretColor: "transparent",
-              boxSizing: 'border-box',
-              cursor: isEditing ? 'default' : 'pointer',
-              zIndex: isReserved ? 10 : 1,
-              ...(isReserved
-                ? {
-                    backgroundColor: 'rgb(16, 185, 129)',
-                    color: '#ffffff',
-                    boxShadow: '0 0 0 2px rgba(16, 185, 129, 0.3)',
-                    ...(newJSON['prezentacija-sale-sto-reserved']?.css || {}),
-                  }
-                : {
-                    backgroundColor: 'rgb(229, 231, 235)',
-                    color: 'rgb(107, 114, 128)',
-                    opacity: 0.6,
-                    ...(newJSON['prezentacija-sale-sto-not-reserved']?.css || {}),
-                  }),
-            }}
-          >
-            {tableSize >= 14 ? table.tableNumber : null}
-          </div>
-        );
-      })}
+      {stolovi.map((table: Sto, k) => (
+        <StoNaSali
+          x={x}
+          y={y}
+          table={table}
+          tId={tId}
+          sala={sala}
+          key={`${table.tableId}-${i}-${k}`}
+          i={i}
+          newJSON={newJSON}
+          k={k}
+          isEditing={isEditing}
+          setTable={setTable}
+          setTableId={setTableId}
+          setTime={setTime}
+          setCapacity={setCapacity}
+        />
+      ))}
     </div>
   );
 }
@@ -160,11 +120,18 @@ export interface tip {
 const prezentacijaSaleJSON: Record<string, tip> = {
   'prezentacija-sale-sala': {
     css: {
-      position: 'relative',
-      borderRadius: '0.625rem',
       backgroundColor: 'rgb(249, 250, 251)',
+      border: '1px solid rgb(229, 231, 235)',
+      overflow: 'hidden',
+      boxSizing: 'border-box',
+      flexShrink: '0',
+      caretColor: 'transparent',
+      position: 'relative',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      borderRadius: '0.75rem',
       borderWidth: '1px',
-      borderColor: 'rgb(229, 231, 235)',
+      borderColor: 'rgb(229,231,235)',
     },
   },
   'prezentacija-sale-sto-reserved': {

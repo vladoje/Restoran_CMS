@@ -1,64 +1,95 @@
-interface Props {
-  params: Promise<{
-    pageSlug: string;
-    restaurantSlug: string
-  }>;
-}
-
-
+import AdminEditNavigation from '@/app/_components/AdminEditNavigationAndOptions/AdminEditNavigation';
 import { _json, convertJSON, getDefaultGlobalStyles } from '@/app/[restaurantSlug]/(user)/_json';
 import { Sidebar } from '@/app/_components/AdminEditPages/Sidebar';
 import Footer from '@/app/_components/Footer';
 import Header from '@/app/_components/Header';
-import Homepage from '@/app/_components/User/Homepage';
-import PrivacyPolicy from '@/app/_components/User/PrivacyPolicy';
-import Profile from '@/app/_components/User/Profile';
-import Reservation from '@/app/_components/User/Reservation';
-import Reservations from '@/app/_components/User/Reservations';
+import Homepage from '@/app/_components/User/Homepage/Homepage';
+import PrivacyPolicy from '@/app/_components/User/PrivacyPolicy/PrivacyPolicy';
+import Profile from '@/app/_components/User/Profile/Profile';
+import Reservation from '@/app/_components/User/Reservation/Reservation';
 import createGlobalStylesObject from '@/app/_lib/CMS/createGlobalStylesObject';
 import { getRestoranWithSlug } from '@/app/_lib/getRestoran';
 import { getSite } from '@/app/_lib/getSite';
+import UserReservations from '@/app/_components/User/UserReservations/UserReservations';
+import ClientLogin from '@/app/_components/User/UserLogin/ClientLogin';
+import ClientRegister from '@/app/_components/User/UserRegister/ClientRegister';
+import PresetSwitches from "@/app/_components/AdminEditNavigationAndOptions/PresetSwitches";
 
-export default async function Page({ params }: Props) {
-  const slug = (await params).restaurantSlug;
-const  pageSlug  = (await params).pageSlug;
+
+export interface CMSEditProps {
+  params: Promise<{
+    pageSlug: string;
+    restaurantSlug: string;
+  }>;
+  searchParams: Promise<{
+    preset?: string;
+  }>;
+}
+export default async function Page({ params, searchParams }: CMSEditProps) {
+  const { restaurantSlug: slug, pageSlug } = await params;
+  const { preset } = await searchParams;
+
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden">
       <Sidebar />
-
-      <Main pageSlug={pageSlug} slug={slug} />
+      <Main preset={preset} pageSlug={pageSlug} slug={slug} />
     </div>
   );
 }
-
-export async function Main({ slug,pageSlug }: { slug: string,pageSlug?:string }) {
-    const restoran = await getRestoranWithSlug(slug);
+export async function Main({ slug, pageSlug, preset }: { slug: string; pageSlug?: string; preset?: string }) {
+  const restoran = await getRestoranWithSlug(slug);
   const site = await getSite(restoran.siteId);
-  const globalStyles =
-    createGlobalStylesObject(site) || getDefaultGlobalStyles();
+
+  const globalStyles = createGlobalStylesObject(site) || getDefaultGlobalStyles();
+
   const json = convertJSON(site.jsonCSS || _json(restoran), globalStyles);
 
-
-
   return (
-    /* overflow-x-hidden ubija horizontalni skrol, a overflow-y-auto ostavlja samo vertikalni */
-    <main className="min-w-0 flex-1 bg-gray-100 overflow-y-auto overflow-x-hidden h-full ">
-      {/* Kontejner sa w-full i box-sizing zaštitom */}
-      <div className="flex justify-center py-12 px-4 min-h-full items-center w-full box-border">
-        {/* Telefon sa fiksnim dimenzijama */}
+    <main className="min-w-0 flex-1 bg-gray-100 overflow-y-auto overflow-x-hidden h-full">
+      <div className="flex min-h-full w-full flex-col items-center px-4 py-8 box-border">
+        {/* Editor navigation */}
+        <div className="mb-5 w-full max-w-3xl">
+          <AdminEditNavigation slug={slug} />
+        </div>
+        <PresetSwitches pageSlug={pageSlug}  />
+        {/* Phone */}
         <div className="w-93.75 h-187.5 shrink-0 border-10 border-slate-900 rounded-[40px] shadow-2xl bg-white flex flex-col overflow-hidden relative">
-          {/* Unutrašnji skrol za sadržaj sajta */}
-
-          <div className="flex-1 overflow-y-auto overflow-x-hidden w-full ">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden w-full">
             <Header slug={slug} isEditing={true} />
+
             <div className="m-2">
-            {!pageSlug && <Homepage isEditing={true} slug={slug} />}
-            {pageSlug === 'profile' && <Profile isEditing={true} json={json} slug={slug} />}
-            {pageSlug === 'privacy-policy' && <PrivacyPolicy isEditing={true} slug={slug} />}
-            {pageSlug === 'reservation' && <Reservation isEditing={true} slug={slug} />}
-            {pageSlug === 'reservations' && <Reservations isEditing={true} slug={slug} />}
-            {/*  */}
+              {!pageSlug && <Homepage isEditing={true} preset={preset} slug={slug} />}
+
+              {pageSlug === 'profile' && <Profile isEditing={true} json={json} slug={slug} />}
+
+              {pageSlug === 'privacy-policy' && <PrivacyPolicy isEditing={true} slug={slug} />}
+
+              {pageSlug === 'reservation' && (
+                <Reservation preset={preset} isEditing={true} slug={slug} />
+              )}
+
+              {pageSlug === 'reservations' && (
+                <UserReservations preset={preset} isEditing={true} slug={slug} />
+              )}
+
+              {pageSlug === 'login' && (
+                <ClientLogin
+                  json={json}
+                  isEditing={true}
+                  restoranId={restoran.restoranId}
+                  restaurantSlug={slug}
+                />
+              )}
+              {pageSlug === 'register' && (
+                <ClientRegister
+                  restoranId={restoran.restoranId}
+                  isEditing={true}
+                  restaurantSlug={slug}
+                  json={json}
+                />
+              )}
             </div>
+
             <Footer isEditing={true} slug={slug} />
           </div>
         </div>

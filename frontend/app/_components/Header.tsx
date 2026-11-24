@@ -14,7 +14,7 @@ import { getRestoranWithSlug } from "../_lib/getRestoran";
 import { getSite } from "../_lib/getSite";
 import { getHeader, getLinkWithHeaderId } from "../_lib/getLinks";
 import Image from "next/image";
-import { Headerr, Linkk, Sajt } from "../_lib/Interfaces";
+import { Headerr, Linkk, MojJSON, Sajt } from "../_lib/Interfaces";
 import { getServerSession } from "next-auth";
 import { options } from "../api/auth/[...nextauth]/options";
 import {
@@ -47,29 +47,17 @@ export default async function Header({ slug,isEditing=false }: { slug: string,is
       className="@container flex flex-row items-center gap-3"
       style={json['header'].css || {}}
     >
-      {header.hasLogo && (
+      {header.hasLogo && isEditing ? (
+        <button id="header-logo" style={json['header-logo'].css || {}}>
+          <HeaderLogoInsides site={site} json={json} />
+        </button>
+      ) : (
         <Link
           href={isEditing ? `/${slug}/admin/edit` : `/${slug}`}
           id="header-logo"
           style={json['header-logo'].css || {}}
         >
-          <div id="header-logo-logo" style={json["header-logo-logo"].css || {}}>
-            <Image
-              src={site.logoUrl}
-              alt="logo"
-              width={40}
-              height={40}
-              className="w-full h-full object-contain"
-            />
-          </div>
-
-          <span
-            id="header-logo-naslov"
-            className="truncate font-bold text-base leading-tight"
-            style={json['header-logo-naslov'].css || {}}
-          >
-            {json['header-logo-naslov'].text}
-          </span>
+          <HeaderLogoInsides site={site} json={json} />
         </Link>
       )}
 
@@ -78,25 +66,39 @@ export default async function Header({ slug,isEditing=false }: { slug: string,is
         className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-2"
         style={json['header-navigation'].css || {}}
       >
-        {links.map((link) => (
-          <Link
-            key={link.linkId}
-            href={
-              isEditing
-                ? `/${slug}/admin/edit/${link.url
-                    .replace(/^\/+/, '')
-                    .replace(new RegExp(`^${slug}/?`), '')}`
-                : link.url
-            }
-            className="text-xs font-medium whitespace-nowrap"
-            style={{
-              ...json['header-navigation-link'].css,
-              ...(!session?.user ? { pointerEvents: 'none' } : {}),
-            }}
-          >
-            {link.text}
-          </Link>
-        ))}
+        {links.map((link) =>
+          isEditing ? (
+            <button
+              className="text-xs font-medium whitespace-nowrap"
+              style={{
+                ...json['header-navigation-link'].css,
+                ...(!session?.user ? { pointerEvents: 'none' } : {}),
+              }}
+              key={link.linkId}
+            >
+              {' '}
+              {link.text}
+            </button>
+          ) : (
+            <Link
+              key={link.linkId}
+              href={
+                isEditing
+                  ? `/${slug}/admin/edit/${link.url
+                      .replace(/^\/+/, '')
+                      .replace(new RegExp(`^${slug}/?`), '')}`
+                  : link.url
+              }
+              className="text-xs font-medium whitespace-nowrap"
+              style={{
+                ...json['header-navigation-link'].css,
+                ...(!session?.user ? { pointerEvents: 'none' } : {}),
+              }}
+            >
+              {link.text}
+            </Link>
+          ),
+        )}
 
         {session?.user?.role === 'admin' && !isEditing && (
           <Link
@@ -110,4 +112,25 @@ export default async function Header({ slug,isEditing=false }: { slug: string,is
       </nav>
     </header>
   );
+}
+function HeaderLogoInsides({json,site} :{json:Record<string, MojJSON>,site:Sajt}){
+  return( <>
+  <div id="header-logo-logo" style={json['header-logo-logo'].css || {}}>
+    <Image
+      src={site.logoUrl}
+      alt="logo"
+      width={40}
+      height={40}
+      className="w-full h-full object-contain"
+    />
+  </div>
+
+  <span
+    id="header-logo-naslov"
+    className="truncate font-bold text-base leading-tight"
+    style={json['header-logo-naslov'].css || {}}
+  >
+            {json['header-logo-naslov'].text}
+          </span>
+  </>)
 }

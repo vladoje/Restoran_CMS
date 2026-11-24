@@ -1,4 +1,4 @@
-import Profile from "@/app/_components/User/Profile";
+import Profile from "@/app/_components/User/Profile/Profile";
 import { _json, convertJSON, getDefaultGlobalStyles } from "../_json";
 import createGlobalStylesObject from "@/app/_lib/CMS/createGlobalStylesObject";
 import { getRestoranWithSlug } from "@/app/_lib/getRestoran";

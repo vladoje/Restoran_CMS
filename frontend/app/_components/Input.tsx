@@ -33,7 +33,7 @@ transitionProperty: "all",
 transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
 transitionDuration: "150ms",
 color: "rgb(148,163,184)",
-cursor: "not-allowed",
+
 backgroundColor: "rgb(241,245,249)",
 opacity: "0.6",
     },

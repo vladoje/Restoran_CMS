@@ -6,8 +6,8 @@ kao da json ne postoji nekad, ili ga cekati ali kolikosa obzirom da u konzoli po
 
 import {  useState } from 'react';
 import { Rezervacija, Sala, Sto } from '@/app/_lib/Interfaces';
-import ReservationsReservationCard from '@/app/_components/User/Reservations/ReservationsReservationCard';
-import ShowMoreAndLessButtons from '@/app/_components/User/Reservations/ShowMoreAndLessButtons';
+import ReservationsReservationCard from '@/app/_components/AdminReservations/ReservationsReservationCard';
+import ShowMoreAndLessButtons from '@/app/_components/AdminReservations/ShowMoreAndLessButtons';
 const allowedKeys = new Set(['bg', 'text', 'primary', 'secondary']);
 export function convertCSS(css: string | undefined, globalStyles: Record<string, string>) {
   return css?.replace(/\{([a-zA-Z0-9_-]+)\}/g, (match, key) => {
@@ -30,10 +30,14 @@ function ReservationList({
   json,
   sala,
   allTables,
+  isEditing = false,
+  activeOrPast,
 }: {
   activeReservations: Rezervacija[];
   json: Record<string, MojJSON>;
   allTables: Sto[];
+  isEditing?: boolean;
+  activeOrPast: string;
   sala: Sala;
 }) {
   const now = new Date();
@@ -66,6 +70,7 @@ function ReservationList({
 
               return (
                 <ReservationsReservationCard
+                  isEditing={isEditing}
                   json={json}
                   start={start}
                   datum={datum}
@@ -84,6 +89,7 @@ function ReservationList({
           {/* SHOW MORE / LESS */}
           {activeReservations.length > 3 && (
             <ShowMoreAndLessButtons
+              activeOrPast={activeOrPast}
               json={json}
               activeReservations={activeReservations}
               isExpanded={isExpanded}

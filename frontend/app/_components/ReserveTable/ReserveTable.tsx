@@ -1,8 +1,7 @@
 'use client';
 
-import PrezentacijaSale from '../PrezentacijaSale';
-import { useRef, useState } from 'react';
-import { createRezervacija } from '../../_lib/createRezervacija';
+import PrezentacijaSale from '../PrezentacijaSale/PrezentacijaSale';
+import { useEffect, useRef } from 'react';
 import {
   OpeningHour,
   Restoran,
@@ -12,18 +11,16 @@ import {
   Sto,
   User,
 } from '../../_lib/Interfaces';
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
 import { useCanvasSize } from './useCanvasSize';
 import { useDisableTime, useOpeningHour } from './useDisableTime';
 import ReservationDetails from './ReservationDetails';
-import { MojJSON } from '../ReservationList';
-import { twj } from 'tw-to-css';
+import { MojJSON } from '@/app/_components/AdminReservations/ReservationList';
+import { useFormInputValues } from '@/app/_components/ReserveTable/useFormInputValues';
 
 function ReserveTable({
   sala,
   json,
-  isEditing,
+  isEditing = false,
   allTables,
   user,
   restoran,
@@ -31,10 +28,12 @@ function ReserveTable({
   isAdmin = false,
   specialDates,
   openingHours,
+  preset,
 }: {
   sala: Sala;
   json?: Record<string, MojJSON>;
-  isEditing: boolean;
+  isEditing?: boolean;
+  preset?: string;
   allTables: Sto[];
   user: User;
   rezervacije: Rezervacija[];
@@ -43,15 +42,37 @@ function ReserveTable({
   specialDates: SlobodanDan[];
   openingHours: OpeningHour[];
 }) {
-  const router = useRouter();
-  const [date, setDate] = useState<string | null>(null);
-  const [time, setTime] = useState<string | null>(null);
-  const [table, setTable] = useState<number | null>(null);
-  const [tableId, setTableId] = useState<number | null>(null);
-  const [capacity, setCapacity] = useState<number | null>(null);
-  const [note, setNote] = useState<string>('');
+  const {
+    date,
+    setDate,
+    time,
+    setTime,
+    table,
+    setTable,
+    tableId,
+    setTableId,
+    capacity,
+    setCapacity,
+    note,
+    setNote,
+    RezervisiTerminFormCall,
+  } = useFormInputValues(isAdmin, restoran);
 
-  const selectedTable = allTables.find((t) => t.tableId === tableId);
+  const selectedTable = preset ? allTables.at(0) : allTables.find((t) => t.tableId === tableId);
+
+  useEffect(() => {
+    if (preset) {
+      setTable?.(selectedTable?.tableNumber ?? null);
+      setTableId?.(selectedTable?.tableId ?? null);
+      setCapacity?.(selectedTable?.capacity ?? null);
+      setTime?.(null);
+    } else {
+      setTable?.(null);
+      setTableId?.(null);
+      setCapacity?.(null);
+      setTime?.(null);
+    }
+  }, [preset, selectedTable, setTable, setTableId, setCapacity, setTime]);
 
   // responsive size for sala
   const parentRef = useRef<HTMLDivElement>(null);
@@ -61,42 +82,14 @@ function ReserveTable({
   const disableTime = useDisableTime(rezervacije, restoran, date, tableId);
 
   const { specijalniDan, openingHour } = useOpeningHour(specialDates, openingHours, date);
-    const newJSON=json||reserveTableJSON
+  const newJSON = json || reserveTableJSON;
   return (
-    <form
-      onSubmit={async (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        try {
-          await createRezervacija(formData);
-          toast.success('Uspjesno rezervisan termin');
-          if (!isAdmin) {
-            router.push(`/${restoran.slug}`);
-          } else {
-            router.refresh();
-            setDate(null);
-            setTime(null);
-            setTable(null);
-            setTableId(null);
-            setCapacity(null);
-            setNote('');
-          }
-        } catch (e) {
-          if (e instanceof Error) {
-            toast.error(e.message);
-          } else {
-            toast.error('Greška');
-          }
-        }
-      }}
-    >
+    <form onSubmit={RezervisiTerminFormCall}>
       <div id="reserve-table" style={newJSON['reserve-table'].css || {}}>
         {/* GRID */}
         <div id="reserve-table-grid" style={newJSON['reserve-table-grid'].css || {}}>
           {/* LEFT */}
           <div style={newJSON['reserve-table-odaberi-sto'].css || {}}>
-            {' '}
-            {/* Dodat overflow-hidden */}
             <h2
               id="reserve-table-odaberi-sto-naslov"
               style={newJSON['reserve-table-odaberi-sto-naslov'].css || {}}
@@ -105,12 +98,10 @@ function ReserveTable({
             </h2>
             <input type="hidden" value={tableId || ''} name="tableId" />
             <div className="w-full flex justify-center" ref={parentRef}>
-              {' '}
-              {/* Izbačen min-w-75 */}
               <PrezentacijaSale
+                preset={preset}
                 isEditing={isEditing}
                 sala={sala}
-
                 stolovi={allTables}
                 x={canvasSize}
                 y={canvasSize}
@@ -140,7 +131,7 @@ function ReserveTable({
               openingHour={openingHour}
               specijalniDan={specijalniDan}
               disableTime={disableTime}
-
+              isEditing={isEditing}
             />
           </div>
         </div>

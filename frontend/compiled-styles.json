@@ -1,0 +1,472 @@
+{
+  "header": {
+    "css": {}
+  },
+  "header-logo": {
+    "css": {}
+  },
+  "header-logo-naslov": {
+    "text": "",
+    "css": {}
+  },
+  "header-navigation": {
+    "css": {
+      "display": "flex"
+    }
+  },
+  "header-navigation-link": {
+    "css": {}
+  },
+  "footer": {
+    "css": {}
+  },
+  "footer-body": {
+    "css": {}
+  },
+  "footer-body-logo": {
+    "css": {}
+  },
+  "footer-body-logo-image": {
+    "css": {}
+  },
+  "footer-body-links": {
+    "css": {}
+  },
+  "footer-body-links-naslov": {
+    "text": "Navigacija",
+    "css": {}
+  },
+  "footer-body-links-link": {
+    "css": {}
+  },
+  "footer-body-contact": {
+    "css": {}
+  },
+  "footer-body-contact-naslov": {
+    "text": "Kontakt",
+    "css": {}
+  },
+  "footer-body-contact-adresa": {
+    "text": "Adresa",
+    "css": {}
+  },
+  "footer-body-contact-telefon": {
+    "text": "Telefon",
+    "css": {}
+  },
+  "footer-reserved": {
+    "text": "© 2026 . Sva prava zadržana.",
+    "css": {}
+  },
+  "footer-body-logo-image-text": {
+    "text": "",
+    "css": {}
+  },
+  "footer-body-logo-text": {
+    "text": "",
+    "css": {}
+  },
+  "homepage-header-text": {
+    "text": "Uživajte u vrhunskom gastronomskom iskustvu i odličnoj usluzi.",
+    "css": {}
+  },
+  "homepage-header-information": {
+    "css": {}
+  },
+  "homepage-brzeAkcije-naslov": {
+    "text": "Nova rezervacija",
+    "css": {}
+  },
+  "homepage-brzeAkcije-text": {
+    "text": "rezervišite sto brzo i jednostavno.",
+    "css": {}
+  },
+  "homepage-rezervacije-naslov": {
+    "text": "Vaše rezervacije",
+    "css": {}
+  },
+  "homepage-rezervacije-nema": {
+    "text": "Nema rezervacija",
+    "css": {}
+  },
+  "homepage-rezervacije-datum": {
+    "css": {}
+  },
+  "homepage-rezervacije-tacka": {
+    "text": "•",
+    "css": {}
+  },
+  "homepage-rezervacije-start": {
+    "css": {}
+  },
+  "homepage-rezervacije-gost": {
+    "css": {}
+  },
+  "homepage-rezervacije-sto": {
+    "css": {}
+  },
+  "homepage-header-naslov": {
+    "text": "",
+    "css": {}
+  },
+  "homepage-header-information-address": {
+    "text": "Adresa: ",
+    "css": {}
+  },
+  "homepage-header-information-phone": {
+    "text": "Telefon: ",
+    "css": {}
+  },
+  "homepage-header": {
+    "css": {}
+  },
+  "homepage-brzeAkcije": {
+    "css": {}
+  },
+  "homepage-brzeAkcije-link": {
+    "text": "rezerviši",
+    "css": {}
+  },
+  "homepage-rezervacije": {
+    "css": {}
+  },
+  "homepage-rezervacije-rezervacija": {
+    "css": {}
+  },
+  "homepage-rezervacije-izmjeni": {
+    "text": "Izmeni",
+    "css": {}
+  },
+  "homepage-rezervacije-otkazi": {
+    "text": "Otkazi",
+    "css": {}
+  },
+  "reservations-nema": {
+    "text": "Nema rezervacija",
+    "css": {}
+  },
+  "reservations-active": {
+    "css": {}
+  },
+  "reservations-active-naslov": {
+    "text": "Aktivni termini",
+    "css": {}
+  },
+  "reservations-active-ukupno": {
+    "css": {}
+  },
+  "reservations-inactive": {
+    "css": {}
+  },
+  "reservations-inactive-naslov": {
+    "text": "Prosli termini",
+    "css": {}
+  },
+  "reservations-inactive-ukupno": {
+    "css": {}
+  },
+  "reservationList-nema": {
+    "text": "Nema rezervacija",
+    "css": {}
+  },
+  "reservationList-res-card": {
+    "css": {}
+  },
+  "reservationList-res-information-poravnanje": {
+    "css": {}
+  },
+  "reservationList-res-datum-start": {
+    "css": {}
+  },
+  "reservationList-res-datum": {
+    "css": {}
+  },
+  "reservationList-res-tacka": {
+    "text": "•",
+    "css": {}
+  },
+  "reservationList-res-start": {
+    "css": {}
+  },
+  "reservationList-res-gost": {
+    "css": {}
+  },
+  "reservationList-res-status-past": {
+    "text": "Završena",
+    "css": {}
+  },
+  "reservationList-res-status-new": {
+    "text": "Aktivna",
+    "css": {}
+  },
+  "reservationList-res-sto": {
+    "css": {}
+  },
+  "reservationList-brzeAkcije": {
+    "css": {}
+  },
+  "reservationList-res-izmjeni": {
+    "text": "Izmeni",
+    "css": {}
+  },
+  "reservationList-res-otkazi": {
+    "text": "Otkazi",
+    "css": {}
+  },
+  "reservationList-showMore-div": {
+    "css": {}
+  },
+  "reservationList-showMore-button-manje": {
+    "text": "Prikazi manje",
+    "css": {}
+  },
+  "reservationList-showMore-button-jos": {
+    "text": "Prikazi jos",
+    "css": {}
+  },
+  "reserve-table": {
+    "css": {}
+  },
+  "reserve-table-grid": {
+    "css": {}
+  },
+  "reserve-table-odaberi-sto": {
+    "css": {}
+  },
+  "reserve-table-odaberi-sto-naslov": {
+    "text": "Odaberi sto",
+    "css": {}
+  },
+  "prezentacija-sale-sala": {
+    "css": {}
+  },
+  "prezentacija-sale-sto-reserved": {
+    "text": "Sto {tableNumber} ({capacity} mjesta)",
+    "css": {
+      "transform": "translate(0, 0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1)"
+    }
+  },
+  "prezentacija-sale-sto-not-reserved": {
+    "css": {
+      "transform": "translate(0, 0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1)"
+    }
+  },
+  "profile": {
+    "css": {}
+  },
+  "profile-inputs": {
+    "css": {}
+  },
+  "profile-input-username": {
+    "text": "Korisničko ime",
+    "icon": "FaUser",
+    "css": {}
+  },
+  "profile-save-button": {
+    "text": "Sacuvaj promjene",
+    "icon": "FaSave",
+    "css": {
+      "transform": "translate(0, 0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1)"
+    }
+  },
+  "user-avatar": {
+    "css": {}
+  },
+  "user-avatar-prvo-slovo": {
+    "css": {}
+  },
+  "user-avatar-naslov-username": {
+    "text": "",
+    "css": {}
+  },
+  "input-label": {
+    "css": {}
+  },
+  "input": {
+    "css": {
+      "outlineStyle": "solid"
+    }
+  },
+  "close-button": {
+    "text": "Odustani",
+    "css": {
+      "display": "flex"
+    }
+  },
+  "profile-actions": {
+    "css": {}
+  },
+  "profile-actions-odjavi-button": {
+    "text": " Odjavi se sa profila",
+    "css": {}
+  },
+  "profile-actions-obrisi-button": {
+    "text": " Obrisi profil",
+    "css": {}
+  },
+  "profile-actions-privacy-policy-link": {
+    "text": "Politika Privatnosti",
+    "icon": "FaShieldHalved",
+    "css": {}
+  },
+  "window": {
+    "css": {}
+  },
+  "window-naslov-odjavi": {
+    "text": "Da li ste sigurni da želite da se odjavite?",
+    "css": {}
+  },
+  "window-naslov-obrisi": {
+    "text": "Da li ste sigurni da želite trajno obrisati svoj profil?",
+    "css": {}
+  },
+  "window-paragraf-odjavi": {
+    "text": "Nakon odjave, moraćete ponovo da se ulogujete da biste pristupili svom nalogu.",
+    "css": {}
+  },
+  "window-paragraf-obrisi": {
+    "text": "Ova akcija se ne može poništiti.",
+    "css": {}
+  },
+  "window-buttons": {
+    "css": {}
+  },
+  "window-button-odjavi": {
+    "text": "Odjavi se",
+    "css": {}
+  },
+  "window-button-obrisi": {
+    "text": "Obriši",
+    "css": {}
+  },
+  "privacy": {
+    "css": {}
+  },
+  "privacy-header": {
+    "css": {}
+  },
+  "privacy-header-naslov": {
+    "text": "Politika Privatnosti",
+    "css": {}
+  },
+  "privacy-header-paragraf": {
+    "text": "Za ugostiteljski objekat: ",
+    "css": {}
+  },
+  "privacy-body": {
+    "css": {}
+  },
+  "privacy-body-section": {
+    "css": {}
+  },
+  "privacy-body-section-header": {
+    "css": {}
+  },
+  "privacy-body-section-header-circle": {
+    "css": {}
+  },
+  "privacy-body-section-header-naslov": {
+    "text": "1. Prikupljanje Podataka",
+    "css": {}
+  },
+  "privacy-body-section-header-naslov2": {
+    "text": "2. Upotreba i Sigurnost",
+    "css": {}
+  },
+  "privacy-body-section-body2": {
+    "text": "Prilikom korištenja naših usluga, rezervacije stola ili narudžbe, \n              prikuplja minimalne neophodne podatke: ime, prezime, kontakt\n              telefon i email adresu, isključivo u svrhu realizacije Vaše\n              usluge.",
+    "css": {}
+  },
+  "privacy-info": {
+    "css": {}
+  },
+  "privacy-info-koverta": {
+    "css": {}
+  },
+  "privacy-info-div": {
+    "css": {}
+  },
+  "privacy-info-div-paragraf": {
+    "text": "Zadnja izmjena dokumenta: ",
+    "css": {}
+  },
+  "privacy-info-div-paragraf2": {
+    "text": " Za sva pitanja u vezi sa Vašim podacima, možete direktno kontaktirati objekat na: ",
+    "css": {}
+  },
+  "privacy-info-div-paragraf-span": {
+    "text": "2026.",
+    "css": {}
+  },
+  "privacy-info-div-paragraf2-anchor": {
+    "text": "",
+    "css": {}
+  },
+  "privacy-footer": {
+    "text": "  Ova politika privatnosti je pravno obavezujuća između Vas kao korisnika\n        i ugostiteljskog objekta . Platforma restoranCMS pruža\n        isključivo tehničku infrastrukturu.",
+    "css": {}
+  },
+  "privacy-header-paragraf-restoran": {
+    "text": "",
+    "css": {}
+  },
+  "privacy-body-section-body": {
+    "text": "Prilikom korištenja naših usluga, rezervacije stola ili narudžbe, \n              prikuplja minimalne neophodne podatke: ime, prezime, kontakt\n              telefon i email adresu, isključivo u svrhu realizacije Vaše\n              usluge.",
+    "css": {}
+  },
+  "select-broj-gostiju": {
+    "css": {
+      "outlineStyle": "solid"
+    }
+  },
+  "res-detalji": {
+    "css": {}
+  },
+  "naslov-detalji": {
+    "text": "Detalji rezervacije",
+    "css": {}
+  },
+  "izabrani-sto": {
+    "text": "Sto {tableNumber} (kapacitet {capacity})",
+    "css": {}
+  },
+  "bez-stola": {
+    "text": "Niste izabrali sto",
+    "css": {}
+  },
+  "vrijeme-label": {
+    "text": "Vrijeme",
+    "css": {}
+  },
+  "restoran-zatvoren": {
+    "css": {
+      "borderWidth": "1px"
+    }
+  },
+  "restoran-zatvoren-label1": {
+    "text": "Nije dostupno za rezervacije",
+    "css": {}
+  },
+  "restoran-zatvoren-label2": {
+    "text": "Restoran je zatvoren ovaj dan",
+    "css": {}
+  },
+  "broj-gostiju-label": {
+    "text": "Broj gostiju",
+    "css": {}
+  },
+  "poruka-label": {
+    "text": "Poruka restoranu",
+    "css": {}
+  },
+  "poruka-text": {
+    "text": "Specijalni zahtjevi...",
+    "css": {
+      "borderWidth": "1px"
+    }
+  },
+  "potvrdi": {
+    "text": "Potvrdite rezervaciju",
+    "css": {}
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { User } from "../_lib/Interfaces";
+import { User } from "../../../_lib/Interfaces";
 // import toast from "react-hot-toast";
 
 export function useProfile() {

@@ -1,32 +1,12 @@
 'use client';
 
 import Input from '@/app/_components/Input';
-import Image from 'next/image';
-import { SetStateAction, useEffect, useState } from 'react';
-import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { clientLoginAPI } from '@/app/_lib/userLoginAPI';
-import { clientRegisterAPI } from '@/app/_lib/userRegisterAPI';
+import {  useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { MojJSON } from '@/app/_lib/Interfaces';
-import { Props } from 'next/script';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { RegisterFooter, RememberMe } from '@/app/_components/User/UserRegister/RegisterHelpers';
+import { RegisterTwoButtons } from '@/app/_components/User/UserRegister/RegisterTwoButtons';
 
-type RegisterElement = {
-  css?: Record<string, string>;
-  text?: string;
-  hover?: Record<string, string>;
-  active?: Record<string, string>;
-  disabled?: Record<string, string>;
-  animation?: {
-    name: string;
-    duration: string;
-    timingFunction: string;
-    iterationCount: string;
-    keyframes: Record<string, Record<string, string>>;
-  };
-};
 
 function Page({
   restaurantSlug,
@@ -76,7 +56,7 @@ function Page({
           {/* Input polja */}
           <div id="register-inputs" style={json['register-inputs'].css}>
             <Input
-              disabled={isLoading}
+              disabled={isLoading||isEditing}
               name="email"
               label="E-mail"
               value={email}
@@ -85,7 +65,7 @@ function Page({
             />
 
             <Input
-              disabled={isLoading}
+              disabled={isLoading||isEditing}
               name="name"
               label="Korisnicko ime"
               value={name}
@@ -94,7 +74,7 @@ function Page({
             />
 
             <Input
-              disabled={isLoading}
+              disabled={isLoading||isEditing}
               name="password"
               label="Lozinka"
               value={password}
@@ -104,22 +84,11 @@ function Page({
           </div>
 
           {/* Opcije */}
-          <div id="register-options" style={json['register-options'].css}>
-            <label id="register-remember-label" style={json['register-remember-label'].css}>
-              <input
-                id="register-remember-checkbox"
-                type="checkbox"
-                style={json['register-remember-checkbox'].css}
-              />
-
-              <span id="register-remember-text" style={json['register-remember-text'].css}>
-                {json['register-remember-text'].text}
-              </span>
-            </label>
-          </div>
+          <RememberMe json={json} isEditing={isEditing} />
 
           {/* Dugmići za akciju */}
           <RegisterTwoButtons
+            isEditing={isEditing}
             json={json}
             setError={setError}
             isLoading={isLoading}
@@ -133,144 +102,12 @@ function Page({
         </div>
 
         {/* Footer kartice */}
-        <p id="register-footer" style={json['register-footer'].css}>
-          {json['register-footer'].text}{' '}
-          {isEditing ? (
-            <button
-              id="register-login-link"
-              disabled={true}
-              style={json['register-login-link'].css}
-            >
-              {json['register-login-link'].text}
-            </button>
-          ) : (
-            <Link
-              id="register-login-link"
-              href={`/${restaurantSlug}/login`}
-              style={json['register-login-link'].css}
-            >
-              {json['register-login-link'].text}
-            </Link>
-          )}
-        </p>
+        <RegisterFooter json={json} restaurantSlug={restaurantSlug} isEditing={isEditing} />
       </div>
     </div>
   );
 }
-interface RegisterTwoButtonsProps {
-  json: Record<string, MojJSON>;
-  isLoading: boolean;
-  setIsLoading: (value: SetStateAction<boolean>) => void;
-  restoranId: number;
-  restaurantSlug: string;
-  name: string;
-  email: string;
-  password: string;
-  setError: (value: SetStateAction<string>) => void;
-}
-function RegisterTwoButtons({
-  json,
-  isLoading,
-  setIsLoading,
-  restoranId,
-  restaurantSlug,
-  name,
-  email,
-  password,
-  setError,
-}: RegisterTwoButtonsProps) {
-  const router = useRouter();
-  return (
-    <div id="register-buttons" style={json['register-buttons'].css}>
-      <button
-        id="register-submit"
-        type="button"
-        disabled={isLoading}
-        onClick={async () => {
-          setIsLoading(true);
 
-          try {
-            await clientRegisterAPI({
-              restoranId,
-              restaurantSlug,
-              name,
-              email,
-              password,
-            });
 
-            const res = await signIn('credentials', {
-              email,
-              password,
-              url: restaurantSlug,
-              redirect: false,
-            });
 
-            if (!res?.ok) {
-              console.log('Greška pri prijavi:', res?.error);
-              setError('Prijava nije uspjela nakon registracije.');
-            } else {
-              setError('Uspjesno ste napravili svoj nalog!');
-              router.push(`/${restaurantSlug}`);
-              router.refresh();
-            }
-          } catch (e: unknown) {
-            const errMsg = e instanceof Error ? e.message : String(e);
-            setError(errMsg);
-          } finally {
-            setIsLoading(false);
-          }
-        }}
-        style={{
-          ...json['register-submit'].css,
-          ...(isLoading ? json['register-submit-disable'].css : {}),
-        }}
-      >
-        {isLoading ? (
-          <span id="register-loading" style={json['register-loading'].css}>
-            <span id="register-spinner" style={json['register-spinner'].css} />
-            {json['register-loading'].text}
-          </span>
-        ) : (
-          json['register-submit'].text
-        )}
-      </button>
-
-      <button
-        id="register-google-button"
-        type="button"
-        disabled={isLoading}
-        onClick={async () => {
-          setIsLoading(true);
-
-          try {
-            await clientLoginAPI(restoranId, restaurantSlug);
-
-            await signIn('google', {
-              callbackUrl: `/${restaurantSlug}`,
-            });
-          } catch (e: unknown) {
-            const errMsg = e instanceof Error ? e.message : String(e);
-            setError(errMsg);
-            setIsLoading(false);
-          }
-        }}
-        style={{
-          ...json['register-google-button'].css,
-          ...(isLoading ? json['register-google-button-disabled'].css : {}),
-        }}
-      >
-        <Image
-          id="register-google-logo"
-          width={20}
-          height={20}
-          src="/google-logo.svg"
-          alt="Google logo"
-          style={json['register-google-logo'].css}
-        />
-
-        <span>{json['register-google-button'].text}</span>
-      </button>
-    </div>
-  );
-}
 export default Page;

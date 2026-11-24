@@ -16,7 +16,7 @@ export async function createRezervacija(formData: FormData) {
   const note = formData.get("note");
 
   const dt = new Date(`${date}T${time}`);
-  console.log(`${date}T${time}`);
+  // console.log(`${date}T${time}`);
   if (isNaN(dt.getTime())) throw new Error("Datum i vrijeme nisu validni");
   const dateTime = dt.toISOString();
   const minuta = dt.getHours() * 60 + dt.getMinutes();
@@ -93,7 +93,7 @@ export async function createRezervacija(formData: FormData) {
   if (minutes > Eminutes || minutes < Sminutes) {
     throw new Error("Rezervacija mora biti u toku radnog vremena");
   }
-  console.log(specijalniDan, openingHour, minutes, Eminutes, Sminutes);
+  // console.log(specijalniDan, openingHour, minutes, Eminutes, Sminutes);
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
 

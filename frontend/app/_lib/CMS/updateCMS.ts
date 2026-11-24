@@ -1,5 +1,5 @@
 "use server";
-import { MojJSON } from "@/app/_components/ReservationList";
+import { MojJSON } from "@/app/_components/AdminReservations/ReservationList";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 

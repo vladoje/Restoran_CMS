@@ -6,10 +6,12 @@ export default function ShowMoreAndLessButtons({
   activeReservations,
   isExpanded,
   setNumShown,
+  activeOrPast,
 }: {
   json: Record<string, MojJSON>;
   activeReservations: Rezervacija[];
   isExpanded: boolean;
+  activeOrPast: string;
   setNumShown: Dispatch<SetStateAction<number>>;
 }) {
   return (
@@ -29,9 +31,11 @@ export default function ShowMoreAndLessButtons({
             : 'reservationList-showMore-button-jos'
         }
       >
-        {isExpanded
-          ? json['reservationList-showMore-button-manje']?.text
-          : json['reservationList-showMore-button-jos']?.text}
+        {isExpanded?
+             json['reservationList-showMore-button-manje']?.text
+          : activeOrPast === 'active'
+            ? json['reservationList-showMore-button-jos-active']?.text
+            : json['reservationList-showMore-button-jos']?.text}
       </button>
     </div>
   );

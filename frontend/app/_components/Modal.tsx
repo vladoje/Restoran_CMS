@@ -56,7 +56,7 @@ function Open({ children, opens }: OpenProps) {
   const { open } = context;
 
   return (
-    <span onClick={() => open(opens)} className="block w-full cursor-pointer">
+    <span onClick={() => open(opens)} className="block w-full ">
       {children}
     </span>
   );

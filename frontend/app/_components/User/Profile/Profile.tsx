@@ -1,13 +1,14 @@
 "use client";
 import { FaSave } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
-import { useProfile } from "../../_hooks/useProfile";
+import { useProfile } from "./useProfile";
 import Modal from "@/app/_components/Modal";
-import { UserAvatar } from "../UserAvatar";
-import Input from "../Input";
-import { ProfileActions, Window } from "../ProfileActions";
-import { twj } from "tw-to-css";
+import { UserAvatar } from "./UserAvatar";
+import Input from "../../Input";
+import { ProfileActions } from "./ProfileActions";
+
 import { MojJSON } from '@/app/_lib/Interfaces';
+import { Window } from '@/app/_components/User/Profile/ProfileWindow';
 
 function Page({
   slug,
@@ -55,8 +56,10 @@ isEditing=false,
           {/* DUGME ZA SPAŠAVANJE */}
           <button
             // onClick={handleClick}
+            disabled={isEditing}
             id="profile-save-button"
             style={json['profile-save-button'].css || {}}
+            className={isEditing ? `cursor-default` : `cursor-pointer`}
           >
             {json['profile-save-button'].icon === 'FaSave' && <FaSave />}{' '}
             {json['profile-save-button'].text}

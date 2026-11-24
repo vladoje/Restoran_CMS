@@ -1,4 +1,4 @@
-import Homepage from "@/app/_components/User/Homepage";
+import Homepage from "@/app/_components/User/Homepage/Homepage";
 
 async function Page({ params }: { params: { restaurantSlug: string } }) {
   const slug = (await params).restaurantSlug;

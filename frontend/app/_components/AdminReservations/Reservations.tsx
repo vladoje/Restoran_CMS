@@ -6,7 +6,7 @@ import {
 } from "@/app/_lib/getRezervacije";
 import { getAllTablesFromSala, getSala } from "@/app/_lib/getTables";
 
-import ReservationList from "@/app/_components/User/Reservations/ReservationList";
+import ReservationList from "@/app/_components/AdminReservations/ReservationList";
 import { Rezervacija, User } from "@/app/_lib/Interfaces";
 import { getRestoranWithSlug } from "@/app/_lib/getRestoran";
 import { getSite } from "@/app/_lib/getSite";
@@ -21,7 +21,6 @@ async function Reservations({ slug, isEditing }: { slug: string; isEditing: bool
     getOldUserReservations(user.userId),
   ]);
   const restoranId = activeReservations.at(0)?.restoranId ?? pastReservations.at(0)?.restoranId;
-  console.log(activeReservations);
   const restoran = await getRestoranWithSlug(slug);
   const site = await getSite(restoran.siteId);
 

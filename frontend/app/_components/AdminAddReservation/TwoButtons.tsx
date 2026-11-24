@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Modal from "../Modal";
-import PrezentacijaSale from "../PrezentacijaSale";
+import PrezentacijaSale from "../PrezentacijaSale/PrezentacijaSale";
 import { Sala, Sto } from "@/app/_lib/Interfaces";
 
 import toast from "react-hot-toast";

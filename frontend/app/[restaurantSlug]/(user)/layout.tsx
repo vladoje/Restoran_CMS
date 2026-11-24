@@ -27,7 +27,7 @@ export default async function Layout({
     >
       <Header slug={restaurantSlug} />
 
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 m-2">{children}</main>
 
       <Footer slug={restaurantSlug} />
     </div>
